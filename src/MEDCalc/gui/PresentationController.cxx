@@ -180,7 +180,8 @@ PresentationController::createActions()
   label   = tr("LAB_PRESENTATION_SCALAR_MAP");
   tooltip = tr("TIP_PRESENTATION_SCALAR_MAP");
   icon = tr(_getIconName("ICO_PRESENTATION_SCALAR_MAP").c_str());
-  actionId = _salomeModule->createStandardAction(label,this, SLOT(onVisualizeScalarMap()),icon,tooltip);
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(onVisualizeScalarMap()),
+                                                 icon, tooltip, FIELDSOp::OpScalarMap);
   _salomeModule->createTool(actionId, presentationToolbarId);
   _salomeModule->action(actionId)->setIconVisibleInMenu(true);
   _salomeModule->createMenu(actionId, presentationMenuId);
@@ -188,7 +189,8 @@ PresentationController::createActions()
   label   = tr("LAB_PRESENTATION_CONTOUR");
   tooltip = tr("TIP_PRESENTATION_CONTOUR");
   icon    = tr(_getIconName("ICO_PRESENTATION_CONTOUR").c_str());
-  actionId = _salomeModule->createStandardAction(label,this, SLOT(onVisualizeContour()),icon,tooltip);
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(onVisualizeContour()),
+                                                 icon, tooltip, FIELDSOp::OpContour);
   _salomeModule->createTool(actionId, presentationToolbarId);
   _salomeModule->action(actionId)->setIconVisibleInMenu(true);
   _salomeModule->createMenu(actionId, presentationMenuId);
@@ -196,7 +198,8 @@ PresentationController::createActions()
   label   = tr("LAB_PRESENTATION_VECTOR_FIELD");
   tooltip = tr("TIP_PRESENTATION_VECTOR_FIELD");
   icon    = tr(_getIconName("ICO_PRESENTATION_VECTOR_FIELD").c_str());
-  actionId = _salomeModule->createStandardAction(label,this, SLOT(onVisualizeVectorField()),icon,tooltip);
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(onVisualizeVectorField()),
+                                                 icon, tooltip, FIELDSOp::OpVectorFields);
   _salomeModule->createTool(actionId, presentationToolbarId);
   _salomeModule->action(actionId)->setIconVisibleInMenu(true);
   _salomeModule->createMenu(actionId, presentationMenuId);
@@ -204,7 +207,8 @@ PresentationController::createActions()
   label   = tr("LAB_PRESENTATION_SLICES");
   tooltip = tr("TIP_PRESENTATION_SLICES");
   icon    = tr(_getIconName("ICO_PRESENTATION_SLICES").c_str());
-  actionId = _salomeModule->createStandardAction(label,this, SLOT(onVisualizeSlices()),icon,tooltip);
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(onVisualizeSlices()),
+                                                 icon, tooltip, FIELDSOp::OpSlices);
   _salomeModule->createTool(actionId, presentationToolbarId);
   _salomeModule->action(actionId)->setIconVisibleInMenu(true);
   _salomeModule->createMenu(actionId, presentationMenuId);
@@ -212,7 +216,8 @@ PresentationController::createActions()
   label   = tr("LAB_PRESENTATION_DEFLECTION_SHAPE");
   tooltip = tr("TIP_PRESENTATION_DEFLECTION_SHAPE");
   icon    = tr(_getIconName("ICO_PRESENTATION_DEFLECTION_SHAPE").c_str());
-  actionId = _salomeModule->createStandardAction(label,this, SLOT(onVisualizeDeflectionShape()),icon,tooltip);
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(onVisualizeDeflectionShape()),
+                                                 icon, tooltip, FIELDSOp::OpDeflectionShape);
   _salomeModule->createTool(actionId, presentationToolbarId);
   _salomeModule->action(actionId)->setIconVisibleInMenu(true);
   _salomeModule->createMenu(actionId, presentationMenuId);
@@ -220,7 +225,8 @@ PresentationController::createActions()
   label   = tr("LAB_PRESENTATION_POINT_SPRITE");
   tooltip = tr("TIP_PRESENTATION_POINT_SPRITE");
   icon    = tr(_getIconName("ICO_PRESENTATION_POINT_SPRITE").c_str());
-  actionId = _salomeModule->createStandardAction(label,this, SLOT(onVisualizePointSprite()),icon,tooltip);
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(onVisualizePointSprite()),
+                                                 icon, tooltip, FIELDSOp::OpPointSprite);
   _salomeModule->createTool(actionId, presentationToolbarId);
   _salomeModule->action(actionId)->setIconVisibleInMenu(true);
   _salomeModule->createMenu(actionId, presentationMenuId);

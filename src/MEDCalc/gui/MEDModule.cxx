@@ -25,6 +25,7 @@
 
 #include "SALOME_LifeCycleCORBA.hxx"
 #include "QtxPopupMgr.h"
+#include <QtxInfoPanel.h>
 
 #include <LightApp_Preferences.h>
 #include <SUIT_Desktop.h>
@@ -172,6 +173,8 @@ MEDModule::windows( QMap<int, int>& theMap ) const
   // want Object browser, in the left area
   theMap.insert( SalomeApp_Application::WT_ObjectBrowser,
                  Qt::LeftDockWidgetArea );
+  // help windows in the right area
+  theMap.insert( SalomeApp_Application::WT_InfoPanel, Qt::RightDockWidgetArea);
 #ifndef DISABLE_PYCONSOLE
   // want Python console, in the bottom area
   theMap.insert( SalomeApp_Application::WT_PyConsole,
@@ -221,6 +224,50 @@ MEDModule::activateModule( SUIT_Study* theStudy )
   setMenuShown( true );
   // show own toolbars
   setToolShown( true );
+
+  // Fill in Help Panel
+  SalomeApp_Application* app = dynamic_cast<SalomeApp_Application*>(application());
+  QtxInfoPanel* ip = app->infoPanel();
+  app->infoPanel()->setTitle(tr("HELP_WELCOME_FIELDS"));
+
+  // short introduction of FIEDS module
+  int gp = ip->addGroup(tr("HELP_GRP_PRESENTATION"));
+  int lp1 = ip->addLabel(tr("HELP_LABEL_PRES1"), gp);
+  int lp2 = ip->addLabel(tr("HELP_LABEL_PRES2"), gp);
+  int lp3 = ip->addLabel(tr("HELP_LABEL_PRES3"), gp);
+
+
+  // getting started Simplified Visu
+  int gv = ip->addGroup(tr("HELP_GRP_VISUALISATION"));
+  int lv1 = ip->addLabel(tr("HELP_LABEL_VISU1"), gv);
+  int av1 = ip->addAction(action(FIELDSOp::OpAddDataSource) , gv);
+  int lv2 = ip->addLabel(tr("HELP_LABEL_VISU2"), gv);
+  int lv3 = ip->addLabel(tr("HELP_LABEL_VISU3"), gv);
+  QString qs31="<ul><li>" + tr("LAB_VIEW_MODE_REPLACE") + "</li></ul>"; 
+  QString qs32="<ul><li>" + tr("LAB_VIEW_MODE_OVERLAP") + "</li></ul>"; 
+  QString qs33="<ul><li>" + tr("LAB_VIEW_MODE_NEW_LAYOUT") + "</li></ul>"; 
+  QString qs34="<ul><li>" + tr("LAB_VIEW_MODE_SPLIT_VIEW") + "</li></ul>"; 
+  int lv31 = ip->addLabel(qs31, gv);
+  int lv32 = ip->addLabel(qs32, gv);
+  int lv33 = ip->addLabel(qs33, gv);
+  int lv34 = ip->addLabel(qs34, gv);
+  int lv4 = ip->addLabel(tr("HELP_LABEL_VISU4"), gv);
+  int av2 = ip->addAction(action(FIELDSOp::OpScalarMap) , gv);
+  int av3 = ip->addAction(action(FIELDSOp::OpContour) , gv);
+  int av4 = ip->addAction(action(FIELDSOp::OpVectorFields) , gv);
+  int av5 = ip->addAction(action(FIELDSOp::OpSlices) , gv);
+  int av6 = ip->addAction(action(FIELDSOp::OpDeflectionShape) , gv);
+  int av7 = ip->addAction(action(FIELDSOp::OpPointSprite) , gv);
+
+  // getting started interpolation
+  int gi = ip->addGroup(tr("HELP_GRP_INTERPOLATION"));
+  int li1 = ip->addLabel(tr("HELP_LABEL_INTERP1"), gi);
+  int li2 = ip->addLabel(tr("HELP_LABEL_INTERP2"), gi);
+  int li3 = ip->addLabel(tr("HELP_LABEL_INTERP3"), gi);
+  int ai1 = ip->addAction(action(FIELDSOp::OpProcessingInterpolation) , gi);
+  int li4 = ip->addLabel(tr("HELP_LABEL_INTERP4"), gi);
+
+  // End of Help Panel
 
   //this->createStudyComponent(theStudy);
   _workspaceController->showDockWidgets(true);
@@ -341,7 +388,8 @@ MEDModule::createStandardAction(const QString& label,
                                 QObject* slotobject,
                                 const char* slotmember,
                                 const QString& iconName,
-                                const QString& tooltip)
+                                const QString& tooltip,
+                                int actionid)
 {
   SUIT_Desktop* dsk = getApp()->desktop();
   SUIT_ResourceMgr* resMgr = getApp()->resourceMgr();
@@ -357,7 +405,7 @@ MEDModule::createStandardAction(const QString& label,
   else
     ico = QIcon(resMgr->loadPixmap("FIELDS", iconName));
 
-  QAction* action = createAction(-1,
+  QAction* action = createAction(actionid,
                                  label,
                                  ico,
                                  label,

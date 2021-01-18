@@ -466,6 +466,66 @@
 <context>
     <name>MEDModule</name>
     <message>
+        <source>HELP_WELCOME_FIELDS</source>
+        <translation>Bienvenue dans FIELDS!</translation>
+    </message>
+    <message>
+        <source>HELP_GRP_PRESENTATION</source>
+        <translation>Présentation du module</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_PRES1</source>
+        <translation>Ce module fournit une &lt;b&gt;interface simplifiée&lt;/b&gt; pour visualiser et manipuler des champs.</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_PRES2</source>
+        <translation>Il s'appuie sur les modules PARAVIS et MEDCoupling.</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_PRES3</source>
+        <translation>Il est possible après une visualisation simplifiée de basculer dans le module PARAVIS pour compléter la présentation.</translation>
+    </message>
+    <message>
+        <source>HELP_GRP_VISUALISATION</source>
+        <translation>Visualisation simplifiée</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_VISU1</source>
+        <translation>1) &lt;b&gt;Importer un maillage et des champs&lt;/b&gt; à partir d'un fichier MED (utiliser le bouton "importer des données MED" présent dans la barre d'outil et dans le menu Fichier)</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_VISU2</source>
+        <translation>2) Sélectionner un champ dans l'arbre des données (fenêtre de droite)</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_VISU3</source>
+        <translation>3) Sélectionner le a &lt;b&gt;mode de vue&lt;/b&gt; parmi les options suivantes:"</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_VISU4</source>
+        <translation>4) Choisir une représentation simplifiée (boutons dans la barre d'outil et dans le menu présentations). Les visus simplifiées suivantes sont disponibles:"</translation>
+    </message>
+    <message>
+        <source>HELP_GRP_INTERPOLATION</source>
+        <translation>Interpolation de champs</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_INTERP1</source>
+        <translation>Le module FIELDS fournit aussi une interface graphique à la classe MEDCouplingRemapper.</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_INTERP2</source>
+        <translation>1) Sélectionner un &lt;b&gt;champ source&lt;/b&gt; dans l'arbre des données</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_INTERP3</source>
+        <translation>2) Cliquer sur le bouton "Interpoler le champ" (dans la barre d'outil ou dans le menu Traitement:</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_INTERP4</source>
+        <translation>3) Dans l'interface, sélectionner le &lt;b&gt;maillage cible&lt;/b&gt;, et spécifier les paramètres d'interpolation.</translation>
+    </message>
+    <message>
         <location filename="MEDCALC/gui/MEDModule.cxx" line="68"/>
         <location filename="MEDCALC/gui/MEDModule.cxx" line="157"/>
         <source>IMPORT_FROM_FILE</source>
@@ -620,6 +680,10 @@
     <message>
         <source>LAB_VIEW_MODE_SPLIT_VIEW</source>
         <translation>Scinder</translation>
+    </message>
+    <message>
+        <source>Simplified interface to visualise and manipulate fields</source>
+        <translation>Interface simplifiée pour visualiser et manipuler les champs</translation>
     </message>
 </context>
 </TS>

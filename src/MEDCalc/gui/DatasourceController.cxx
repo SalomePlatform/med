@@ -75,7 +75,8 @@ void DatasourceController::createActions() {
   QString tooltip = tr("TIP_ADD_DATA_SOURCE");
   QString icon    = tr("ICO_DATASOURCE_ADD");
   int actionId;
-  actionId = _salomeModule->createStandardAction(label,this, SLOT(OnAddDatasource()),icon,tooltip);
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(OnAddDatasource()),
+                                                 icon, tooltip, FIELDSOp::OpAddDataSource);
   _salomeModule->createTool(actionId, toolbarId);
 
   // This action has to be placed in the general file menu with the label "Import MED file"

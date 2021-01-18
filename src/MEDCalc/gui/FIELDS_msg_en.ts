@@ -466,6 +466,66 @@
 <context>
     <name>MEDModule</name>
     <message>
+        <source>HELP_WELCOME_FIELDS</source>
+        <translation>Welcome to FIELDS!</translation>
+    </message>
+    <message>
+        <source>HELP_GRP_PRESENTATION</source>
+        <translation>Module Presentation</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_PRES1</source>
+        <translation>This module provides a &lt;b&gt;simplified interface&lt;/b&gt; to visualise and manipulate fields.</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_PRES2</source>
+        <translation>It is based upon PARAVIS and MEDCoupling modules.</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_PRES3</source>
+        <translation>After applying a simplified visualisation, it is possible to switch in PARAVIS module, and complete the presentation.</translation>
+    </message>
+    <message>
+        <source>HELP_GRP_VISUALISATION</source>
+        <translation>Simplified Visualisation</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_VISU1</source>
+        <translation>1) &lt;b&gt;Import mesh and fields&lt;/b&gt; from a MED file (use the add data source button or the menu File/Add Data Source)</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_VISU2</source>
+        <translation>2) Select a field in the object browser (left window)</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_VISU3</source>
+        <translation>3) Select a &lt;b&gt;view mode&lt;/b&gt; among these options:"</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_VISU4</source>
+        <translation>4) Choose a simplified representation (buttons in the tool bar, or in the presentations menu). The following simplified visualisations are available:"</translation>
+    </message>
+    <message>
+        <source>HELP_GRP_INTERPOLATION</source>
+        <translation>Fields Interpolation</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_INTERP1</source>
+        <translation>FIELDS module also provides a graphical interface above MEDCouplingRemapper class.</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_INTERP2</source>
+        <translation>1) Select a &lt;b&gt;source field&lt;/b&gt; in the object browser</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_INTERP3</source>
+        <translation>2) Click on "interpolate field" button (in the toolbar or in the processing menu:</translation>
+    </message>
+    <message>
+        <source>HELP_LABEL_INTERP4</source>
+        <translation>3) Within the interface, select the &lt;b&gt;target mesh&lt;/b&gt;, and specify the interpolation parameters.</translation>
+    </message>
+    <message>
         <location filename="MEDCALC/gui/MEDModule.cxx" line="68"/>
         <location filename="MEDCALC/gui/MEDModule.cxx" line="157"/>
         <source>IMPORT_FROM_FILE</source>
