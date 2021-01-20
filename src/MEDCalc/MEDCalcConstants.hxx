@@ -34,4 +34,19 @@ const int NB_TYPE_OF_FIELDS = 4;
 const char* const mapTypeOfFieldLabel[NB_TYPE_OF_FIELDS] =
   {"ON_CELLS", "ON_NODES", "ON_GAUSS_PT", "ON_GAUSS_NE" };
 
+// IDs we use for actions we want to export in help info panel
+namespace FIELDSOp {
+  enum {
+    OpAddDataSource             = 2041,   // Menu Add Data Source
+    // Simplified Visu  ----------------------------------------------------------
+    OpScalarMap                 = 2501,   // Menu Scalar Map
+    OpContour                   = 2502,   // Menu Contour
+    OpVectorFields              = 2503,   // Menu Vector fields
+    OpSlices                    = 2504,   // Menu Slices
+    OpDeflectionShape           = 2505,   // Menu Deflection
+    OpPointSprite               = 2506,   // Menu PointSprite
+    // Interpolation
+    OpProcessingInterpolation   = 2601,   // Menu Processing interpolation
+  };
+}
 #endif

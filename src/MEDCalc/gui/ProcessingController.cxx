@@ -73,7 +73,8 @@ ProcessingController::createActions()
 
   label   = tr("LAB_PROCESSING_INTERPOLATE_FIELD");
   icon = tr("ICO_PROCESSING_INTERPOLATE_FIELD");
-  actionId = _salomeModule->createStandardAction(label,this, SLOT(OnInterpolateField()),icon,label);
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(OnInterpolateField()),
+                                                 icon, label, FIELDSOp::OpProcessingInterpolation);
   _salomeModule->createTool(actionId, processingToolbarId);
   _salomeModule->action(actionId)->setIconVisibleInMenu(true);
   _salomeModule->createMenu(actionId, processingMenuId);

@@ -76,7 +76,8 @@ public:
                            QObject* slotobject,
                            const char* slotmember,
                            const QString& iconName,
-                           const QString& tooltip=QString());
+                           const QString& tooltip=QString(),
+                           int actionid=-1);
   void addActionInPopupMenu(int actionId,
                             const QString& menus="",
                             const QString& rule="client='ObjectBrowser'");
