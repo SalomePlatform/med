@@ -318,6 +318,9 @@ void WorkspaceController::processMedEvent(const MEDCALC::MedEvent* event) {
   else if ( event->type == MEDCALC::EVENT_REMOVE_PRESENTATION ) {
     emit workspaceSignal(event); // forward to PresentationController
   }
+  else if ( event->type == MEDCALC::EVENT_VISIBILITY_CHANGED ) {
+    emit workspaceSignal(event); // forward to PresentationController
+  }
   else if ( event->type == MEDCALC::EVENT_MODIFY_PRESENTATION ) {
       emit workspaceSignal(event); // forward to PresentationController
   }

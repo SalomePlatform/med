@@ -48,6 +48,41 @@ public:
   MEDCALC::ScalarBarRangeType getScalarBarRange() const;
   void setScalarBarRange(MEDCALC::ScalarBarRangeType);
 
+  MEDCALC::IntegrationDirType getIntegrationDir() const;
+  void setIntegrationDir(MEDCALC::IntegrationDirType);
+
+  std::string getContourComponent() const;
+  void setContourComponents(std::vector<std::string> compos, int selecIndex);
+
+  bool getScalarBarVisibility() const;
+  void setScalarBarVisibility(const bool);
+
+  bool getHideDataOutsideCustomRange() const;
+  void setHideDataOutsideCustomRange(const bool);
+
+  void getScalarBarRangeValue( double* ) const;
+  void setScalarBarRangeValue(const double, const double);
+
+  double getScaleFactor() { return _ui.spinScaleFactor->value(); }
+  void setScaleFactor(double);
+
+  bool getScaleFactorFlag() { return _ui.checkBoxScaleFactor->isChecked(); }
+  void setScaleFactorFlag(const bool);
+
+  void getNormal( double * ) const;
+  void setNormal(const double, const double, const double);
+
+  void getCutPoint1( double *) const;
+  void setCutPoint1(const double, const double, const double);
+  void getCutPoint2( double *) const;
+  void setCutPoint2(const double, const double, const double);
+
+  void hidePlot3D();
+  void hideContourComponent();
+
+  double getPlanePosition() const;
+  void setPlanePosition( double );
+
 //  double getScalarBarTimestep() const;
 //  double getScalarBarMinVal() const;
 //  double getScalarBarMaxVal() const;
@@ -70,13 +105,31 @@ public:
 
   void toggleCommonFieldWidget(bool show);
 
+  QComboBox* getRangeComboBox() { return _ui.comboBoxScalarBarRange; }
+  double getMixCustomRange() { return _ui.spinCustomRangeMin->value(); }
+  double getMaxCustomRange() { return _ui.spinCustomRangeMax->value(); }
+
 signals:
   void comboScalarBarRangeIndexChanged(int);
   void comboColorMapIndexChanged(int);
   void comboCompoIndexChanged(int);
   void comboOrientIndexChanged(int);
   void comboMeshIndexChanged(int);
+  void comboIntegrDirIndexChanged(int);
+  void comboContCompIndexChanged(int);
   void spinBoxValueChanged(int);
+  void spinNormalValuesChanged(double, double, double);
+  void spinCutPoint1ValuesChanged(double, double, double);
+  void spinCutPoint2ValuesChanged(double, double, double);
+  void spinPlanePosValueChanged(double);
+  void checkboxScalarBarVisibilityChanged(int);
+  void checkboxCustomRangeChanged(int);
+  void checkboxScaleFactorChanged(int);
+  void spinboxCustomRangeChanged(double, double);
+  void spinboxScaleFactorChaged(double);
+  void checkboxCustomScaleFactorChanged(int);
+  void checkboxHideDataOutsideCustomRangeChanged(int);
+
 
 private slots:
   void onComboScalarBarRangeIndexChanged(int);
@@ -84,10 +137,22 @@ private slots:
   void onComboCompoIndexChanged(int);
   void onComboOrientIndexChanged(int);
   void onComboMeshIndexChanged(int);
+  void onComboIntegrDirIndexChanged(int);
+  void onComboContCompIndexChanged(int);
   void onSpinBoxEditingFinished();
-
+  void onSpinNormalEditingFinished();
+  void onSpinCutPoint1EditingFinished();
+  void onSpinCutPoint2EditingFinished();
+  void onSpinPlanePosEditingFinished();
+  void onCheckboxScalarBarVisibilityChanged(int);
+  void onCheckboxCustomRangeChanged(int);
+  void onCheckboxScaleFactorChanged(int);
+  void onSpinboxCustomRangeChanged();
+  void onSpinboxScaleFactorChanged();
+  void onCheckboxCustomScaleFactorChanged(int);
+  void onCheckboxHideDataOutsideCustomRangeChanged(int);
 private:
-  Ui_WidgetPresentationParameters _ui; // instance of the class defined in ui_WidgetPresentationParameters.h
+  Ui_WidgetPresentationParameters _ui; // instancte of the class defined in ui_WidgetPresentationParameters.h
   bool _blockSig;
 };
 

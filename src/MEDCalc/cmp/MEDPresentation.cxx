@@ -44,6 +44,13 @@ const std::string MEDPresentation::PROP_SELECTED_COMPONENT = "selectedComponent"
 const std::string MEDPresentation::PROP_COMPONENT = "component_";
 const std::string MEDPresentation::PROP_COLOR_MAP = "colorMap";
 const std::string MEDPresentation::PROP_SCALAR_BAR_RANGE = "scalarBarRange";
+const std::string MEDPresentation::PROP_VISIBILITY = "visibility";
+const std::string MEDPresentation::PROP_SCALAR_BAR_VISIBILITY = "scalarBarVisibility";
+const std::string MEDPresentation::PROP_SCALAR_BAR_MIN_VALUE = "scalarBarMinValue";
+const std::string MEDPresentation::PROP_SCALAR_BAR_MAX_VALUE = "scalarBarMaxValue";
+const std::string MEDPresentation::PROP_HIDE_DATA_OUTSIDE_CUSTOM_RANGE = "hideDataOutsideCustomRange";
+
+#define PROGRAMMABLE "__programmable" 
 
 MEDPresentation::MEDPresentation(MEDPresentation::TypeID handlerId, const std::string& name,
                                  const MEDCALC::ViewModeType viewMode,
@@ -58,7 +65,14 @@ MEDPresentation::MEDPresentation(MEDPresentation::TypeID handlerId, const std::s
       _colorMap(colorMap),
       _sbRange(sbRange),
       _renderViewPyId(-1),  // will be set by MEDPresentationManager_i::_makePresentation()
-      _globalDict(0)
+      _globalDict(0),
+      _presentationVisibility(true),
+      _scalarBarVisibility(true),
+      _scalarBarRangeArray{ 0.0, 100.0 },
+      _programmableInitialized(false),
+      _hideDataOutsideCustomRange(false),
+      _nbComponents(0),
+      _nbComponentsInThresholdInput(0)
 {
   setStringProperty(MEDPresentation::PROP_NAME, name);
 
@@ -67,20 +81,28 @@ MEDPresentation::MEDPresentation(MEDPresentation::TypeID handlerId, const std::s
 
   setIntProperty(MEDPresentation::PROP_COLOR_MAP, static_cast<int>(colorMap));
   setIntProperty(MEDPresentation::PROP_SCALAR_BAR_RANGE, static_cast<int>(sbRange));
+  setIntProperty(MEDPresentation::PROP_VISIBILITY, static_cast<int>(_presentationVisibility));
+  setIntProperty(MEDPresentation::PROP_SCALAR_BAR_VISIBILITY, static_cast<int>(_scalarBarVisibility));
+  setDoubleProperty(MEDPresentation::PROP_SCALAR_BAR_MIN_VALUE, _scalarBarRangeArray[0]);
+  setDoubleProperty(MEDPresentation::PROP_SCALAR_BAR_MAX_VALUE, _scalarBarRangeArray[1]);
+  setIntProperty(MEDPresentation::PROP_HIDE_DATA_OUTSIDE_CUSTOM_RANGE, static_cast<int>(_hideDataOutsideCustomRange));
+
 
   // Python variables:
   int id = GeneratePythonId();
-  std::ostringstream oss_o, oss_d, oss_l, oss_s, oss_r;
+  std::ostringstream oss_o, oss_d, oss_l, oss_s, oss_r, oss_cl, oss_p;
   oss_o << "__obj" << id;
   oss_s << "__srcObj" << id;
   oss_d << "__disp" << id;
   oss_l << "__lut" << id;
   oss_r << "__range" << id;
+  oss_p << PROGRAMMABLE << id;
   _objVar = oss_o.str();
   _srcObjVar = oss_s.str();
   _dispVar = oss_d.str();
   _lutVar = oss_l.str();
   _rangeVar = oss_r.str();
+  _programmableVar = oss_p.str();
 }
 
 /**
@@ -102,7 +124,7 @@ MEDPresentation::initFieldMeshInfos()
   _fieldName = fieldHandler->fieldname;
   _mcFieldType = (MEDCoupling::TypeOfField) fieldHandler->type;
   _pvFieldType = getPVFieldTypeString(_mcFieldType);
-  _colorByType = _pvFieldType;  // by default the same; overridden in DeflectionShape, VectorField, PointSprite and Contour
+  _colorByType = _pvFieldType;  // by default the same; overridden in DeflectionShape, VectorField, PointSprite and Contour, Plot3D
   _meshName = meshHandler->name;
 }
 
@@ -136,6 +158,11 @@ MEDPresentation::~MEDPresentation()
 
     try {
       oss << "pvs.Hide(" << _objVar <<  ", view=" << getRenderViewVar() << ");";
+      for (auto& value : _presentationThresolds) {
+        if (value._active) {
+          oss << "pvs.Hide(" << value._thresholdVar << ", view=" << getRenderViewVar() << ");";
+        }
+      }
       execPyLine(oss.str());
       // :TRICKY: The two following lines raise an exception when closing MED module
       //          after sequence: MED - load file - PARAVIS - MED - close SALOME
@@ -154,6 +181,63 @@ MEDPresentation::generatePipeline()
   // Might be more complicated in the future:
 
   this->internalGeneratePipeline();
+}
+
+void MEDPresentation::internalGenerateThreshold() {
+  std::ostringstream oss;
+  std::string inputFieldName = getFieldName();
+  if (!_programmableInitialized) {
+    if (_nbComponentsInThresholdInput > 1) {
+      std::string typ = toScriptCellType(_colorByType);
+      oss << _programmableVar << " = pvs.ProgrammableFilter(Input = " << _objVar << ");";
+      oss << _programmableVar << ".Script = \"\"\"import numpy as np" << std::endl;
+      oss << "import paraview.vtk.numpy_interface.dataset_adapter as dsa" << std::endl;
+      oss << "input0 = inputs[0]" << std::endl;
+      oss << "inputDataArray=input0." << typ << "['" << inputFieldName << "']" << std::endl;
+      oss << "if type(inputDataArray) == dsa.VTKCompositeDataArray:" << std::endl;
+      oss << "\tnpa = inputDataArray.GetArrays()" << std::endl;
+      oss << "else:" << std::endl;
+      oss << "\tnpa = inputDataArray" << std::endl;
+      oss << "if type(npa) == list:" << std::endl;
+      oss << "\tarrs = []" << std::endl;
+      oss << "\tfor a in npa:" << std::endl;
+      oss << "\t\tmgm = np.linalg.norm(a, axis = -1)" << std::endl;
+      oss << "\t\tmga = mgm.reshape(mgm.size, 1)" << std::endl;
+      oss << "\t\tarrs.append(mga)" << std::endl;
+      oss << "\tca = dsa.VTKCompositeDataArray(arrs)" << std::endl;
+      oss << "\toutput." << typ << ".append(ca, '" << inputFieldName << "_magnitude')" << std::endl;
+      oss << "else:" << std::endl;
+      oss << "\tmgm = np.linalg.norm(npa, axis = -1)" << std::endl;
+      oss << "\tmga = mgm.reshape(mgm.size, 1)" << std::endl;
+      oss << "\toutput." << typ << ".append(mga, '" << inputFieldName << "_magnitude')" << std::endl;
+      for (std::vector<std::string>::size_type ii = 1; ii < _nbComponentsInThresholdInput + 1 ; ii++) {
+        oss << "dataArray" << ii << " = inputDataArray[:, [" << ii - 1 << "]]" << std::endl;
+        oss << "output." << typ << ".append(dataArray" << ii << ", '" << inputFieldName << "_" << ii <<  "')" << std::endl;
+      }
+      oss << "\"\"\"" << std::endl;
+      _programmableInitialized = true;
+    }
+  }
+
+  ComponentThresold& currentThreshold = _presentationThresolds[getThresholdIndex()];
+  if (!currentThreshold._thresholdInitialized) {
+    std::string& thInput = (_nbComponentsInThresholdInput > 1 ) ? _programmableVar : _objVar;
+    std::string arrayName = getThresholdFieldName();
+    oss << currentThreshold._thresholdVar << " = pvs.Threshold(Input = " << thInput << ");";
+    oss << currentThreshold._thresholdVar << ".Scalars = ['" << _colorByType << "', '" << arrayName << "'];";
+    oss << additionalThresholdInitializationActions();
+    oss << currentThreshold._thresholdDispVar << " = pvs.Show(" << currentThreshold._thresholdVar << ", " 
+      << getRenderViewVar() << ");";
+    oss << currentThreshold._thresholdLutVar << " = pvs.GetColorTransferFunction('" << arrayName << "', " 
+      << currentThreshold._thresholdDispVar << ", separate=True);";
+    oss << "pvs.ColorBy(" << currentThreshold._thresholdDispVar << ", ('" << _colorByType << "', '"
+      << arrayName << "'), separate = True);";
+    oss << additionalThresholdVisualizationActions();
+    currentThreshold._thresholdInitialized = true;
+  }
+  if (oss.str().length() > 0) {
+    pushAndExecPyLine(oss.str());
+  }
 }
 
 //void
@@ -234,6 +318,38 @@ MEDPresentation::getIntProperty(const std::string& propName) const
        oss << (*it).first << "  ->   " << (*it).second;
        STDLOG(oss.str());
      }
+ }
+
+ void
+ MEDPresentation::setDoubleProperty(const std::string& propName, const double propValue)
+ {
+   _propertiesDouble[propName] = propValue;
+ }
+
+ double
+ MEDPresentation::getDoubleProperty(const std::string& propName) const
+ {
+   std::map<std::string, double>::const_iterator it = _propertiesDouble.find(propName);
+   if (it != _propertiesDouble.end()) {
+     return (*it).second;
+   }
+   else {
+     STDLOG("MEDPresentation::getDoubleProperty(): no property named " + propName);
+     throw MEDPresentationException("MEDPresentation::getDoubleProperty(): no property named " + propName);
+   }
+ }
+
+ void
+  MEDPresentation::dumpDoubleProperties() const
+ {
+   std::map<std::string, double>::const_iterator it = _propertiesDouble.begin();
+   STDLOG("@@@ Dumping DOUBLE properties");
+   for (; it != _propertiesDouble.end(); ++it)
+   {
+     std::ostringstream oss;
+     oss << (*it).first << "  ->   " << (*it).second;
+     STDLOG(oss.str());
+   }
  }
 
  void
@@ -388,11 +504,11 @@ MEDPresentation::setOrCreateRenderView()
   if (_viewMode == MEDCALC::VIEW_MODE_OVERLAP) {
       // this might potentially re-assign to an existing view variable, but this is OK, we
       // normally reassign exactly the same RenderView object.
-      oss2 << view << " = pvs.GetActiveViewOrCreate('RenderView');";
+      oss2 << view << " = medcalc.FindOrCreateView('RenderView');";
       pushAndExecPyLine(oss2.str()); oss2.str("");
   } else if (_viewMode == MEDCALC::VIEW_MODE_REPLACE) {
       // same as above
-      oss2 << view << " = pvs.GetActiveViewOrCreate('RenderView');";
+      oss2 << view << " = medcalc.FindOrCreateView('RenderView');";
       pushAndExecPyLine(oss2.str()); oss2.str("");
       oss2 << "pvs.active_objects.source and pvs.Hide(view=" << view << ");";
       pushAndExecPyLine(oss2.str()); oss2.str("");
@@ -431,19 +547,51 @@ MEDPresentation::selectFieldComponent()
 {
   std::ostringstream oss, oss_l;
   std::string ret;
-
-  if (_selectedComponentIndex != -1)
+  if (!_hideDataOutsideCustomRange) {
+    if (_selectedComponentIndex != -1)
     {
       oss << _lutVar << ".VectorMode = 'Component';";
       pushAndExecPyLine(oss.str()); oss.str("");
       oss << _lutVar << ".VectorComponent = " << _selectedComponentIndex << ";";
       pushAndExecPyLine(oss.str()); oss.str("");
     }
-  else  // Euclidean norm
+    else  // Euclidean norm
     {
       oss << _lutVar << ".VectorMode = 'Magnitude';";
       pushAndExecPyLine(oss.str()); oss.str("");
     }
+  }
+  else {
+    // Make sure that threshold is initialized
+    internalGenerateThreshold();
+    // Set range
+    thresholdValues();
+
+    // Color map setting
+    selectColorMap(false);
+
+    if (!_presentationThresolds[getThresholdIndex()]._active) {
+      std::vector<std::string>::size_type idx = (_nbComponentsInThresholdInput > 1) ? -1 : 0;
+      for (auto& value : _presentationThresolds) {
+        // Hide previous threshold
+        if (value._active) {
+          bool currentVisibility = _presentationVisibility;
+          std::vector<std::string>::size_type currentIndex = _selectedComponentIndex;
+          _presentationVisibility = false;
+          _selectedComponentIndex = idx;
+          visibility();
+          _selectedComponentIndex = currentIndex;
+          _presentationVisibility = currentVisibility;
+          value._active = false;
+        }
+        idx++;
+      }
+      // Show new threshold 
+      visibility();
+      _presentationThresolds[getThresholdIndex()]._active = true;
+      scalarBarTitle();
+    }
+  }
 }
 
 /**
@@ -468,24 +616,24 @@ MEDPresentation::scalarBarTitle()
         compoName = "Magnitude";
     }
   std::ostringstream oss;
-  oss << "pvs.GetScalarBar(" << _lutVar << ").ComponentTitle = '" << compoName << "';";
+  if (_hideDataOutsideCustomRange) {
+    oss << "pvs.GetScalarBar(" << getLutVar() << ").Title = '" << _fieldName << "';";
+  }
+  oss << "pvs.GetScalarBar(" << getLutVar() << ").ComponentTitle = '" << compoName << "';";
   pushAndExecPyLine(oss.str()); oss.str("");
 }
 
 void
-MEDPresentation::selectColorMap()
+MEDPresentation::selectColorMap(const bool updateFieldComponent)
 {
-  std::ostringstream oss, oss2;
-
-  oss2 << _lutVar << " = pvs.GetColorTransferFunction('" << _fieldName << "');";
-  pushAndExecPyLine(oss2.str());
+  std::ostringstream oss;
 
   switch (_colorMap) {
   case MEDCALC::COLOR_MAP_BLUE_TO_RED_RAINBOW:
-    oss << _lutVar << ".ApplyPreset('Blue to Red Rainbow',True);";
+    oss << getLutVar() << ".ApplyPreset('Blue to Red Rainbow',True);";
     break;
   case MEDCALC::COLOR_MAP_COOL_TO_WARM:
-    oss << _lutVar << ".ApplyPreset('Cool to Warm',True);";
+    oss << getLutVar() << ".ApplyPreset('Cool to Warm',True);";
     break;
   default:
     STDLOG("MEDPresentation::getColorMapCommand(): invalid colormap!");
@@ -493,7 +641,9 @@ MEDPresentation::selectColorMap()
   }
   pushAndExecPyLine(oss.str());
 
-  selectFieldComponent(); // somehow PV keeps the LUT parameters of the previous presentation, so better reset this.
+  if(updateFieldComponent) {
+    selectFieldComponent(); // somehow PV keeps the LUT parameters of the previous presentation, so better reset this.
+  }
 }
 
 void
@@ -501,28 +651,173 @@ MEDPresentation::showObject()
 {
   std::ostringstream oss;
   oss << _dispVar << " = pvs.Show(" << _objVar << ", " << getRenderViewVar() << ");";
+  oss << _lutVar << " = pvs.GetColorTransferFunction('" << getFieldName() << "', " << _dispVar << ", separate=True);";
+  pushAndExecPyLine(oss.str());
+}
+
+void
+MEDPresentation::hideObject()
+{
+  std::ostringstream oss;
+  oss <<"pvs.Hide(" << _objVar << ", " << getRenderViewVar() << ");";
   pushAndExecPyLine(oss.str());
 }
 
 void
 MEDPresentation::showScalarBar()
 {
+  // Display Scalar Bar only if presentation is visible 
+  if (_presentationVisibility) {
+    std::ostringstream oss;
+    oss << getDispVar() << ".SetScalarBarVisibility(" << getRenderViewVar() << ", True);";
+    pushAndExecPyLine(oss.str());
+  }
+}
+
+void
+MEDPresentation::hideScalarBar()
+{
   std::ostringstream oss;
-  oss << _dispVar <<  ".SetScalarBarVisibility(" << getRenderViewVar() << ", True);";
+  oss << getDispVar() << ".SetScalarBarVisibility(" << getRenderViewVar() << ", False);";
   pushAndExecPyLine(oss.str());
+}
+
+void 
+MEDPresentation::scalarBarVisibility() {
+  _scalarBarVisibility ? showScalarBar() : hideScalarBar();
 }
 
 void
 MEDPresentation::colorBy()
 {
   std::ostringstream oss;
-  oss << "pvs.ColorBy(" << _dispVar << ", ('" << _colorByType << "', '" << _fieldName << "'));";
+  oss << "pvs.ColorBy(" << getDispVar() << ", ('" << _colorByType << "', '" << getFieldName() << "'), separate=True);";
   pushAndExecPyLine(oss.str());
+}
+
+void MEDPresentation::visibility() {
+  std::ostringstream oss;                        
+  oss << getDispVar() << ".Visibility = " << (_presentationVisibility ? "True" : "False") << ";";
+  pushAndExecPyLine(oss.str());
+
+  // Hide scalar bar with the presentation
+  if (!_presentationVisibility && _scalarBarVisibility)
+    hideScalarBar();
+
+  // Show scalar bar with the presentation
+  if (_presentationVisibility && _scalarBarVisibility)
+    showScalarBar();
+}
+
+void MEDPresentation::threshold() {
+  _hideDataOutsideCustomRange ? thresholdPresentation() : unThresholdPresentation();
+}
+
+void MEDPresentation::thresholdPresentation() {
+  if (!_hideDataOutsideCustomRange)
+    return;
+
+  internalGenerateThreshold();
+
+  // Hide _dispVar, for that temporary switch the _presentationVisibility and _hideDataOutsideCustomRange
+  // flag to false and call visibility() method
+  bool prevVisibility = _presentationVisibility;
+  bool prevHideDataOutsideCustomRange = _hideDataOutsideCustomRange;
+  _presentationVisibility = false;
+  _hideDataOutsideCustomRange = false;
+  visibility();
+  _presentationVisibility = prevVisibility;
+  _hideDataOutsideCustomRange = prevHideDataOutsideCustomRange;
+
+  // Display _thresholdDispVar var
+  visibility();
+
+  // Select target colormap  
+  selectColorMap();
+
+  // Adapt scalar bar title
+  scalarBarTitle();
+
+  // Additional threshold actions to be done
+  additionalThresholdActions();
+
+  _presentationThresolds[getThresholdIndex()]._active = true;
+}
+
+void MEDPresentation::thresholdValues() {
+  if (!_hideDataOutsideCustomRange)
+    return;
+  std::ostringstream oss;
+  oss << _presentationThresolds[getThresholdIndex()]._thresholdVar << ".ThresholdRange = [ " << _scalarBarRangeArray[0] << ", " << _scalarBarRangeArray[1] << "];";
+  oss << _presentationThresolds[getThresholdIndex()]._thresholdLutVar <<".RescaleTransferFunction(" << _scalarBarRangeArray[0] << ", " << _scalarBarRangeArray[1] << ");";
+  pushAndExecPyLine(oss.str());
+}
+
+void MEDPresentation::unThresholdPresentation() {
+
+  if (_presentationThresolds[getThresholdIndex()]._active) {
+    // Hide _dispVar, for that temporary switch the _presentationVisibility to talse and _hideDataOutsideCustomRange
+    // flag to true and call visibility() method
+    bool prevVisibility = _presentationVisibility;
+    bool prevHideDataOutsideCustomRange = _hideDataOutsideCustomRange;
+    _presentationVisibility = false;
+    _hideDataOutsideCustomRange = true;
+    visibility();
+    _presentationVisibility = prevVisibility;
+    _hideDataOutsideCustomRange = prevHideDataOutsideCustomRange;
+
+    // Range
+    rescaleTransferFunction();
+
+    // Display _dispVar var
+    visibility();
+
+    // Select target colormap  
+    selectColorMap();
+
+    // Adapt scalar bar title
+    scalarBarTitle();
+
+    // Additional unthreshold actions to be done
+    additionalUnThresholdActions();
+
+    _presentationThresolds[getThresholdIndex()]._active = false;
+  }
+}
+
+int MEDPresentation::getThresholdIndex() const {
+  if (_nbComponentsInThresholdInput > 1 && _nbComponentsInThresholdInput <= 3) {
+    return _selectedComponentIndex + 1; 
+  }
+  else {
+    return _selectedComponentIndex;
+  }
+}
+
+/*!
+  Return _dispVar or _thresholdDispVar depending on _hideDataOutsideCustomRange flag:
+         _hideDataOutsideCustomRange == false : _dispVar is used
+         _hideDataOutsideCustomRange == true  : _thresholdDispVar is used
+*/
+const std::string& MEDPresentation::getDispVar() {
+  return (_hideDataOutsideCustomRange ? _presentationThresolds[getThresholdIndex()]._thresholdDispVar : _dispVar);
+}
+
+/*!
+  Return _dispVar or _thresholdDispVar depending on _hideDataOutsideCustomRange flag:
+         _hideDataOutsideCustomRange == false : _dispVar is used
+         _hideDataOutsideCustomRange == true  : _thresholdDispVar is used
+*/
+const std::string& MEDPresentation::getLutVar() {
+  return (_hideDataOutsideCustomRange ? _presentationThresolds[getThresholdIndex()]._thresholdLutVar : _lutVar);
 }
 
 void
 MEDPresentation::rescaleTransferFunction()
 {
+  if (_hideDataOutsideCustomRange)
+    return;
+
   std::ostringstream oss;
   switch(_sbRange)
   {
@@ -532,26 +827,69 @@ MEDPresentation::rescaleTransferFunction()
     case MEDCALC::SCALAR_BAR_CURRENT_TIMESTEP:
       oss << _dispVar << ".RescaleTransferFunctionToDataRange(False);";
       break;
+    case MEDCALC::SCALAR_BAR_CUSTOM_RANGE:
+      oss << _lutVar << ".RescaleTransferFunction("<< _scalarBarRangeArray[0]<<", "<< _scalarBarRangeArray[1]<<");";
+      break;
     default:
       STDLOG("MEDPresentation::getRescaleCommand(): invalid range!");
       throw KERNEL::createSalomeException("MEDPresentation::getRescaleCommand(): invalid range!");
   }
   pushAndExecPyLine(oss.str()); oss.str("");
   // Get min-max
-  oss << _rangeVar << " = [" << _dispVar << ".LookupTable.RGBPoints[0], " << _dispVar << ".LookupTable.RGBPoints[-4]];";
-  pushAndExecPyLine(oss.str());
+  oss << _rangeVar << " = [" << _lutVar << ".RGBPoints[0], " << _lutVar << ".RGBPoints[-4]];";
+  execPyLine(oss.str());
 
+  //Update _scalarBarRange internal variable in case of rescaling to "Data Range" or "Data Range Over All Times"
+  if (_sbRange == MEDCALC::SCALAR_BAR_ALL_TIMESTEPS ||
+      _sbRange == MEDCALC::SCALAR_BAR_CURRENT_TIMESTEP) {
+    MEDPyLockWrapper lock;
+    PyObject * obj = getPythonObjectFromMain(_rangeVar.c_str());
+    if (obj && PyList_Check(obj)) {
+      PyObject* objL0 = PyList_GetItem(obj, 0);
+      PyObject* objL1 = PyList_GetItem(obj, 1);
+      if (PyFloat_Check(objL0)) {
+        double min = PyFloat_AsDouble(objL0);
+        _scalarBarRangeArray[0] = min;
+      }
+      if (PyFloat_Check(objL1)) {
+        double max = PyFloat_AsDouble(objL1);
+        _scalarBarRangeArray[1] = max;
+      }
+    }
+    setDoubleProperty(MEDPresentation::PROP_SCALAR_BAR_MIN_VALUE, _scalarBarRangeArray[0]);
+    setDoubleProperty(MEDPresentation::PROP_SCALAR_BAR_MAX_VALUE, _scalarBarRangeArray[1]);
+  }
   // Adapt scalar bar title
   scalarBarTitle();
 }
 
+MEDCALC::PresentationVisibility
+MEDPresentation::presentationStateInActiveView() {
+  MEDPyLockWrapper lock;
+  MEDCALC::PresentationVisibility result = MEDCALC::PRESENTATION_NOT_IN_VIEW;
 
+  execPyLine("__isInView = ( " + getRenderViewVar() + " == pvs.GetActiveView() )");
+  PyObject * obj = getPythonObjectFromMain("__isInView");
+  
+  if (obj && PyBool_Check(obj) && (obj == Py_True)) {
+    result = _presentationVisibility ? MEDCALC::PRESENTATION_VISIBLE : MEDCALC::PRESENTATION_INVISIBLE;
+  }
+  return result;
+}
 
 int
 MEDPresentation::GeneratePythonId()
 {
   static int INIT_ID = 0;
   return INIT_ID++;
+}
+
+bool MEDPresentation::isThresoldActive() const {
+  bool active = false;
+  for (auto const& value : _presentationThresolds) {
+    active = active || value._active;
+  }
+  return active;
 }
 
 bool
@@ -587,11 +925,15 @@ MEDPresentation::activateView()
 void
 MEDPresentation::recreateViewSetup()
 {
+  bool prevHideDataOutsideCustomRange = _hideDataOutsideCustomRange;
+  _hideDataOutsideCustomRange = false;
   showObject();
   colorBy();
   showScalarBar();
   selectColorMap();
   rescaleTransferFunction();
+  _hideDataOutsideCustomRange = prevHideDataOutsideCustomRange;
+  threshold();
   resetCameraAndRender();
 }
 
@@ -620,19 +962,7 @@ void
 MEDPresentation::fillAvailableFieldComponents()
 {
   MEDPyLockWrapper lock;  // GIL!
-  std::string typ;
-
-  if(_pvFieldType == "CELLS") {
-      typ = "CellData";
-  }
-  else if (_pvFieldType == "POINTS") {
-      typ = "PointData";
-  }
-  else {
-      std::string msg("Unsupported spatial discretisation: " + _pvFieldType);
-      STDLOG(msg);
-      throw KERNEL::createSalomeException(msg.c_str());
-  }
+  std::string typ = getScriptCellType();
 
   std::ostringstream oss;
   oss << "__nbCompo = " << _srcObjVar << "." << typ << ".GetArray('" <<  _fieldName << "').GetNumberOfComponents();";
@@ -646,6 +976,8 @@ MEDPresentation::fillAvailableFieldComponents()
       STDLOG("Unexpected Python error");
       throw KERNEL::createSalomeException("Unexpected Python error");
     }
+  _nbComponents = nbCompo;
+  _nbComponentsInThresholdInput = _nbComponents;
   setIntProperty(MEDPresentation::PROP_NB_COMPONENTS, nbCompo);
 
   // if the field is not a vector (2 or 3 components), select the first component of the tensor,
@@ -695,15 +1027,69 @@ MEDPresentation::fillAvailableFieldComponents()
           oss_n << compo << "(" << val << ")";
           aCompos.push_back(oss_n.str());
         }
-        aCompoMap[compo] = aCompoMap[compo]++;
+        aCompoMap[compo] = aCompoMap[compo] + 1;
       }
     }
-  for (std::vector<std::string>::size_type i = 0; i != aCompos.size(); i++) {
-    std::ostringstream oss_p;
-    oss_p << MEDPresentation::PROP_COMPONENT << i;
-    setStringProperty(oss_p.str(), aCompos[i]);
-  }
+  std::string aCopy = _programmableVar;
+  std::string id = aCopy.replace(aCopy.find(PROGRAMMABLE), std::string(aCopy).length() - 1, "");
 
+  std::vector<std::string>::size_type up = (nbCompo > 1) ? nbCompo + 1 : nbCompo;
+  for (std::vector<std::string>::size_type i = 0; i != up; i++) {
+    std::ostringstream oss_p;
+    if (i != 0 || nbCompo == 1) {
+      std::vector<std::string>::size_type idx = (nbCompo > 1) ? i - 1 : i;
+      oss_p << MEDPresentation::PROP_COMPONENT << idx;
+      setStringProperty(oss_p.str(), aCompos[idx]);
+    }
+    std::ostringstream oss_thd, oss_th, oss_thl;
+    oss_th << "__threshold" << id <<"_"<<i;
+    oss_thd << "__thresholdDisp" << id << "_" << i;
+    oss_thl << "__thresholdLut" << id << "_" << i;
+    ComponentThresold ct = ComponentThresold();
+    ct._thresholdVar = oss_th.str();
+    ct._thresholdDispVar = oss_thd.str();
+    ct._thresholdLutVar = oss_thl.str();
+    _presentationThresolds.push_back(ct);
+  }
+}
+
+std::string MEDPresentation::getThresholdFieldName() const {
+  std::string result = getFieldName();
+  if (_nbComponentsInThresholdInput > 1 && _hideDataOutsideCustomRange) {
+    std::ostringstream oss;
+    if (_selectedComponentIndex == -1) {
+      oss << _fieldName << "_magnitude";
+    }
+    else {
+      oss << _fieldName << "_" << _selectedComponentIndex + 1;
+    }
+    result = oss.str();
+  }
+  return result;
+}
+
+std::string MEDPresentation::getFieldName() const {
+  return _fieldName;
+}
+
+std::string MEDPresentation::toScriptCellType(const std::string& pvType) {
+  std::string typ = "";
+  if (pvType == "CELLS") {
+    typ = "CellData";
+  }
+  else if (pvType == "POINTS") {
+    typ = "PointData";
+  }
+  else {
+    std::string msg("Unsupported spatial discretisation: " + pvType);
+    STDLOG(msg);
+    throw KERNEL::createSalomeException(msg.c_str());
+  }
+  return typ;
+}
+
+std::string MEDPresentation::getScriptCellType() const {
+  return toScriptCellType(_pvFieldType);
 }
 
 /**
@@ -723,6 +1109,28 @@ MEDPresentation::applyCellToPointIfNeeded()
       // Now the source becomes the result of the CellDatatoPointData:
       _srcObjVar = oss2.str();
     }
+}
+
+/**
+* Delete threshold filters and programmable filter
+*/
+void 
+MEDPresentation::deleteThresholds() {
+  std::ostringstream oss;
+  for (auto& value : _presentationThresolds) {
+    if (value._active) {
+      oss << "pvs.Hide(" << value._thresholdVar << ");";
+    }
+    if (value._thresholdInitialized) {
+      oss << "pvs.Delete(" << value._thresholdVar <<");";
+      value.clear();
+    }
+  }
+  if (_programmableInitialized) {
+    oss << "pvs.Delete(" << _programmableVar << ");";
+    _programmableInitialized = false;
+  }
+  pushAndExecPyLine(oss.str());
 }
 
 ///**

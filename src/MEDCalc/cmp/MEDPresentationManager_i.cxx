@@ -29,6 +29,9 @@
 #include "MEDPresentationVectorField.hxx"
 #include "MEDPresentationDeflectionShape.hxx"
 #include "MEDPresentationPointSprite.hxx"
+#include "MEDPresentationPlot3D.hxx"
+#include "MEDPresentationStreamLines.hxx"
+#include "MEDPresentationCutSegment.hxx"
 
 #include <SALOME_KernelServices.hxx>
 
@@ -76,7 +79,7 @@ MEDPresentationManager_i::_getPresentation(MEDPresentation::TypeID presentationI
   STDLOG("Get presentation " << presentationID);
   std::map<MEDPresentation::TypeID, MEDPresentation*>::const_iterator citr = _presentations.find(presentationID);
   if (citr == _presentations.end())
-    return NULL;
+    return nullptr;
   return (*citr).second;
 }
 
@@ -124,6 +127,30 @@ MEDPresentationManager_i::getPresentationIntProperty(MEDPresentation::TypeID pre
 
 }
 
+void
+MEDPresentationManager_i::setPresentationDoubleProperty(MEDPresentation::TypeID presentationID, const char* propName,
+  const CORBA::Double propValue)
+{
+  MEDPresentation* pres = _getPresentation(presentationID);
+  if (pres)
+    pres->setDoubleProperty(propName, propValue);
+  else
+    throw KERNEL::createSalomeException("setPresentationDoubleProperty(): presentation not found!!");
+}
+
+CORBA::Double
+MEDPresentationManager_i::getPresentationDoubleProperty(MEDPresentation::TypeID presentationID, const char* propName)
+{
+  MEDPresentation* pres = _getPresentation(presentationID);
+  if (pres) {
+    return (CORBA::Double) pres->getDoubleProperty(propName);
+  }
+  else
+    throw KERNEL::createSalomeException("getPresentationIntProperty(): presentation not found!!");
+
+}
+
+
 MEDPresentation::TypeID
 MEDPresentationManager_i::makeMeshView(const MEDCALC::MeshViewParameters& params, const MEDCALC::ViewModeType viewMode)
 {
@@ -166,6 +193,24 @@ MEDPresentationManager_i::makePointSprite(const MEDCALC::PointSpriteParameters& 
   return _makePresentation<MEDPresentationPointSprite>(params, viewMode);
 }
 
+MEDPresentation::TypeID
+MEDPresentationManager_i::makePlot3D(const MEDCALC::Plot3DParameters& params, const MEDCALC::ViewModeType viewMode)
+{
+  return _makePresentation<MEDPresentationPlot3D>(params, viewMode);
+}
+
+MEDPresentation::TypeID
+MEDPresentationManager_i::makeStreamLines(const MEDCALC::StreamLinesParameters& params, const MEDCALC::ViewModeType viewMode)
+{
+  return _makePresentation<MEDPresentationStreamLines>(params, viewMode);
+}
+
+MEDPresentation::TypeID
+MEDPresentationManager_i::makeCutSegment(const MEDCALC::CutSegmentParameters& params, const MEDCALC::ViewModeType viewMode)
+{
+  return _makePresentation<MEDPresentationCutSegment>(params, viewMode);
+}
+
 MEDCALC::MeshViewParameters
 MEDPresentationManager_i::getMeshViewParameters(MEDPresentation::TypeID presentationID)
 {
@@ -185,7 +230,7 @@ MEDPresentationManager_i::getScalarMapParameters(MEDPresentation::TypeID present
   return tmp._retn();
 }
 
-MEDCALC::ContourParameters
+MEDCALC::ContourParameters*
 MEDPresentationManager_i::getContourParameters(MEDPresentation::TypeID presentationID)
 {
   MEDCALC::ContourParameters* p = new MEDCALC::ContourParameters();
@@ -203,10 +248,10 @@ MEDPresentationManager_i::getSlicesParameters(MEDPresentation::TypeID presentati
   return tmp._retn();
 }
 
-MEDCALC::VectorFieldParameters
+MEDCALC::VectorFieldParameters*
 MEDPresentationManager_i::getVectorFieldParameters(MEDPresentation::TypeID presentationID)
 {
-  MEDCALC::VectorFieldParameters* p = new MEDCALC::VectorFieldParameters();
+  MEDCALC::VectorFieldParameters* p = new MEDCALC::VectorFieldParameters;
   _getParameters<MEDPresentationVectorField>(presentationID, *p);
   MEDCALC::VectorFieldParameters_var tmp(p);
   return tmp._retn();
@@ -221,7 +266,34 @@ MEDPresentationManager_i::getPointSpriteParameters(MEDPresentation::TypeID prese
   return tmp._retn();
 }
 
-MEDCALC::DeflectionShapeParameters
+MEDCALC::Plot3DParameters*
+MEDPresentationManager_i::getPlot3DParameters(MEDPresentation::TypeID presentationID)
+{
+  MEDCALC::Plot3DParameters* p = new MEDCALC::Plot3DParameters();
+  _getParameters<MEDPresentationPlot3D>(presentationID, *p);
+  MEDCALC::Plot3DParameters_var tmp(p);
+  return tmp._retn();
+}
+
+MEDCALC::StreamLinesParameters*
+MEDPresentationManager_i::getStreamLinesParameters(MEDPresentation::TypeID presentationID)
+{
+  MEDCALC::StreamLinesParameters* p = new MEDCALC::StreamLinesParameters();
+  _getParameters<MEDPresentationStreamLines>(presentationID, *p);
+  MEDCALC::StreamLinesParameters_var tmp(p);
+  return tmp._retn();
+}
+
+MEDCALC::CutSegmentParameters*
+MEDPresentationManager_i::getCutSegmentParameters(MEDPresentation::TypeID presentationID)
+{
+  MEDCALC::CutSegmentParameters* p = new MEDCALC::CutSegmentParameters();
+  _getParameters<MEDPresentationCutSegment>(presentationID, *p);
+  MEDCALC::CutSegmentParameters_var tmp(p);
+  return tmp._retn();
+}
+
+MEDCALC::DeflectionShapeParameters*
 MEDPresentationManager_i::getDeflectionShapeParameters(MEDPresentation::TypeID presentationID)
 {
   MEDCALC::DeflectionShapeParameters* p = new MEDCALC::DeflectionShapeParameters();
@@ -273,18 +345,34 @@ MEDPresentationManager_i::updatePointSprite(MEDPresentation::TypeID presentation
   return _updatePresentation<MEDPresentationPointSprite>(presentationID, params);
 }
 
+void
+MEDPresentationManager_i::updatePlot3D(MEDPresentation::TypeID presentationID, const MEDCALC::Plot3DParameters& params)
+{
+  return _updatePresentation<MEDPresentationPlot3D>(presentationID, params);
+}
+
+void
+MEDPresentationManager_i::updateStreamLines(MEDPresentation::TypeID presentationID, const MEDCALC::StreamLinesParameters& params)
+{
+  return _updatePresentation<MEDPresentationStreamLines>(presentationID, params);
+}
+
+void
+MEDPresentationManager_i::updateCutSegment(MEDPresentation::TypeID presentationID, const MEDCALC::CutSegmentParameters& params)
+{
+  return _updatePresentation<MEDPresentationCutSegment>(presentationID, params);
+}
+
 CORBA::Boolean
 MEDPresentationManager_i::removePresentation(MEDPresentation::TypeID presentationID)
 {
   STDLOG("Remove presentation " << presentationID);
-  std::map<MEDPresentation::TypeID, MEDPresentation*>::const_iterator citr = _presentations.find(presentationID);
-  if (citr == _presentations.end()) {
-    std::cerr << "removePresentation(): presentation not found!!" << std::endl;
+  MEDPresentation* presentation = _getPresentation(presentationID);
+  
+  if (!presentation)
     return false;
-  }
-  MEDPresentation* presentation = (*citr).second;
-  if (presentation)
-    delete presentation;
+  
+  delete presentation;
   _presentations.erase(presentationID);
 
   STDLOG("Presentation " << presentationID << " has been removed.");
@@ -362,6 +450,17 @@ MEDPresentationManager_i::getAllPresentations()
     (*presList)[i] = it->first;
   return presList;
 }
+
+MEDCALC::PresentationVisibility 
+MEDPresentationManager_i::stateInActiveView(MEDPresentation::TypeID presentationID)
+{
+  MEDPresentation* pres = _getPresentation(presentationID);
+  if (pres)
+    return pres->presentationStateInActiveView();
+  else
+    throw KERNEL::createSalomeException("stateInActiveView(): presentation not found!!");
+}
+ 
 
 void
 MEDPresentationManager_i::cleanUp()

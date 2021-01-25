@@ -46,13 +46,18 @@ SET(MEDCALCGUI_SOURCES
     MEDWidgetHelperComponent.cxx
     MEDWidgetHelperContour.cxx
     MEDWidgetHelperSlices.cxx
+    MEDWidgetHelperPlot3D.cxx
+    MEDWidgetHelperStreamLines.cxx
+    MEDWidgetHelperCutSegment.cxx
+    MEDWidgetHelperVectorField.cxx
+    MEDCALCGUI_Displayer.cxx
 )
 
 IF(SALOME_FIELDS_WITH_QTTESTING)
   LIST(APPEND MEDCALCGUI_SOURCES TestController.cxx)
 ENDIF()
 
-SET(MEDCALCGUI_HEADERS
+SET(MEDCALCGUI_MOC_HEADERS
   MEDModule.hxx
   MEDEventListener_i.hxx
   WorkspaceController.hxx
@@ -66,15 +71,22 @@ SET(MEDCALCGUI_HEADERS
   MEDWidgetHelperContour.hxx
   MEDWidgetHelperSlices.hxx
   MEDWidgetHelperPointSprite.hxx
+  MEDWidgetHelperPlot3D.hxx
+  MEDWidgetHelperStreamLines.hxx
+  MEDWidgetHelperCutSegment.hxx
   MEDWidgetHelperVectorField.hxx
   MEDWidgetHelperDeflectionShape.hxx
   )
+
+SET(MEDCALCGUI_HEADERS
+  MEDCALCGUI_Displayer.hxx
+  )
  
 IF(SALOME_FIELDS_WITH_QTTESTING)
-  LIST(APPEND MEDCALCGUI_HEADERS TestController.hxx)
+  LIST(APPEND MEDCALCGUI_MOC_HEADERS TestController.hxx)
 ENDIF()
 
-QT_WRAP_MOC(MEDCALCGUI_HEADERS_MOC ${MEDCALCGUI_HEADERS})
+QT_WRAP_MOC(MEDCALCGUI_HEADERS_MOC ${MEDCALCGUI_MOC_HEADERS})
 
 INCLUDE_DIRECTORIES(
   ${OMNIORB_INCLUDE_DIR} ${OMNIORB_INCLUDE_DIRS}

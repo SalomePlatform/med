@@ -61,6 +61,11 @@ protected slots:
   void onComponentChanged(int idx);
   void onColorMapChanged(int idx);
   void onScalarBarRangeChanged(int idx);
+  void onScalarBarVisibilityChanged(int idx);
+  void onUseCustomRangeChanged(int idx);
+  void onCustomRangeValueChanged(double min, double max);
+  void onHideDataOutsideCustomRangeChanged(int idx);
+
 
 protected:
   ///! GUI needs to talk directly to the pres manager to activate a view, get some params, etc ...:
@@ -75,6 +80,9 @@ protected:
   int _selectedCompo;                  // Selected field component
   int _nbCompos;                       // Total number of available components
   std::vector<std::string> _allCompos; // All available components
+  bool _scalarBarVisibility;
+  double _scalarBarRangeArray[2];
+  bool _hideDataOutsideCustomRange;
 
   // Color map
   MEDCALC::ColorMapType _colorMap;

@@ -40,6 +40,9 @@ public:
 
   virtual void recreateViewSetup();
 
+  virtual void showScalarBar() override {};
+  virtual void hideScalarBar() override {};
+
 protected:
   void updateMeshMode(const MEDCALC::MeshModeType mode);
   virtual void internalGeneratePipeline();

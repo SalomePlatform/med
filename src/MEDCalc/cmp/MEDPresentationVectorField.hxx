@@ -27,6 +27,8 @@ class MEDCALC_EXPORT MEDPresentationVectorField : public MEDPresentation
 {
 public:
   static const std::string TYPE_NAME;
+  static const std::string PROP_SCALE_FACTOR;
+  static const std::string PROP_CUSTOM_SCALE_FACTOR;
 
   MEDPresentationVectorField(const MEDCALC::VectorFieldParameters& params, const MEDCALC::ViewModeType viewMode);
   virtual ~MEDPresentationVectorField() {}
@@ -40,8 +42,9 @@ public:
 
 protected:
   virtual void internalGeneratePipeline();
+  void updateScaleFactor(const double, const bool);
   void autoScale();
-
+  void scale();
 private:
   MEDCALC::VectorFieldParameters _params;
 

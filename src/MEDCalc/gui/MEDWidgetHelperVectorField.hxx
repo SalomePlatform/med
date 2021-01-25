@@ -31,13 +31,23 @@ class MEDWidgetHelperVectorField: public MEDWidgetHelper
 public:
   MEDWidgetHelperVectorField(const PresentationController* presController,
                            MEDCALC::MEDPresentationManager_ptr presManager, int presId, const std::string & presName,
-                           WidgetPresentationParameters * paramW):
-     MEDWidgetHelper(presController, presManager, presId, presName, paramW)
-  {}
-  virtual ~MEDWidgetHelperVectorField() {}
+                           WidgetPresentationParameters * paramW);
+
+  virtual ~MEDWidgetHelperVectorField();
+
+  virtual void updateWidget(bool connect);
+  virtual void releaseWidget();
 
   virtual std::string getPythonTag() const { return "VectorField"; }
 
+protected slots:
+  void onScaleFactorChanged(double);
+  void onCustomScaleFactorChanged(int);
+
+protected:
+  virtual void loadParametersFromEngine();
+  double _scaleFactor;
+  bool _customScaleFactor;
 };
 
 #endif /* SRC_MEDCALC_GUI_MEDWIDGETHELPERVECTORFIELD_HXX_ */

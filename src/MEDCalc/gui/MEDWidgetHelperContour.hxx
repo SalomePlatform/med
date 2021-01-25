@@ -41,12 +41,14 @@ public:
 
 protected slots:
   void onNbContourChanged(int nbContour);
+  void onContourComponentTypeChanged(int index);
 
 protected:
   virtual void loadParametersFromEngine();
 
 private:
   int _nbContours;
+  int _contourComponent;
 };
 
 #endif /* SRC_MEDCALC_GUI_MEDWIDGETHELPERCONTOUR_HXX_ */

@@ -41,7 +41,8 @@ module MEDCALC
 
   enum ScalarBarRangeType {
     SCALAR_BAR_ALL_TIMESTEPS,
-    SCALAR_BAR_CURRENT_TIMESTEP
+    SCALAR_BAR_CURRENT_TIMESTEP,
+    SCALAR_BAR_CUSTOM_RANGE
   };
 
   enum MeshModeType {
@@ -49,7 +50,20 @@ module MEDCALC
     MESH_MODE_SURFACE_EDGES,
     MESH_MODE_SURFACE
   };
-  
+
+  enum PresentationVisibility {
+    PRESENTATION_INVISIBLE, 
+    PRESENTATION_VISIBLE,
+    PRESENTATION_NOT_IN_VIEW
+  };
+
+  enum IntegrationDirType {
+    INTEGRATION_DIR_BOTH,
+    INTEGRATION_DIR_FORWARD,
+    INTEGRATION_DIR_BACKWARD
+  };
+
+  typedef sequence<double> DoubleArray;
   
 
 //  struct ScalarBarRange {
@@ -84,6 +98,7 @@ module MEDCALC
 //  const long SCALAR_BAR_RANGE_VAL_MAX_DEFAULT = -1;
   const string DISPLAY_DEFAULT = DISPLAY_EUCLIDEAN_NORM;
   const SliceOrientationType SLICE_ORIENTATION_DEFAULT = SLICE_NORMAL_TO_X;
+  const IntegrationDirType INTEGRATION_DIR_DEFAULT = INTEGRATION_DIR_BOTH;
 
   const long NB_CONTOURS_DEFAULT = 10;
   const long NB_SLICES_DEFAULT = 1;
@@ -97,6 +112,7 @@ module MEDCALC
   struct MeshViewParameters {
     long meshHandlerId;
     MeshModeType mode;
+    boolean visibility;
   };
 
   // A simple scalar map
@@ -105,6 +121,10 @@ module MEDCALC
     string displayedComponent; // DISPLAY_EUCLIDEAN_NORM or any component name
     ScalarBarRangeType scalarBarRange;
     ColorMapType colorMap;
+    boolean visibility;
+    boolean scalarBarVisibility;
+    DoubleArray scalarBarRangeArray;
+    boolean hideDataOutsideCustomRange;
   };
 
   // A contour is an isoline in 2D and an isosurface in 3D
@@ -112,13 +132,24 @@ module MEDCALC
     long fieldHandlerId;
     ScalarBarRangeType scalarBarRange;
     ColorMapType colorMap;
+    boolean visibility;
+    boolean scalarBarVisibility;
+    DoubleArray scalarBarRangeArray;
+    boolean hideDataOutsideCustomRange; 
     long nbContours;
+    string contourComponent;
   };
 
   struct VectorFieldParameters {
     long fieldHandlerId;
     ScalarBarRangeType scalarBarRange;
     ColorMapType colorMap;
+    boolean visibility;
+    boolean scalarBarVisibility;
+    DoubleArray scalarBarRangeArray;
+    boolean hideDataOutsideCustomRange;
+    double scaleFactor;
+    boolean customScaleFactor;
   };
 
   struct SlicesParameters {
@@ -126,14 +157,23 @@ module MEDCALC
     string displayedComponent; // DISPLAY_EUCLIDEAN_NORM or any component name
     ScalarBarRangeType scalarBarRange;
     ColorMapType colorMap;
+    boolean visibility;
+    boolean scalarBarVisibility;
+    DoubleArray scalarBarRangeArray;
+    boolean hideDataOutsideCustomRange;
     SliceOrientationType orientation;
     long nbSlices;
   };
+
 
   struct DeflectionShapeParameters {
     long fieldHandlerId;
     ScalarBarRangeType scalarBarRange;
     ColorMapType colorMap;
+    boolean visibility;
+    boolean scalarBarVisibility;
+    DoubleArray scalarBarRangeArray;
+    boolean hideDataOutsideCustomRange;
   };
 
   struct PointSpriteParameters {
@@ -141,6 +181,45 @@ module MEDCALC
     string displayedComponent; // DISPLAY_EUCLIDEAN_NORM or any component name
     ScalarBarRangeType scalarBarRange;
     ColorMapType colorMap;
+    boolean visibility;
+    boolean scalarBarVisibility;
+    DoubleArray scalarBarRangeArray;
+    boolean hideDataOutsideCustomRange;
+  };
+
+  struct Plot3DParameters {
+    long fieldHandlerId;
+    ScalarBarRangeType scalarBarRange;
+    ColorMapType colorMap;
+    boolean visibility;
+    boolean scalarBarVisibility;
+    DoubleArray scalarBarRangeArray;
+    boolean hideDataOutsideCustomRange; 
+    DoubleArray planeNormal;
+    double planePos;
+  };
+
+  struct StreamLinesParameters {
+    long fieldHandlerId;
+    ScalarBarRangeType scalarBarRange;
+    ColorMapType colorMap;
+    boolean visibility;
+    boolean scalarBarVisibility;
+    DoubleArray scalarBarRangeArray;
+    boolean hideDataOutsideCustomRange; 
+    IntegrationDirType integrDir;
+  };
+
+  struct CutSegmentParameters {
+    long fieldHandlerId;
+    ScalarBarRangeType scalarBarRange;
+    ColorMapType colorMap;
+    boolean visibility;
+    boolean scalarBarVisibility;
+    DoubleArray scalarBarRangeArray;
+    boolean hideDataOutsideCustomRange; 
+    DoubleArray point1;
+    DoubleArray point2;
   };
 
   typedef sequence<long> PresentationsList;
@@ -156,11 +235,17 @@ module MEDCALC
     long makeSlices(in SlicesParameters params, in ViewModeType viewMode)            raises (SALOME::SALOME_Exception);
     long makeDeflectionShape(in DeflectionShapeParameters params, in ViewModeType viewMode) raises (SALOME::SALOME_Exception);
     long makePointSprite(in PointSpriteParameters params, in ViewModeType viewMode)  raises (SALOME::SALOME_Exception);
+    long makePlot3D(in Plot3DParameters params, in ViewModeType viewMode)       raises (SALOME::SALOME_Exception);
+    long makeStreamLines(in StreamLinesParameters params, in ViewModeType viewMode)       raises (SALOME::SALOME_Exception);
+    long makeCutSegment(in CutSegmentParameters params, in ViewModeType viewMode)       raises (SALOME::SALOME_Exception);
 
     void setPresentationStringProperty(in long presId, in string propName, in string propValue);
     string getPresentationStringProperty(in long presId, in string propName);
     void setPresentationIntProperty(in long presId, in string propName, in long propValue);
-    long getPresentationIntProperty(in long presId, in string propName);
+    long getPresentationIntProperty(in long presId, in string propName);  
+    void setPresentationDoubleProperty(in long presId, in string propName, in double propValue);
+    double getPresentationDoubleProperty(in long presId, in string propName);
+
 
     MeshViewParameters  getMeshViewParameters(in long presId);
     ScalarMapParameters getScalarMapParameters(in long presId);
@@ -168,7 +253,10 @@ module MEDCALC
     SlicesParameters     getSlicesParameters(in long presId);
     VectorFieldParameters     getVectorFieldParameters(in long presId);
     PointSpriteParameters     getPointSpriteParameters(in long presId);
+    Plot3DParameters          getPlot3DParameters(in long presId);
     DeflectionShapeParameters     getDeflectionShapeParameters(in long presId);
+    StreamLinesParameters     getStreamLinesParameters(in long presId);
+    CutSegmentParameters     getCutSegmentParameters(in long presId);
 
     void updateMeshView(in long presId, in MeshViewParameters params)   raises (SALOME::SALOME_Exception);
     void updateScalarMap(in long presId, in ScalarMapParameters params) raises (SALOME::SALOME_Exception);
@@ -177,6 +265,9 @@ module MEDCALC
     void updateSlices(in long presId, in SlicesParameters params)       raises (SALOME::SALOME_Exception);
     void updateDeflectionShape(in long presId, in DeflectionShapeParameters params) raises (SALOME::SALOME_Exception);
     void updatePointSprite(in long presId, in PointSpriteParameters params)         raises (SALOME::SALOME_Exception);
+    void updatePlot3D(in long presId, in Plot3DParameters params)         raises (SALOME::SALOME_Exception);
+    void updateStreamLines(in long presId, in StreamLinesParameters params)         raises (SALOME::SALOME_Exception);
+    void updateCutSegment(in long presId, in CutSegmentParameters params)         raises (SALOME::SALOME_Exception);
 
     boolean removePresentation(in long presId)   raises (SALOME::SALOME_Exception);
 
@@ -189,6 +280,9 @@ module MEDCALC
 //    ViewModeType getPresentationViewMode(in long presId);
     
     PresentationsList getAllPresentations();
+
+//  Visibility State in the active ParaView viewer
+    PresentationVisibility stateInActiveView(in long presId);
 
     void cleanUp()   raises (SALOME::SALOME_Exception);
   };

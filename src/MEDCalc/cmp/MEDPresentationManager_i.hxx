@@ -46,6 +46,9 @@ class MEDPresentationManager_i: public POA_MEDCALC::MEDPresentationManager,
   MEDCALC_EXPORT MEDPresentation::TypeID makeSlices(const MEDCALC::SlicesParameters&, const MEDCALC::ViewModeType);
   MEDCALC_EXPORT MEDPresentation::TypeID makeDeflectionShape(const MEDCALC::DeflectionShapeParameters&, const MEDCALC::ViewModeType);
   MEDCALC_EXPORT MEDPresentation::TypeID makePointSprite(const MEDCALC::PointSpriteParameters&, const MEDCALC::ViewModeType);
+  MEDCALC_EXPORT MEDPresentation::TypeID makePlot3D(const MEDCALC::Plot3DParameters&, const MEDCALC::ViewModeType);
+  MEDCALC_EXPORT MEDPresentation::TypeID makeStreamLines(const MEDCALC::StreamLinesParameters&, const MEDCALC::ViewModeType);
+  MEDCALC_EXPORT MEDPresentation::TypeID makeCutSegment(const MEDCALC::CutSegmentParameters&, const MEDCALC::ViewModeType);
 
   MEDCALC_EXPORT void setPresentationStringProperty(MEDPresentation::TypeID presentationID, const char* propName, const char* propValue);
   MEDCALC_EXPORT char* getPresentationStringProperty(MEDPresentation::TypeID presentationID, const char* propName);
@@ -53,13 +56,19 @@ class MEDPresentationManager_i: public POA_MEDCALC::MEDPresentationManager,
   MEDCALC_EXPORT void setPresentationIntProperty(MEDPresentation::TypeID presentationID, const char* propName, const CORBA::Long propValue);
   MEDCALC_EXPORT CORBA::Long getPresentationIntProperty(MEDPresentation::TypeID presentationID, const char* propName);
 
+  MEDCALC_EXPORT void setPresentationDoubleProperty(MEDPresentation::TypeID presentationID, const char* propName, const CORBA::Double propValue);
+  MEDCALC_EXPORT CORBA::Double getPresentationDoubleProperty(MEDPresentation::TypeID presentationID, const char* propName);
+
   MEDCALC_EXPORT MEDCALC::MeshViewParameters   getMeshViewParameters(MEDPresentation::TypeID presentationID);
   MEDCALC_EXPORT MEDCALC::ScalarMapParameters* getScalarMapParameters(MEDPresentation::TypeID presentationID);
-  MEDCALC_EXPORT MEDCALC::ContourParameters    getContourParameters(MEDPresentation::TypeID presentationID);
+  MEDCALC_EXPORT MEDCALC::ContourParameters*    getContourParameters(MEDPresentation::TypeID presentationID);
   MEDCALC_EXPORT MEDCALC::SlicesParameters*    getSlicesParameters(MEDPresentation::TypeID presentationID);
-  MEDCALC_EXPORT MEDCALC::VectorFieldParameters     getVectorFieldParameters(MEDPresentation::TypeID presentationID);
+  MEDCALC_EXPORT MEDCALC::VectorFieldParameters*     getVectorFieldParameters(MEDPresentation::TypeID presentationID);
   MEDCALC_EXPORT MEDCALC::PointSpriteParameters*    getPointSpriteParameters(MEDPresentation::TypeID presentationID);
-  MEDCALC_EXPORT MEDCALC::DeflectionShapeParameters     getDeflectionShapeParameters(MEDPresentation::TypeID presentationID);
+  MEDCALC_EXPORT MEDCALC::Plot3DParameters*         getPlot3DParameters(MEDPresentation::TypeID presentationID);
+  MEDCALC_EXPORT MEDCALC::DeflectionShapeParameters*     getDeflectionShapeParameters(MEDPresentation::TypeID presentationID);
+  MEDCALC_EXPORT MEDCALC::StreamLinesParameters*     getStreamLinesParameters(MEDPresentation::TypeID presentationID);
+  MEDCALC_EXPORT MEDCALC::CutSegmentParameters*     getCutSegmentParameters(MEDPresentation::TypeID presentationID);
 
   MEDCALC_EXPORT void updateMeshView(MEDPresentation::TypeID, const MEDCALC::MeshViewParameters&);
   MEDCALC_EXPORT void updateScalarMap(MEDPresentation::TypeID, const MEDCALC::ScalarMapParameters&);
@@ -68,6 +77,9 @@ class MEDPresentationManager_i: public POA_MEDCALC::MEDPresentationManager,
   MEDCALC_EXPORT void updateSlices(MEDPresentation::TypeID, const MEDCALC::SlicesParameters&);
   MEDCALC_EXPORT void updateDeflectionShape(MEDPresentation::TypeID, const MEDCALC::DeflectionShapeParameters&);
   MEDCALC_EXPORT void updatePointSprite(MEDPresentation::TypeID, const MEDCALC::PointSpriteParameters&);
+  MEDCALC_EXPORT void updatePlot3D(MEDPresentation::TypeID, const MEDCALC::Plot3DParameters&);
+  MEDCALC_EXPORT void updateStreamLines(MEDPresentation::TypeID, const MEDCALC::StreamLinesParameters&);
+  MEDCALC_EXPORT void updateCutSegment(MEDPresentation::TypeID, const MEDCALC::CutSegmentParameters&);
 
   MEDCALC_EXPORT CORBA::Boolean removePresentation(MEDPresentation::TypeID);
   MEDCALC_EXPORT CORBA::Boolean activateView(MEDPresentation::TypeID);
@@ -76,6 +88,7 @@ class MEDPresentationManager_i: public POA_MEDCALC::MEDPresentationManager,
   MEDCALC_EXPORT char * getParavisDump(MEDPresentation::TypeID presentationID);
   MEDCALC_EXPORT MEDCALC::PresentationsList* getAllPresentations();
   MEDCALC_EXPORT void cleanUp();
+  MEDCALC_EXPORT MEDCALC::PresentationVisibility stateInActiveView(MEDPresentation::TypeID presentationID);
 
  private:
   MEDPresentationManager_i();

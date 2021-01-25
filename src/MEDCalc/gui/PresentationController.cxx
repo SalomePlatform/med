@@ -33,6 +33,9 @@
 #include "MEDPresentationSlices.hxx"
 #include "MEDPresentationPointSprite.hxx"
 #include "MEDPresentationVectorField.hxx"
+#include "MEDPresentationPlot3D.hxx"
+#include "MEDPresentationStreamLines.hxx"
+#include "MEDPresentationCutSegment.hxx"
 #include "MEDPresentationDeflectionShape.hxx"
 
 #include "MEDWidgetHelperMeshView.hxx"
@@ -40,6 +43,9 @@
 #include "MEDWidgetHelperContour.hxx"
 #include "MEDWidgetHelperSlices.hxx"
 #include "MEDWidgetHelperPointSprite.hxx"
+#include "MEDWidgetHelperPlot3D.hxx"
+#include "MEDWidgetHelperStreamLines.hxx"
+#include "MEDWidgetHelperCutSegment.hxx"
 #include "MEDWidgetHelperVectorField.hxx"
 #include "MEDWidgetHelperDeflectionShape.hxx"
 
@@ -58,6 +64,7 @@
 #include <SUIT_ResourceMgr.h>
 #include <QMessageBox>
 #include <sstream>
+#include <regex>
 
 #include "MEDFactoryClient.hxx"
 
@@ -231,6 +238,34 @@ PresentationController::createActions()
   _salomeModule->action(actionId)->setIconVisibleInMenu(true);
   _salomeModule->createMenu(actionId, presentationMenuId);
 
+  label   = tr("LAB_PRESENTATION_PLOT3D");
+  tooltip = tr("TIP_PRESENTATION_PLOT3D");
+  icon    = tr(_getIconName("ICO_PRESENTATION_PLOT3D").c_str());
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(onVisualizePlot3D()),
+                                                 icon, tooltip, FIELDSOp::OpPlot3D);
+  _salomeModule->createTool(actionId, presentationToolbarId);
+  _salomeModule->action(actionId)->setIconVisibleInMenu(true);
+  _salomeModule->createMenu(actionId, presentationMenuId);
+
+  label   = tr("LAB_PRESENTATION_STREAM_LINES");
+  tooltip = tr("TIP_PRESENTATION_STREAM_LINES");
+  icon    = tr(_getIconName("ICO_PRESENTATION_STREAM_LINES").c_str());
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(onVisualizeStreamLines()),
+                                                 icon, tooltip, FIELDSOp::OpStreamLines);
+  _salomeModule->createTool(actionId, presentationToolbarId);
+  _salomeModule->action(actionId)->setIconVisibleInMenu(true);
+  _salomeModule->createMenu(actionId, presentationMenuId);
+
+  label   = tr("LAB_PRESENTATION_CUT_SEGMENT");
+  tooltip = tr("TIP_PRESENTATION_CUT_SEGMENT");
+  icon    = tr(_getIconName("ICO_PRESENTATION_CUT_SEGMENT").c_str());
+  actionId = _salomeModule->createStandardAction(label, this, SLOT(onVisualizeCutSegment()),
+                                                 icon, tooltip, FIELDSOp::OpCutSegment);
+  _salomeModule->createTool(actionId, presentationToolbarId);
+  _salomeModule->action(actionId)->setIconVisibleInMenu(true);
+  _salomeModule->createMenu(actionId, presentationMenuId);
+
+
   // Separator
   _salomeModule->createMenu(_salomeModule->separator(), presentationMenuId);
 
@@ -388,6 +423,29 @@ PresentationController::onVisualizePointSprite()
 }
 
 void
+PresentationController::onVisualizePlot3D()
+{
+  this->visualize(PresentationEvent::EVENT_VIEW_OBJECT_PLOT3D);
+}
+
+void
+PresentationController::onVisualizeStreamLines()
+{
+  this->visualize(PresentationEvent::EVENT_VIEW_OBJECT_STREAM_LINES);
+}
+
+void
+PresentationController::onVisualizeCutSegment()
+{
+  // Cut segment presentation "creates" new view, so switch off visibility state update 
+  // because pqActiveObjects::viewChanged is emmited 
+  _salomeModule->visibilityStateUpdateOff();
+  this->visualize(PresentationEvent::EVENT_VIEW_OBJECT_CUT_SEGMENT);
+  _salomeModule->visibilityStateUpdateOn();
+  _salomeModule->updateVisibilityState();
+}
+
+void
 PresentationController::onDeletePresentation()
 {
   // Get the selected objects in the study (SObject)
@@ -439,10 +497,11 @@ PresentationController::getColorMapPython() const
 QString
 PresentationController::getScalarBarRangePython() const
 {
-  MEDCALC::ScalarBarRangeType colorMap = getSelectedScalarBarRange();
-  switch(colorMap) {
+  MEDCALC::ScalarBarRangeType scalarBarRange = getSelectedScalarBarRange();
+  switch(scalarBarRange) {
     case MEDCALC::SCALAR_BAR_ALL_TIMESTEPS: return "MEDCALC.SCALAR_BAR_ALL_TIMESTEPS";
     case MEDCALC::SCALAR_BAR_CURRENT_TIMESTEP: return "MEDCALC.SCALAR_BAR_CURRENT_TIMESTEP";
+    case MEDCALC::SCALAR_BAR_CUSTOM_RANGE: return "MEDCALC.SCALAR_BAR_CUSTOM_RANGE";
   }
   return QString();
 }
@@ -475,6 +534,19 @@ PresentationController::getSliceOrientationPython(const int orientation) const
   return QString();
 }
 
+QString
+PresentationController::getIntegrDirTypePython(const int intDir) const
+{
+  MEDCALC::IntegrationDirType type = static_cast<MEDCALC::IntegrationDirType>(intDir);
+  switch(type) {
+    case MEDCALC::INTEGRATION_DIR_BOTH:     return "MEDCALC.INTEGRATION_DIR_BOTH";
+    case MEDCALC::INTEGRATION_DIR_FORWARD:  return "MEDCALC.INTEGRATION_DIR_FORWARD";
+    case MEDCALC::INTEGRATION_DIR_BACKWARD: return "MEDCALC.INTEGRATION_DIR_BACKWARD";
+  }
+  return QString();
+}
+
+
 std::string
 PresentationController::getPresTypeFromWidgetHelper(int presId) const
 {
@@ -482,6 +554,12 @@ PresentationController::getPresTypeFromWidgetHelper(int presId) const
   if (it != _presHelperMap.end())
     return (*it).second->getPythonTag();
   return "UNKNOWN";
+}
+
+void
+PresentationController::emitPresentationSignal(const PresentationEvent* event) 
+{
+  emit presentationSignal(event);
 }
 
 void
@@ -527,7 +605,22 @@ PresentationController::processPresentationEvent(const PresentationEvent* event)
               .arg(fieldHandler->id).arg(viewMode).arg(scalarBarRange).arg(colorMap);
       commands += QString("presentation_id");
   }
-    else if ( event->eventtype == PresentationEvent::EVENT_VIEW_OBJECT_DEFLECTION_SHAPE ) {
+  else if ( event->eventtype == PresentationEvent::EVENT_VIEW_OBJECT_PLOT3D ) {
+      commands += QString("presentation_id = medcalc.MakePlot3D(accessField(%1), viewMode=%2, scalarBarRange=%3, colorMap=%4)")
+              .arg(fieldHandler->id).arg(viewMode).arg(scalarBarRange).arg(colorMap);
+      commands += QString("presentation_id");
+  }
+  else if ( event->eventtype == PresentationEvent::EVENT_VIEW_OBJECT_STREAM_LINES ) {
+      commands += QString("presentation_id = medcalc.MakeStreamLines(accessField(%1), viewMode=%2, scalarBarRange=%3, colorMap=%4)")
+              .arg(fieldHandler->id).arg(viewMode).arg(scalarBarRange).arg(colorMap);
+      commands += QString("presentation_id");
+  }
+  else if ( event->eventtype == PresentationEvent::EVENT_VIEW_OBJECT_CUT_SEGMENT ) {
+      commands += QString("presentation_id = medcalc.MakeCutSegment(accessField(%1), viewMode=%2, scalarBarRange=%3, colorMap=%4)")
+              .arg(fieldHandler->id).arg(viewMode).arg(scalarBarRange).arg(colorMap);
+      commands += QString("presentation_id");
+  }
+  else if ( event->eventtype == PresentationEvent::EVENT_VIEW_OBJECT_DEFLECTION_SHAPE ) {
       commands += QString("presentation_id = medcalc.MakeDeflectionShape(accessField(%1), viewMode=%2, scalarBarRange=%3, colorMap=%4)")
           .arg(fieldHandler->id).arg(viewMode).arg(scalarBarRange).arg(colorMap);
       commands += QString("presentation_id");
@@ -547,9 +640,20 @@ PresentationController::processPresentationEvent(const PresentationEvent* event)
       commands += QString("medcalc.Update%1(%2, params)").arg(QString::fromStdString(typ)).arg(event->presentationId);
   }
   else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_TIME_RANGE ) {
+      bool customRangeFlag =
+        (bool)_presManager->getPresentationIntProperty(event->presentationId, MEDPresentation::PROP_HIDE_DATA_OUTSIDE_CUSTOM_RANGE.c_str());
       std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
       commands += QString("params = medcalc.Get%1Parameters(%2)").arg(QString::fromStdString(typ)).arg(event->presentationId);
       commands += QString("params.scalarBarRange = %1").arg(getScalarBarRangePython());
+      if (getSelectedScalarBarRange() == MEDCALC::SCALAR_BAR_CUSTOM_RANGE) {
+        commands += QString("params.scalarBarRangeArray = [%1, %2]").arg(event->aDouble1).arg(event->aDouble2);
+      }
+      else {
+        if (customRangeFlag) // switch off hideDataOutsideCustomRange
+        {
+          commands += QString("params.hideDataOutsideCustomRange = False");
+        }
+      }
       commands += QString("medcalc.Update%1(%2, params)").arg(QString::fromStdString(typ)).arg(event->presentationId);
   }
   else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_NB_CONTOUR ) {
@@ -576,9 +680,98 @@ PresentationController::processPresentationEvent(const PresentationEvent* event)
       commands += QString("params.orientation = %1").arg(getSliceOrientationPython(event->anInteger));
       commands += QString("medcalc.UpdateSlices(%1, params)").arg(event->presentationId);
   }
+  else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_PLANE_POS ) {
+      std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
+      commands += QString("params = medcalc.GetPlot3DParameters(%2)").arg(event->presentationId);
+      commands += QString("params.planePos = %1").arg(event->aDouble3);
+      commands += QString("medcalc.UpdatePlot3D(%1, params)").arg(event->presentationId);
+  }
+  else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_NORMAL ) {
+      std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
+      commands += QString("params = medcalc.GetPlot3DParameters(%2)").arg(event->presentationId);
+      commands += QString("params.planeNormal = [%1, %2, %3]").arg(event->aDoubleN[0]).arg(event->aDoubleN[1]).arg(event->aDoubleN[2]);
+      commands += QString("medcalc.UpdatePlot3D(%1, params)").arg(event->presentationId);
+  }
+  else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_CUT_POINT1 ) {
+      std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
+      commands += QString("params = medcalc.GetCutSegmentParameters(%2)").arg(event->presentationId);
+      commands += QString("params.point1 = [%1, %2, %3]").arg(event->aDoubleP1[0]).arg(event->aDoubleP1[1]).arg(event->aDoubleP1[2]);
+      commands += QString("medcalc.UpdateCutSegment(%1, params)").arg(event->presentationId);
+  }
+  else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_CUT_POINT2 ) {
+      std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
+      commands += QString("params = medcalc.GetCutSegmentParameters(%2)").arg(event->presentationId);
+      commands += QString("params.point2 = [%1, %2, %3]").arg(event->aDoubleP2[0]).arg(event->aDoubleP2[1]).arg(event->aDoubleP2[2]);
+      commands += QString("medcalc.UpdateCutSegment(%1, params)").arg(event->presentationId);
+  }
+  else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_INTEGR_DIR ) {
+      std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
+      commands += QString("params = medcalc.GetStreamLinesParameters(%2)").arg(event->presentationId);
+      commands += QString("params.integrDir = %1").arg(getIntegrDirTypePython(event->anInteger));
+      commands += QString("medcalc.UpdateStreamLines(%1, params)").arg(event->presentationId);
+  }
+  else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_CONTOUR_COMPONENT) {
+      std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
+      commands += QString("params = medcalc.GetContourParameters(%2)").arg(event->presentationId);
+      commands += QString("params.contourComponent = '%1'").arg(event->aString.c_str());
+      commands += QString("medcalc.UpdateContour(%1, params)").arg(event->presentationId);
+  }
+  else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_SCALE_FACTOR ) {
+      std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
+      commands += QString("params = medcalc.GetVectorFieldParameters(%2)").arg(event->presentationId);
+      commands += QString("params.scaleFactor = %1").arg(event->aDouble3);
+      commands += QString("medcalc.UpdateVectorField(%1, params)").arg(event->presentationId);
+  }
+
+  else if (event->eventtype == PresentationEvent::EVENT_CHANGE_CUSTOM_SCALE_FACTOR) {
+  std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
+  commands += QString("params = medcalc.GetVectorFieldParameters(%2)").arg(event->presentationId);
+  commands += QString("params.customScaleFactor = %1").arg(event->anInteger);
+  if(event->anInteger) {
+    commands += QString("params.scaleFactor = %1").arg(event->aDouble3);
+  }
+  commands += QString("medcalc.UpdateVectorField(%1, params)").arg(event->presentationId);
+  }
 
   else if ( event->eventtype == PresentationEvent::EVENT_DELETE_PRESENTATION ) {
       commands += QString("medcalc.RemovePresentation(%1)").arg(event->presentationId);
+
+  }
+  else if (event->eventtype == PresentationEvent::EVENT_DISPLAY_PRESENTATION ||
+           event->eventtype == PresentationEvent::EVENT_ERASE_PRESENTATION) {
+    commands += QString("params = medcalc.Get%1Parameters(%2)").arg(QString::fromStdString(getPresTypeFromWidgetHelper(event->presentationId)))
+      .arg(event->presentationId);
+    QString visility = event->eventtype == PresentationEvent::EVENT_DISPLAY_PRESENTATION ? QString("True") : QString("False");
+    commands += QString("params.visibility = %1").arg(visility);
+    commands += QString("medcalc.Update%1(%2, params)").arg(QString::fromStdString(getPresTypeFromWidgetHelper(event->presentationId)))
+      .arg(event->presentationId);
+  }
+  else if (event->eventtype == PresentationEvent::EVENT_SCALAR_BAR_VISIBILITY_CHANGED ||
+           event->eventtype == PresentationEvent::EVENT_HIDE_DATA_OUTSIDE_CUSTOM_RANGE_CHANGED) {
+    std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
+    QString param;
+    switch (event->eventtype) {
+    case PresentationEvent::EVENT_SCALAR_BAR_VISIBILITY_CHANGED: 
+      param = QString("scalarBarVisibility"); 
+      break;
+    case PresentationEvent::EVENT_HIDE_DATA_OUTSIDE_CUSTOM_RANGE_CHANGED:
+      param = QString("hideDataOutsideCustomRange"); 
+      break;
+    default: break;
+    }
+    commands += QString("params = medcalc.Get%1Parameters(%2)").arg(QString::fromStdString(typ)).arg(event->presentationId);
+    commands += QString("params.%1 = %2").arg(param).arg( event->anInteger ? QString("True") : QString("False"));
+    if (event->eventtype == PresentationEvent::EVENT_HIDE_DATA_OUTSIDE_CUSTOM_RANGE_CHANGED && event->anInteger) {
+      commands += QString("params.scalarBarRangeArray = [%1, %2]").arg(event->aDouble1).arg(event->aDouble2);
+    }
+    commands += QString("medcalc.Update%1(%2, params)").arg(QString::fromStdString(typ)).arg(event->presentationId);
+  }
+  else if (event->eventtype == PresentationEvent::EVENT_CUSTOM_RANGE_CHANGED)
+  {
+  std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
+    commands += QString("params = medcalc.Get%1Parameters(%2)").arg(QString::fromStdString(typ)).arg(event->presentationId);
+    commands += QString("params.scalarBarRangeArray = [%1, %2]").arg(event->aDouble1).arg(event->aDouble2);
+    commands += QString("medcalc.Update%1(%2, params)").arg(QString::fromStdString(typ)).arg(event->presentationId);
   }
   else {
       STDLOG("The event "<<event->eventtype<<" is not implemented yet");
@@ -606,6 +799,12 @@ PresentationController::findOrCreateWidgetHelper(MEDCALC::MEDPresentationManager
     wh = new MEDWidgetHelperVectorField(this, _presManager, presId, name, _widgetPresentationParameters);
   else if (type == MEDPresentationPointSprite::TYPE_NAME)
     wh = new MEDWidgetHelperPointSprite(this, _presManager, presId, name, _widgetPresentationParameters);
+  else if (type == MEDPresentationPlot3D::TYPE_NAME)
+    wh = new MEDWidgetHelperPlot3D(this, _presManager, presId, name, _widgetPresentationParameters);
+  else if (type == MEDPresentationStreamLines::TYPE_NAME)
+    wh = new MEDWidgetHelperStreamLines(this, _presManager, presId, name, _widgetPresentationParameters);
+  else if (type == MEDPresentationCutSegment::TYPE_NAME)
+    wh = new MEDWidgetHelperCutSegment(this, _presManager, presId, name, _widgetPresentationParameters);
   else if (type == MEDPresentationDeflectionShape::TYPE_NAME)
     wh = new MEDWidgetHelperDeflectionShape(this, _presManager, presId, name, _widgetPresentationParameters);
   else
@@ -715,6 +914,7 @@ PresentationController::updateTreeViewWithNewPresentation(long dataId, long pres
   int presId = -1;
   _salomeModule->itemClickGeneric(name, type, presId);
   onPresentationSelected(presId, QString::fromStdString(type), QString::fromStdString(name));
+  updateVisibilityState(presId);
 }
 
 void
@@ -765,6 +965,9 @@ PresentationController::processWorkspaceEvent(const MEDCALC::MedEvent* event)
     else {
       updateTreeViewWithNewPresentation(event->dataId, event->presentationId);
       _dealWithReplaceMode();
+      // Update parameter widget if shown: some parameters should be updated after presentation has been added
+      if (_currentWidgetHelper)
+        _currentWidgetHelper->updateWidget(false);
     }
   }
   else if ( event->type == MEDCALC::EVENT_REMOVE_PRESENTATION ) {
@@ -777,10 +980,27 @@ PresentationController::processWorkspaceEvent(const MEDCALC::MedEvent* event)
       if(_currentWidgetHelper)
         _currentWidgetHelper->updateWidget(false);
   }
+  else if (event->type == MEDCALC::EVENT_VISIBILITY_CHANGED) {
+    updateVisibilityState(event->presentationId);
+  }
 }
 
 void
 PresentationController::showDockWidgets(bool isVisible)
 {
   _dockWidget->setVisible(isVisible);
+}
+
+void PresentationController::updateVisibilityState(long presId) 
+{
+  char* str = _salomeModule->engine()->getStudyPresentationEntry(presId);
+  if (str) {
+    QStringList entries;
+    entries.append(str);
+    _salomeModule->updateVisibilityState(false, entries);
+  }
+}
+
+std::string PresentationController::presentationName2Type(const std::string& name) {
+  return std::regex_replace(name, std::regex("MEDPresentation"), std::string(""));
 }

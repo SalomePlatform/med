@@ -64,6 +64,30 @@
         <translation>Point sprite</translation>
     </message>
     <message>
+        <source>LAB_PRESENTATION_PLOT3D</source>
+        <translation>Plot3D</translation>
+    </message>
+    <message>
+        <source>TIP_PRESENTATION_PLOT3D</source>
+        <translation>Plot3D</translation>
+    </message>
+    <message>
+        <source>LAB_PRESENTATION_STREAM_LINES</source>
+        <translation>Les Lignes DÉcoulement</translation>
+    </message>
+    <message>
+        <source>TIP_PRESENTATION_STREAM_LINES</source>
+        <translation>Les Lignes DÉcoulement</translation>
+    </message>
+    <message>
+        <source>LAB_PRESENTATION_CUT_SEGMENT</source>
+        <translation>Couper Des Segment</translation>
+    </message>
+    <message>
+        <source>TIP_PRESENTATION_CUT_SEGMENT</source>
+        <translation>Couper Des Segment</translation>
+    </message>
+    <message>
         <source>LAB_DELETE_PRESENTATION</source>
         <translation>Supprimer</translation>
     </message>
@@ -110,6 +134,18 @@
     <message>
         <source>MEDPresentationPointSprite</source>
         <translation>Point sprite</translation>
+    </message>
+    <message>
+        <source>MEDPresentationPlot3D</source>
+        <translation>Plot3D</translation>
+    </message>
+    <message>
+        <source>MEDPresentationStreamLines</source>
+        <translation>Les Lignes DeÉcoulement</translation>
+    </message>
+    <message>
+        <source>MEDPresentationCutSegment</source>
+        <translation>Couper Des Segment</translation>
     </message>
 </context>
 <context>
@@ -208,6 +244,18 @@
         <translation>Intervalle :</translation>
     </message>
     <message>
+        <source>LAB_SHOW_SCALAR_BAR</source>
+        <translation>Afficher la barre scalaire</translation>
+    </message>
+    <message>
+        <source>LAB_CUSTOM_RANGE</source>
+        <translation>Gamme personnalisée:</translation>
+    </message>
+    <message>
+        <source>LAB_HIDE_DATA_OUTSIDE_CR</source>
+        <translation>Masquer les données en dehors de la plage personnalisée</translation>
+    </message>
+    <message>
         <source>LAB_ALL_TIMESTEPS</source>
         <translation>Tous les pas de temps</translation>
     </message>
@@ -248,8 +296,24 @@
         <translation>Surface Avec Arrêtes</translation>
     </message>
     <message>
+        <source>LAB_INTEGR_DIR_BOTH</source>
+        <translation>Les DEUX</translation>
+    </message>
+    <message>
+        <source>LAB_INTEGR_DIR_FORWARD</source>
+        <translation>TRANSMETTRE</translation>
+    </message>
+    <message>
+        <source>LAB_INTEGR_DIR_BACKWARD</source>
+        <translation>ARRIÉRÉ</translation>
+    </message>
+    <message>
         <source>LAB_DISP_MESH_MODE</source>
         <translation>Affichage du maillage:</translation>
+    </message>
+    <message>
+        <source>LAB_INTEGR_DIR</source>
+        <translation>Intégration De Direction:</translation>
     </message>
     <message>
         <source>LAB_NB_CONTOURS</source>
@@ -302,6 +366,26 @@
     <message>
         <source>LAB_COOL_TO_WARM</source>
         <translation>Froid vers chaud</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_PLANE_NORMAL</source>
+        <translation>Plan Normal:</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_PLANE_POS</source>
+        <translation>Position Du Plan De Coupe:</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_POINT1</source>
+        <translation>Point 1:</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_POINT2</source>
+        <translation>Point 2:</translation>
+    </message>
+    <message>
+        <source>LAB_SCALE_FACTOR</source>
+        <translation>Facteur Déchelle</translation>
     </message>
 </context>
 <context>

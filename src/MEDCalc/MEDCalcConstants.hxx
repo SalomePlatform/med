@@ -45,6 +45,9 @@ namespace FIELDSOp {
     OpSlices                    = 2504,   // Menu Slices
     OpDeflectionShape           = 2505,   // Menu Deflection
     OpPointSprite               = 2506,   // Menu PointSprite
+    OpPlot3D                    = 2507,   // Menu Plot3D
+    OpStreamLines               = 2508,   // Menu StreamLines
+    OpCutSegment                = 2509,   // Menu CutSegment
     // Interpolation
     OpProcessingInterpolation   = 2601,   // Menu Processing interpolation
   };

@@ -108,6 +108,9 @@ MEDPresentationMeshView::updatePipeline(const MEDCALC::MeshViewParameters& param
 
   if (params.mode != _params.mode)
     updateMeshMode(params.mode);
+  if (params.visibility != _params.visibility)
+    updateVisibility<MEDPresentationMeshView, MEDCALC::MeshViewParameters>(params.visibility);
+
 }
 
 void

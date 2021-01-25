@@ -22,6 +22,7 @@
 #include "MEDModule.hxx"
 #include "QtHelper.hxx"
 #include <MEDCalcConstants.hxx>
+#include "MEDCALCGUI_Displayer.hxx"
 
 #include "SALOME_LifeCycleCORBA.hxx"
 #include "QtxPopupMgr.h"
@@ -35,6 +36,8 @@
 #include <SalomeApp_Study.h>
 #include <SalomeApp_DataObject.h>
 #include <SalomeApp_DataModel.h>
+#include <SUIT_ViewManager.h>
+#include <SUIT_ViewWindow.h>
 
 #include <SALOMEconfig.h>
 #include CORBA_CLIENT_HEADER(SALOMEDS_Attributes)
@@ -55,6 +58,8 @@
 #include <pqAnimationManager.h>
 #include <pqPVApplicationCore.h>
 #include <pqAnimationScene.h>
+#include <pqActiveObjects.h>
+#include <pqView.h>
 
 //! The only instance of the reference to engine
 MED_ORB::MED_Gen_var MEDModule::_MED_engine;
@@ -62,7 +67,9 @@ MED_ORB::MED_Gen_var MEDModule::_MED_engine;
 MEDModule::MEDModule() :
   SalomeApp_Module("FIELDS"), _studyEditor(0),
   _datasourceController(0), _workspaceController(0), _presentationController(0),
-  _processingController(0), _pvGuiElements(0)
+  _processingController(0), _pvGuiElements(0),
+  _displayer(nullptr),
+  _enableVisibilityStateUpdate(true)
 {
   STDLOG("MEDModule::MEDModule()");
   // Note also that we can't use the getApp() function here because
@@ -134,7 +141,9 @@ MEDModule::initialize( CAM_Application* app )
   if (! getApp()->objectBrowser())
     getApp()->getWindow(SalomeApp_Application::WT_ObjectBrowser);
 
-  getApp()->objectBrowser()->setAutoOpenLevel(5);
+  // rnv: #20430 [CEA 20428] FIELDS : improvement of simplified visualisations: 
+  //      Disable auto expanding
+  //getApp()->objectBrowser()->setAutoOpenLevel(5);
 
   if (app && app->desktop()) {
     connect((QObject*) (getApp()->objectBrowser()->treeView()), SIGNAL(doubleClicked(const QModelIndex&)),
@@ -258,6 +267,9 @@ MEDModule::activateModule( SUIT_Study* theStudy )
   int av5 = ip->addAction(action(FIELDSOp::OpSlices) , gv);
   int av6 = ip->addAction(action(FIELDSOp::OpDeflectionShape) , gv);
   int av7 = ip->addAction(action(FIELDSOp::OpPointSprite) , gv);
+  int av8 = ip->addAction(action(FIELDSOp::OpPlot3D) , gv);
+  int av9 = ip->addAction(action(FIELDSOp::OpStreamLines) , gv);
+  int av10 = ip->addAction(action(FIELDSOp::OpCutSegment) , gv);
 
   // getting started interpolation
   int gi = ip->addGroup(tr("HELP_GRP_INTERPOLATION"));
@@ -279,6 +291,10 @@ MEDModule::activateModule( SUIT_Study* theStudy )
 //  QTimer::singleShot(0, this, SLOT(onEventLoopStarted()));
 
   // return the activation status
+
+  QObject::connect(&pqActiveObjects::instance(), SIGNAL(viewChanged(pqView*)), this,
+    SLOT(onViewChanged()), Qt::QueuedConnection);
+
   return bOk;
 }
 
@@ -341,6 +357,65 @@ MEDModule::createModuleWidgets() {
 
   connect(_workspaceController, SIGNAL(workspaceSignal(const MEDCALC::MedEvent*)),
     _presentationController, SLOT(processWorkspaceEvent(const MEDCALC::MedEvent*)));
+
+  connect(&pqActiveObjects::instance(), &pqActiveObjects::viewChanged, [this](pqView* view) { this->updateVisibilityState(); });
+
+}
+
+
+void MEDModule::updateVisibilityState(const bool all, const QStringList& entries) 
+{
+  if (!_enableVisibilityStateUpdate) {
+    return;
+  }
+  QStringList allPrsEntries = QStringList();
+  const QStringList& workList = ( all ? allPrsEntries : entries );
+  if (all) {
+    SALOMEDS::Study_var aStudy = KERNEL::getStudyServant();
+    if (aStudy->_is_nil())
+      return;
+    SALOMEDS::SComponent_var father = aStudy->FindComponent("FIELDS");
+    if (father->_is_nil())
+      return;
+    SALOMEDS::ChildIterator_var it = aStudy->NewChildIterator(father);
+    SALOMEDS::GenericAttribute_var anAttribute;
+    for (it->InitEx(true); it->More(); it->Next())
+    {
+      SALOMEDS::SObject_var child(it->Value());
+      if (child->FindAttribute(anAttribute, "AttributeParameter"))
+      {
+        SALOMEDS::AttributeParameter_var attrParam = SALOMEDS::AttributeParameter::_narrow(anAttribute);
+        if (!attrParam->IsSet(IS_PRESENTATION, PT_BOOLEAN) || !attrParam->GetBool(IS_PRESENTATION) || !attrParam->IsSet(PRESENTATION_ID, PT_INTEGER))
+          continue;
+        allPrsEntries.append(child->GetID());
+      }
+    }
+  }
+  
+  // update visibility state of objects
+  LightApp_Application* app = dynamic_cast<LightApp_Application*>(SUIT_Session::session()->activeApplication());
+  if (!app) 
+    return;
+  SalomeApp_Study* appStudy = dynamic_cast<SalomeApp_Study*>(app->activeStudy());
+  if (!appStudy)
+    return;
+  SUIT_Study* activeStudy = app->activeStudy();
+  if (!activeStudy)
+    return;
+  SUIT_ViewWindow* aViewWindow = app->desktop()->activeWindow();
+  if (!aViewWindow)
+    return;
+  SUIT_ViewManager* aViewManager = aViewWindow->getViewManager();
+  if (!aViewManager)
+    return;
+    
+  SUIT_ViewModel * aViewModel = aViewManager->getViewModel();
+  DataObjectList aList;
+  for(const auto& str : workList) {
+    aList.append(appStudy->findObjectByEntry(str));
+  }
+  app->updateVisibilityState(aList, aViewModel);
+
 }
 
 void
@@ -568,4 +643,18 @@ MEDModule::getIntParamFromStudyEditor(SALOMEDS::SObject_var obj, const char* nam
       return aParam->GetInt(name);
   }
   return -1;
+}
+
+LightApp_Displayer* MEDModule::displayer()
+{
+  if (!_displayer)
+    _displayer = new MEDCALCGUI_Displayer(_presentationController);
+  return _displayer;
+}
+
+void MEDModule::visibilityStateUpdateOff() {
+  _enableVisibilityStateUpdate = false;
+}
+void MEDModule::visibilityStateUpdateOn() {
+  _enableVisibilityStateUpdate = true;
 }

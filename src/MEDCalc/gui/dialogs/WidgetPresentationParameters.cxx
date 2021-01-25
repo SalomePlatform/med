@@ -24,6 +24,8 @@
 #include "WidgetPresentationParameters.hxx"
 #include <Basics_Utils.hxx>
 
+#include <limits>
+
 using namespace std;
 
 WidgetPresentationParameters::WidgetPresentationParameters(QWidget* parent)
@@ -34,16 +36,70 @@ WidgetPresentationParameters::WidgetPresentationParameters(QWidget* parent)
   toggleWidget(false);
   QObject::connect(_ui.comboBoxCompo,          SIGNAL(activated(int)),
                    this,                       SLOT(onComboCompoIndexChanged(int)) );
-  QObject::connect(_ui.comboBoxMesh,          SIGNAL(activated(int)),
-                     this,                       SLOT(onComboMeshIndexChanged(int)) );
+  QObject::connect(_ui.comboBoxMesh,           SIGNAL(activated(int)),
+                     this,                     SLOT(onComboMeshIndexChanged(int)) );
   QObject::connect(_ui.comboBoxScalarBarRange, SIGNAL(activated(int)),
                    this,                       SLOT(onComboScalarBarRangeIndexChanged(int)) );
   QObject::connect(_ui.comboBoxColorMap,       SIGNAL(activated(int)),
                    this,                       SLOT(onComboColorMapIndexChanged(int)) );
-  QObject::connect(_ui.comboBoxSliceOrient,       SIGNAL(activated(int)),
+  QObject::connect(_ui.comboBoxSliceOrient,    SIGNAL(activated(int)),
                    this,                       SLOT(onComboOrientIndexChanged(int)) );
+  QObject::connect(_ui.comboBoxIntegrDir,      SIGNAL(activated(int)),
+                   this,                       SLOT(onComboIntegrDirIndexChanged(int)) );
+  QObject::connect(_ui.comboBoxContComp,       SIGNAL(activated(int)),
+                   this,                       SLOT(onComboContCompIndexChanged(int)) );
   QObject::connect(_ui.spinBox,                SIGNAL(editingFinished()),
                      this,                     SLOT(onSpinBoxEditingFinished()) );
+  QObject::connect(_ui.checkBoxShowScalarBar,  SIGNAL(stateChanged(int)),
+                     this,                     SLOT(onCheckboxScalarBarVisibilityChanged(int)));
+  QObject::connect(_ui.checkBoxCustomRange,    SIGNAL(stateChanged(int)),
+                     this,                     SLOT(onCheckboxCustomRangeChanged(int)));
+  QObject::connect(_ui.checkBoxScaleFactor,    SIGNAL(stateChanged(int)),
+                     this,                     SLOT(onCheckboxScaleFactorChanged(int)));
+  QObject::connect(_ui.checkBoxScaleFactor,    SIGNAL(stateChanged(int)),
+                     this,                     SLOT(onCheckboxCustomScaleFactorChanged(int)));
+  QObject::connect(_ui.spinCustomRangeMin,     SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinboxCustomRangeChanged()));
+  QObject::connect(_ui.spinCustomRangeMax,     SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinboxCustomRangeChanged()));
+  QObject::connect(_ui.spinScaleFactor,        SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinboxScaleFactorChanged()));
+  QObject::connect(_ui.checkBoxHideDataOutsideCR, SIGNAL(stateChanged(int)),
+                     this,                        SLOT(onCheckboxHideDataOutsideCustomRangeChanged(int)));
+  QObject::connect(_ui.spinNormalX,            SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinNormalEditingFinished()) );
+  QObject::connect(_ui.spinNormalY,            SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinNormalEditingFinished()) );
+  QObject::connect(_ui.spinNormalZ,            SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinNormalEditingFinished()) );
+  QObject::connect(_ui.spinPoint1_X,           SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinCutPoint1EditingFinished()) );
+  QObject::connect(_ui.spinPoint1_Y,           SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinCutPoint1EditingFinished()) );
+  QObject::connect(_ui.spinPoint1_Z,           SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinCutPoint1EditingFinished()) );
+  QObject::connect(_ui.spinPoint2_X,           SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinCutPoint2EditingFinished()) );
+  QObject::connect(_ui.spinPoint2_Y,           SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinCutPoint2EditingFinished()) );
+  QObject::connect(_ui.spinPoint2_Z,           SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinCutPoint2EditingFinished()) );
+  QObject::connect(_ui.spinPlanePos,           SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinPlanePosEditingFinished()) );
+
+   // Disable Custom Range Spin boxes
+  _ui.spinCustomRangeMax->setEnabled(false);
+  _ui.spinCustomRangeMin->setEnabled(false);
+  _ui.spinScaleFactor->setEnabled(false);
+  _ui.checkBoxHideDataOutsideCR->setEnabled(false);
+
+  // Min and max values
+  _ui.spinCustomRangeMin->setRange(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
+  _ui.spinCustomRangeMax->setRange(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
+  _ui.spinNormalX->setRange(0.0, 1.0);
+  _ui.spinNormalY->setRange(0.0, 1.0);
+  _ui.spinNormalZ->setRange(0.0, 1.0);
+  _ui.spinPlanePos->setRange(0.0, 1.0);
 }
 
 void
@@ -78,9 +134,114 @@ WidgetPresentationParameters::onComboScalarBarRangeIndexChanged(int idx)
 }
 
 void
+WidgetPresentationParameters::onComboIntegrDirIndexChanged(int idx)
+{
+  if (!_blockSig) emit comboIntegrDirIndexChanged(idx);
+}
+
+void
+WidgetPresentationParameters::onComboContCompIndexChanged(int idx)
+{
+  if (!_blockSig) emit comboContCompIndexChanged(idx);
+}
+
+void
+WidgetPresentationParameters::onCheckboxScalarBarVisibilityChanged(int flag)
+{
+  if (!_blockSig) emit checkboxScalarBarVisibilityChanged(flag);
+}
+
+void
+WidgetPresentationParameters::onCheckboxCustomRangeChanged(int flag)
+{
+  _ui.spinCustomRangeMin->setEnabled(flag);
+  _ui.spinCustomRangeMax->setEnabled(flag);
+  _ui.checkBoxHideDataOutsideCR->setEnabled(flag);
+  _ui.comboBoxScalarBarRange->setEnabled(!flag);
+  if (!_blockSig) emit checkboxCustomRangeChanged(flag);
+}
+
+void
+WidgetPresentationParameters::onCheckboxScaleFactorChanged(int flag)
+{
+  _ui.spinScaleFactor->setEnabled(flag);
+  if (!_blockSig) emit checkboxScaleFactorChanged(flag);
+}
+
+void
+WidgetPresentationParameters::onSpinboxCustomRangeChanged()
+{
+  if (!_blockSig) emit spinboxCustomRangeChanged(_ui.spinCustomRangeMin->value(),
+                                                 _ui.spinCustomRangeMax->value());
+}
+
+void
+WidgetPresentationParameters::onSpinboxScaleFactorChanged()
+{
+  if (!_blockSig) emit spinboxScaleFactorChaged(_ui.spinScaleFactor->value());
+}
+
+void
+WidgetPresentationParameters::
+onCheckboxHideDataOutsideCustomRangeChanged(int flag)
+{
+  if (!_blockSig) emit checkboxHideDataOutsideCustomRangeChanged(flag);
+}
+
+void
+WidgetPresentationParameters::
+onCheckboxCustomScaleFactorChanged(int flag) {
+  if (!_blockSig) emit checkboxCustomScaleFactorChanged(flag);
+}
+
+void
 WidgetPresentationParameters::onSpinBoxEditingFinished()
 {
   if (!_blockSig) emit spinBoxValueChanged(_ui.spinBox->value());
+}
+
+void
+WidgetPresentationParameters::onSpinNormalEditingFinished()
+{
+  if (!_blockSig) emit spinNormalValuesChanged(_ui.spinNormalX->value(),
+                                               _ui.spinNormalY->value(),
+                                               _ui.spinNormalZ->value());
+}
+
+void
+WidgetPresentationParameters::onSpinCutPoint1EditingFinished()
+{
+  if (!_blockSig) emit spinCutPoint1ValuesChanged(_ui.spinPoint1_X->value(),
+                                                  _ui.spinPoint1_Y->value(),
+                                                  _ui.spinPoint1_Z->value());
+}
+
+void
+WidgetPresentationParameters::onSpinCutPoint2EditingFinished()
+{
+  if (!_blockSig) emit spinCutPoint2ValuesChanged(_ui.spinPoint2_X->value(),
+                                                  _ui.spinPoint2_Y->value(),
+                                                  _ui.spinPoint2_Z->value());
+}
+
+void
+WidgetPresentationParameters::onSpinPlanePosEditingFinished()
+{
+  if (!_blockSig) emit spinPlanePosValueChanged(_ui.spinPlanePos->value());
+}
+
+void
+WidgetPresentationParameters::hidePlot3D()
+{
+  _ui.labelCutPlanePosition->hide();
+  _ui.spinPlanePos->hide();
+}
+
+void
+WidgetPresentationParameters::hideContourComponent()
+{
+  _ui.labelContourComp->hide();
+  _ui.comboBoxContComp->hide();
 }
 
 void
@@ -116,6 +277,26 @@ WidgetPresentationParameters::toggleWidget(bool show)
       _ui.spinBox->hide();
       _ui.labelSliceOrient->hide();
       _ui.comboBoxSliceOrient->hide();
+      _ui.labelCutPlaneNormal->hide();
+      _ui.labelCutPlanePosition->hide();
+      _ui.spinNormalX->hide();
+      _ui.spinNormalY->hide();
+      _ui.spinNormalZ->hide();
+      _ui.spinPlanePos->hide();
+      _ui.labelIntegrDir->hide();
+      _ui.comboBoxIntegrDir->hide();
+      _ui.labelPoint1->hide();
+      _ui.spinPoint1_X->hide();
+      _ui.spinPoint1_Y->hide();
+      _ui.spinPoint1_Z->hide();
+      _ui.labelPoint2->hide();
+      _ui.spinPoint2_X->hide();
+      _ui.spinPoint2_Y->hide();
+      _ui.spinPoint2_Z->hide();
+      _ui.labelContourComp->hide();
+      _ui.comboBoxContComp->hide();
+      _ui.checkBoxScaleFactor->hide();
+      _ui.spinScaleFactor->hide();
       _blockSig = false;
     }
 }
@@ -224,15 +405,17 @@ WidgetPresentationParameters::setScalarBarRange(MEDCALC::ScalarBarRangeType sbra
   else if (sbrange == MEDCALC::SCALAR_BAR_CURRENT_TIMESTEP)
     idx = _ui.comboBoxScalarBarRange->findText(tr("LAB_CURRENT_TIMESTEP"));
 
-  if (idx >= 0)
-  {
-    _ui.comboBoxScalarBarRange->setCurrentIndex(idx);
+  if (idx >= 0) {
+      _ui.comboBoxScalarBarRange->setCurrentIndex(idx);
+      _ui.checkBoxCustomRange->setChecked(false);
   }
-  else
-  {
-    STDLOG("Strange!! No matching found - unable to set scalar bar range in GUI.");
+  else {
+    if (sbrange == MEDCALC::SCALAR_BAR_CUSTOM_RANGE) {
+      _ui.checkBoxCustomRange->setChecked(true);
+    } else {
+      STDLOG("Strange!! No matching found - unable to set scalar bar range in GUI.");
+    }
   }
-
   _blockSig = false;
 }
 
@@ -291,6 +474,65 @@ WidgetPresentationParameters::setMeshMode(MEDCALC::MeshModeType mode)
   {
     STDLOG("Strange!! No matching found - unable to set mesh mode in GUI.");
   }
+
+  _blockSig = false;
+}
+
+void
+WidgetPresentationParameters::setIntegrationDir(MEDCALC::IntegrationDirType iDir)
+{
+  _blockSig = true;
+
+  // Show the widget;
+  _ui.labelIntegrDir->show();
+  _ui.comboBoxIntegrDir->show();
+
+  int idx;
+  switch(iDir)
+  {
+    case MEDCALC::INTEGRATION_DIR_BOTH:
+      idx = _ui.comboBoxIntegrDir->findText(tr("LAB_INTEGR_DIR_BOTH"));
+      break;
+    case MEDCALC::INTEGRATION_DIR_FORWARD:
+      idx = _ui.comboBoxIntegrDir->findText(tr("LAB_INTEGR_DIR_FORWARD"));
+      break;
+    case MEDCALC::INTEGRATION_DIR_BACKWARD:
+      idx = _ui.comboBoxIntegrDir->findText(tr("LAB_INTEGR_DIR_BACKWARD"));
+      break;
+    default:
+      idx = -1;
+  }
+  if (idx >= 0)
+  {
+    _ui.comboBoxIntegrDir->setCurrentIndex(idx);
+  }
+  else
+  {
+    STDLOG("Strange!! No matching found - unable to set integration direction in GUI.");
+  }
+
+  _blockSig = false;
+}
+
+void
+WidgetPresentationParameters::setContourComponents(std::vector<std::string> compos, int selecIndex)
+{
+  _blockSig = true;
+
+  // Show the widget;
+  _ui.labelContourComp->show();
+  _ui.comboBoxContComp->show();
+
+  _ui.comboBoxContComp->clear();
+  bool vectorField = (compos.size() > 1 && compos.size() <= 3);
+  if (vectorField)
+    _ui.comboBoxContComp->addItem(tr("LAB_EUCLIDEAN_NORM"));
+  for (vector<string>::const_iterator it = compos.begin(); it != compos.end(); ++it)
+    _ui.comboBoxContComp->addItem(QString::fromStdString(*it));
+  if (!vectorField)
+    _ui.comboBoxContComp->setCurrentIndex(std::max(0, selecIndex - 1));
+  else
+    _ui.comboBoxContComp->setCurrentIndex(selecIndex);
 
   _blockSig = false;
 }
@@ -392,10 +634,39 @@ WidgetPresentationParameters::getMeshMode() const
   return MEDCALC::MESH_MODE_WIREFRAME;
 }
 
+MEDCALC::IntegrationDirType 
+WidgetPresentationParameters::getIntegrationDir() const
+{
+  QString iDir = _ui.comboBoxIntegrDir->currentText();
+  if (iDir == tr("LAB_INTEGR_DIR_BOTH")) {
+      return MEDCALC::INTEGRATION_DIR_BOTH;
+  }
+  else if (iDir == tr("LAB_INTEGR_DIR_FORWARD")) {
+      return MEDCALC::INTEGRATION_DIR_FORWARD;
+  }
+  else if (iDir == tr("LAB_INTEGR_DIR_BACKWARD")) {
+      return MEDCALC::INTEGRATION_DIR_BACKWARD;
+  }
+  // Should not happen
+  STDLOG("Strange!! No matching found - returning LAB_INTEGR_DIR_BOTH.");
+  return MEDCALC::INTEGRATION_DIR_BOTH;
+}
+
+std::string 
+WidgetPresentationParameters::getContourComponent() const
+{
+  if (_ui.comboBoxContComp->count() > 1 && _ui.comboBoxContComp->count() <= 4)
+    if (_ui.comboBoxContComp->currentIndex() == 0) // Euclidean norm
+      return "";
+  return _ui.comboBoxContComp->currentText().toStdString();
+}
 
 MEDCALC::ScalarBarRangeType
 WidgetPresentationParameters::getScalarBarRange() const
 {
+  if (_ui.checkBoxCustomRange->isChecked()) {
+    return  MEDCALC::SCALAR_BAR_CUSTOM_RANGE;
+  }
   QString sbrange = _ui.comboBoxScalarBarRange->currentText();
   if (sbrange == tr("LAB_ALL_TIMESTEPS")) {
     return MEDCALC::SCALAR_BAR_ALL_TIMESTEPS;
@@ -448,4 +719,133 @@ WidgetPresentationParameters::setPresName(const std::string& name)
   QFont f(_ui.labelPresName->font());
   f.setItalic(true);
   _ui.labelPresName->setFont(f);
+}
+
+
+void 
+WidgetPresentationParameters::getScalarBarRangeValue(double* arr) const 
+{
+  arr[0] = _ui.spinCustomRangeMin->value();
+  arr[1] = _ui.spinCustomRangeMax->value();
+}
+
+void WidgetPresentationParameters::setScalarBarRangeValue(double aMin, double aMax) {
+  _blockSig = true;
+  _ui.spinCustomRangeMin->setValue(aMin);
+  _ui.spinCustomRangeMax->setValue(aMax);
+  _blockSig = false;
+}
+
+void WidgetPresentationParameters::setScaleFactor(double scale) {
+  _blockSig = true;
+
+  // Show widget:
+  _ui.checkBoxScaleFactor->show();
+  _ui.spinScaleFactor->show();
+
+  _ui.spinScaleFactor->setValue(scale);
+  _blockSig = false;
+}
+
+void WidgetPresentationParameters::getNormal(double* arr) const
+{
+  arr[0] = _ui.spinNormalX->value();
+  arr[1] = _ui.spinNormalY->value();
+  arr[2] = _ui.spinNormalZ->value();
+}
+
+void
+WidgetPresentationParameters::setNormal(const double normX, const double normY, const double normZ)
+{
+  _blockSig = true;
+  _ui.labelCutPlaneNormal->show();
+  _ui.spinNormalX->show();
+  _ui.spinNormalY->show();
+  _ui.spinNormalZ->show();
+  _ui.spinNormalX->setValue(normX);
+  _ui.spinNormalY->setValue(normY);
+  _ui.spinNormalZ->setValue(normZ);
+  _blockSig = false;
+}
+
+void WidgetPresentationParameters::getCutPoint1(double* arr) const
+{
+  arr[0] = _ui.spinPoint1_X->value();
+  arr[1] = _ui.spinPoint1_Y->value();
+  arr[2] = _ui.spinPoint1_Z->value();
+}
+
+void
+WidgetPresentationParameters::setCutPoint1(const double x, const double y, const double z)
+{
+  _blockSig = true;
+  _ui.labelPoint1->show();
+  _ui.spinPoint1_X->show();
+  _ui.spinPoint1_Y->show();
+  _ui.spinPoint1_Z->show();
+  _ui.spinPoint1_X->setValue(x);
+  _ui.spinPoint1_Y->setValue(y);
+  _ui.spinPoint1_Z->setValue(z);
+  _blockSig = false;
+}
+
+void WidgetPresentationParameters::getCutPoint2(double* arr) const
+{
+  arr[0] = _ui.spinPoint2_X->value();
+  arr[1] = _ui.spinPoint2_Y->value();
+  arr[2] = _ui.spinPoint2_Z->value();
+}
+
+void
+WidgetPresentationParameters::setCutPoint2(const double x, const double y, const double z)
+{
+  _blockSig = true;
+  _ui.labelPoint2->show();
+  _ui.spinPoint2_X->show();
+  _ui.spinPoint2_Y->show();
+  _ui.spinPoint2_Z->show();
+  _ui.spinPoint2_X->setValue(x);
+  _ui.spinPoint2_Y->setValue(y);
+  _ui.spinPoint2_Z->setValue(z);
+  _blockSig = false;
+}
+
+double WidgetPresentationParameters::getPlanePosition() const
+{
+  return _ui.spinPlanePos->value();
+}
+
+void WidgetPresentationParameters::setPlanePosition(double pos)
+{
+  _blockSig = true;
+  _ui.labelCutPlanePosition->show();
+  _ui.spinPlanePos->show();
+  _ui.spinPlanePos->setValue(pos);
+  _blockSig = false;
+}
+
+bool WidgetPresentationParameters::getScalarBarVisibility() const {
+  return _ui.checkBoxShowScalarBar->isChecked();
+}
+
+void WidgetPresentationParameters::setScalarBarVisibility(const bool visibility) {
+  _blockSig = true;
+  _ui.checkBoxShowScalarBar->setChecked(visibility);
+  _blockSig = false;
+}
+
+bool WidgetPresentationParameters::getHideDataOutsideCustomRange() const {
+  return _ui.checkBoxHideDataOutsideCR->isChecked();
+}
+
+void WidgetPresentationParameters::setHideDataOutsideCustomRange(const bool flag) {
+  _blockSig = true;
+  _ui.checkBoxHideDataOutsideCR->setChecked(flag);
+  _blockSig = false;
+}
+
+void WidgetPresentationParameters::setScaleFactorFlag(const bool flag) {
+  _blockSig = true;
+  _ui.checkBoxScaleFactor->setChecked(flag);
+  _blockSig = false;
 }

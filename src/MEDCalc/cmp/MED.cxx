@@ -193,8 +193,7 @@ MED::registerPresentationField(CORBA::Long fieldId,
   SALOMEDS::StudyBuilder_var studyBuilder = aStudy->NewBuilder();
   SALOMEDS::UseCaseBuilder_var useCaseBuilder = aStudy->GetUseCaseBuilder();
   SALOMEDS::SObject_var soPresentation = studyBuilder->NewObject(soFieldseries);
-  useCaseBuilder->AppendTo(soPresentation->GetFather(), soPresentation);
-
+  
   soPresentation->SetAttrString("AttributeName", name);
   soPresentation->SetAttrString("AttributePixMap", ico);
 
@@ -206,6 +205,8 @@ MED::registerPresentationField(CORBA::Long fieldId,
   aParam->SetBool(IS_PRESENTATION, true);
   aParam->SetInt(PRESENTATION_ID, presentationId);
   aParam->SetString(PRESENTATION_TYPE, type);
+
+  useCaseBuilder->AppendTo(soPresentation->GetFather(), soPresentation);
 
   return MED_ORB::OP_OK;
 }

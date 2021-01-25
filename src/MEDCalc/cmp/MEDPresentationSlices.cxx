@@ -65,8 +65,10 @@ MEDPresentationSlices::setSliceParametersAndGroup()
 void
 MEDPresentationSlices::deleteGroup()
 {
+  deleteThresholds();
   std::ostringstream oss;
-  oss << "pvs.Delete(" << _objVar << ");";
+  oss << "pvs.Hide(" << _objVar << ");";
+  oss << "pvs.Delete(" << _objVar << ");del " <<_objVar<<";";
   pushAndExecPyLine(oss.str()); oss.str("");
 }
 
@@ -76,11 +78,11 @@ MEDPresentationSlices::adaptNumberOfSlices()
   std::ostringstream oss;
   int nbSlices = getIntProperty(MEDPresentationSlices::PROP_NB_SLICES);
 
-  oss << "for _ in range(max(len(" << _sliceListVar << ")-" << nbSlices << ", 0)):\n";
+  oss << "for _ in range(int(max(len(" << _sliceListVar << ")-" << nbSlices << ", 0))):\n";
   oss << "  pvs.Delete(" << _sliceListVar << ".pop());\n";
   pushAndExecPyLine(oss.str()); oss.str("");
 
-  oss << "for _ in range(" << nbSlices << "-max(len(" << _sliceListVar << "), 0)):\n";
+  oss << "for _ in range(" << nbSlices << "-int(max(len(" << _sliceListVar << "), 0))):\n";
   oss << "  obj = pvs.Slice(Input=" << _srcObjVar << ");\n";
   oss << "  obj.SliceType = 'Plane';\n";
   oss << "  " << _sliceListVar << ".append(obj);\n";
@@ -92,7 +94,6 @@ MEDPresentationSlices::generateAndDisplay()
 {
   adaptNumberOfSlices();
   setSliceParametersAndGroup();
-
   recreateViewSetup();
 }
 
@@ -169,8 +170,14 @@ MEDPresentationSlices::updatePipeline(const MEDCALC::SlicesParameters& params)
 
   if (std::string(params.displayedComponent) != std::string(_params.displayedComponent))
     updateComponent<MEDPresentationSlices, MEDCALC::SlicesParameters>(std::string(params.displayedComponent));
-  if (params.scalarBarRange != _params.scalarBarRange)
-    updateScalarBarRange<MEDPresentationSlices, MEDCALC::SlicesParameters>(params.scalarBarRange);
+  if (params.scalarBarRange != _params.scalarBarRange ||
+      params.hideDataOutsideCustomRange != _params.hideDataOutsideCustomRange ||
+      params.scalarBarRangeArray[0] != _params.scalarBarRangeArray[0] ||
+      params.scalarBarRangeArray[1] != _params.scalarBarRangeArray[1])
+    updateScalarBarRange<MEDPresentationSlices, MEDCALC::SlicesParameters>(params.scalarBarRange,
+                                                                           params.hideDataOutsideCustomRange,
+                                                                           params.scalarBarRangeArray[0],
+                                                                           params.scalarBarRangeArray[1]);
   if (params.colorMap != _params.colorMap)
     updateColorMap<MEDPresentationSlices, MEDCALC::SlicesParameters>(params.colorMap);
 
@@ -186,6 +193,11 @@ MEDPresentationSlices::updatePipeline(const MEDCALC::SlicesParameters& params)
       }
       updateNbSlices(params.nbSlices);
     }
+  if (params.visibility != _params.visibility)
+    updateVisibility<MEDPresentationSlices, MEDCALC::SlicesParameters>(params.visibility);
+
+  if (params.scalarBarVisibility != _params.scalarBarVisibility)
+    updateScalarBarVisibility<MEDPresentationSlices, MEDCALC::SlicesParameters>(params.scalarBarVisibility);
 }
 
 void

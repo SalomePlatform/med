@@ -64,6 +64,30 @@
         <translation>Point sprite</translation>
     </message>
     <message>
+        <source>LAB_PRESENTATION_PLOT3D</source>
+        <translation>Plot3D</translation>
+    </message>
+    <message>
+        <source>TIP_PRESENTATION_PLOT3D</source>
+        <translation>Plot3D</translation>
+    </message>
+    <message>
+        <source>LAB_PRESENTATION_STREAM_LINES</source>
+        <translation>Stream Lines</translation>
+    </message>
+    <message>
+        <source>TIP_PRESENTATION_STREAM_LINES</source>
+        <translation>Stream Lines</translation>
+    </message>
+    <message>
+        <source>LAB_PRESENTATION_CUT_SEGMENT</source>
+        <translation>Cut Segment</translation>
+    </message>
+    <message>
+        <source>TIP_PRESENTATION_CUT_SEGMENT</source>
+        <translation>Cut Segment</translation>
+    </message>
+    <message>
         <source>LAB_DELETE_PRESENTATION</source>
         <translation>Delete presentation</translation>
     </message>
@@ -110,6 +134,18 @@
     <message>
         <source>MEDPresentationPointSprite</source>
         <translation>Point sprite</translation>
+    </message>
+    <message>
+        <source>MEDPresentationPlot3D</source>
+        <translation>Plot3D</translation>
+    </message>
+    <message>
+        <source>MEDPresentationStreamLines</source>
+        <translation>Stream Lines</translation>
+    </message>
+    <message>
+        <source>MEDPresentationCutSegment</source>
+        <translation>Cut Segment</translation>
     </message>
 </context>
 <context>
@@ -208,6 +244,18 @@
         <translation>Range:</translation>
     </message>
     <message>
+        <source>LAB_SHOW_SCALAR_BAR</source>
+        <translation>Show Scalar Bar</translation>
+    </message>
+    <message>
+        <source>LAB_CUSTOM_RANGE</source>
+        <translation>Custom Range:</translation>
+    </message>
+    <message>
+        <source>LAB_HIDE_DATA_OUTSIDE_CR</source>
+        <translation>Hide Data outside Custom Range</translation>
+    </message>
+    <message>
         <source>LAB_ALL_TIMESTEPS</source>
         <translation>All timesteps</translation>
     </message>
@@ -248,8 +296,24 @@
         <translation>Surface With Edges</translation>
     </message>
     <message>
+        <source>LAB_INTEGR_DIR_BOTH</source>
+        <translation>BOTH</translation>
+    </message>
+    <message>
+        <source>LAB_INTEGR_DIR_FORWARD</source>
+        <translation>FORWARD</translation>
+    </message>
+    <message>
+        <source>LAB_INTEGR_DIR_BACKWARD</source>
+        <translation>BACKWARD</translation>
+    </message>
+    <message>
         <source>LAB_DISP_MESH_MODE</source>
         <translation>Mesh display:</translation>
+    </message>
+    <message>
+        <source>LAB_INTEGR_DIR</source>
+        <translation>Integration Direction:</translation>
     </message>
     <message>
         <source>LAB_NB_CONTOURS</source>
@@ -302,6 +366,30 @@
     <message>
         <source>LAB_COOL_TO_WARM</source>
         <translation>Cool to warm</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_PLANE_NORMAL</source>
+        <translation>Plane Normal:</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_PLANE_POS</source>
+        <translation>Cutting Plane Position:</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_POINT1</source>
+        <translation>Point 1:</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_POINT2</source>
+        <translation>Point 2:</translation>
+    </message>
+    <message>
+        <source>LAB_CONTOUR_COMP</source>
+        <translation>Contour By:</translation>
+    </message>
+    <message>
+        <source>LAB_SCALE_FACTOR</source>
+        <translation>Scale Factor</translation>
     </message>
 </context>
 <context>

@@ -56,8 +56,11 @@ public:
   void showDockWidgets(bool isVisible);
 
   std::string getPresTypeFromWidgetHelper(int presId) const;
+  static std::string presentationName2Type(const std::string& name);
 
   void setConsoleDriver(XmedConsoleDriver* driver) { _consoleDriver = driver; };
+
+  void emitPresentationSignal(const PresentationEvent* event);
 
 signals:
   void presentationSignal(const PresentationEvent*);
@@ -70,6 +73,9 @@ protected slots:
   void onVisualizeSlices();
   void onVisualizeDeflectionShape();
   void onVisualizePointSprite();
+  void onVisualizePlot3D();
+  void onVisualizeStreamLines();
+  void onVisualizeCutSegment();
 
   void onDeletePresentation();
   void onParavisDump();
@@ -83,6 +89,7 @@ private:
   void visualize(PresentationEvent::EventType);
   void updateTreeViewWithNewPresentation(long dataId, long presentationId);
   void updateTreeViewForPresentationRemoval(long presId);
+  void updateVisibilityState(long presId);
   std::string _getIconName(const std::string&);
   MEDWidgetHelper * findOrCreateWidgetHelper(MEDCALC::MEDPresentationManager_ptr presManager,
                                              int presId, const std::string& type, const std::string& name);
@@ -92,6 +99,8 @@ private:
   QString getScalarBarRangePython() const;
   QString getMeshModePython(const int mode) const;
   QString getSliceOrientationPython(const int orient) const;
+  QString getIntegrDirTypePython(const int intDir) const;
+  QString getContourComponentTypePython(const int comp) const;
 
   void _dealWithReplaceMode();
 

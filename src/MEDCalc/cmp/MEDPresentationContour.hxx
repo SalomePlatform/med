@@ -28,6 +28,7 @@ class MEDCALC_EXPORT MEDPresentationContour : public MEDPresentation
 public:
   static const std::string TYPE_NAME;
   static const std::string PROP_NB_CONTOUR;
+  static const std::string PROB_CONTOUR_COMPONENT_ID;
 
   MEDPresentationContour(const MEDCALC::ContourParameters& params, const MEDCALC::ViewModeType viewMode);
   virtual ~MEDPresentationContour() {}
@@ -40,13 +41,19 @@ public:
   void setParameters(const MEDCALC::ContourParameters & params) { _params = params; } ;
 
 protected:
+  void initProgFilter();
   void updateNbContours(const int nbContours);
+  void updateContourComponent(const std::string& newCompo);
   virtual void internalGeneratePipeline();
-
+  int getContourComponentId() const;
+  std::string getContourComponentName() const;
   void setNumberContours();
+  std::string getFieldName() const override;
+  void scalarBarTitle() override;
 
 private:
   MEDCALC::ContourParameters _params;
+  std::string _countourProgrammableVar;
 };
 
 #endif

@@ -122,24 +122,90 @@ MEDPresentation::updateColorMap(MEDCALC::ColorMapType colorMap)
 
 template<typename PresentationType, typename PresentationParameters>
 void
-MEDPresentation::updateScalarBarRange(MEDCALC::ScalarBarRangeType sbRange)
+MEDPresentation::updateScalarBarRange(MEDCALC::ScalarBarRangeType sbRange, 
+                                      bool hideDataOutsideCustomRange,
+                                      double minValue, double maxValue)
+{
+  PresentationType * p = static_cast<PresentationType*>(this);
+  PresentationParameters params;
+  p->getParameters(params);
+  bool prevHideDataoutsideCustomRange = params.hideDataOutsideCustomRange;
+
+  params.scalarBarRange = sbRange;
+  params.scalarBarRangeArray[0] = minValue;
+  params.scalarBarRangeArray[1] = maxValue;
+  params.hideDataOutsideCustomRange = hideDataOutsideCustomRange;
+  p->setParameters(params);
+
+  p->_sbRange = sbRange;
+  p->_scalarBarRangeArray[0] = minValue;
+  p->_scalarBarRangeArray[1] = maxValue;
+  p->_hideDataOutsideCustomRange = hideDataOutsideCustomRange;
+
+  // GUI helper:
+  setIntProperty(MEDPresentation::PROP_SCALAR_BAR_RANGE, sbRange);
+  setDoubleProperty(MEDPresentation::PROP_SCALAR_BAR_MIN_VALUE, minValue);
+  setDoubleProperty(MEDPresentation::PROP_SCALAR_BAR_MAX_VALUE, maxValue);
+  setIntProperty(MEDPresentation::PROP_HIDE_DATA_OUTSIDE_CUSTOM_RANGE, static_cast<int>(hideDataOutsideCustomRange));
+ 
+  // Update the pipeline:
+    if (hideDataOutsideCustomRange || hideDataOutsideCustomRange != prevHideDataoutsideCustomRange) {
+      MEDPyLockWrapper lock;
+      threshold(); //Swith on/off threshould or update threshould range
+      pushAndExecPyLine("pvs.Render();");      
+    }
+    else
+    {
+      MEDPyLockWrapper lock;
+      rescaleTransferFunction();
+      pushAndExecPyLine("pvs.Render();");
+    }
+}
+
+template<typename PresentationType, typename PresentationParameters>
+void 
+MEDPresentation::updateVisibility(const bool theVisibility)
 {
   PresentationType * p = static_cast<PresentationType*>(this);
 
   PresentationParameters params;
   p->getParameters(params);
-  params.scalarBarRange = sbRange;
+  params.visibility = theVisibility;
   p->setParameters(params);
 
-  p->_sbRange = sbRange;
+  p->_presentationVisibility = theVisibility;
 
   // GUI helper:
-  setIntProperty(MEDPresentation::PROP_SCALAR_BAR_RANGE, sbRange);
+  setIntProperty(MEDPresentation::PROP_VISIBILITY, theVisibility);
 
   // Update the pipeline:
   {
     MEDPyLockWrapper lock;
-    rescaleTransferFunction();
+    visibility();
+    pushAndExecPyLine("pvs.Render();");
+  }
+}
+
+template<typename PresentationType, typename PresentationParameters>
+void 
+MEDPresentation::updateScalarBarVisibility(const bool theVisibility)
+{
+  PresentationType * p = static_cast<PresentationType*>(this);
+
+  PresentationParameters params;
+  p->getParameters(params);
+  params.scalarBarVisibility = theVisibility;
+  p->setParameters(params);
+
+  p->_scalarBarVisibility = theVisibility;
+
+  // GUI helper:
+  setIntProperty(MEDPresentation::PROP_SCALAR_BAR_VISIBILITY, theVisibility);
+
+  // Update the pipeline:
+  {
+    MEDPyLockWrapper lock;
+    scalarBarVisibility();
     pushAndExecPyLine("pvs.Render();");
   }
 }

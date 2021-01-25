@@ -120,6 +120,9 @@ def notifyGui_removePresentation(presId):
 #
 def notifyGui_modifyPresentation(presId):
   __notifyGui(MEDCALC.EVENT_MODIFY_PRESENTATION, presentationId=presId)
+#
+def notifyGui_visibilityChanged(presId):
+  __notifyGui(MEDCALC.EVENT_VISIBILITY_CHANGED, presentationId=presId)
 
 def notifyGui_playQtTestingScenario(filename):
   __notifyGui(MEDCALC.EVENT_PLAY_TEST, filename=filename)

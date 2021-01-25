@@ -64,6 +64,30 @@
       <translation>点スプライト</translation>
     </message>
     <message>
+        <source>LAB_PRESENTATION_PLOT3D</source>
+        <translation>プロット3D</translation>
+    </message>
+    <message>
+        <source>TIP_PRESENTATION_PLOT3D</source>
+        <translation>プロット3D</translation>
+    </message>
+    <message>
+        <source>LAB_PRESENTATION_STREAM_LINES</source>
+        <translation>ストリーム線</translation>
+    </message>
+    <message>
+        <source>TIP_PRESENTATION_STREAM_LINES</source>
+        <translation>ストリーム線</translation>
+    </message>
+    <message>
+        <source>LAB_PRESENTATION_CUT_SEGMENT</source>
+        <translation>カット部分</translation>
+    </message>
+    <message>
+        <source>TIP_PRESENTATION_CUT_SEGMENT</source>
+        <translation>カット部分</translation>
+    </message>
+    <message>
       <source>LAB_DELETE_PRESENTATION</source>
       <translation>プレゼンテーションの削除</translation>
     </message>
@@ -110,6 +134,18 @@
     <message>
       <source>MEDPresentationPointSprite</source>
       <translation>点スプライト描画</translation>
+    </message>
+    <message>
+        <source>MEDPresentationPlot3D</source>
+        <translation>プロット3D</translation>
+    </message>
+    <message>
+        <source>MEDPresentationStreamLines</source>
+        <translation>ストリーム線</translation>
+    </message>
+    <message>
+        <source>MEDPresentationCutSegment</source>
+        <translation>カットセグ</translation>
     </message>
   </context>
   <context>
@@ -248,8 +284,24 @@
       <translation>エッジを持った表面</translation>
     </message>
     <message>
+        <source>LAB_INTEGR_DIR_BOTH</source>
+        <translation>どちらも</translation>
+    </message>
+    <message>
+        <source>LAB_INTEGR_DIR_FORWARD</source>
+        <translation>フォワード</translation>
+    </message>
+    <message>
+        <source>LAB_INTEGR_DIR_BACKWARD</source>
+        <translation>後ろ向き</translation>
+    </message>
+    <message>
       <source>LAB_DISP_MESH_MODE</source>
       <translation>メッシュ表示:</translation>
+    </message>
+    <message>
+        <source>LAB_INTEGR_DIR</source>
+        <translation>統合の方向:</translation>
     </message>
     <message>
       <source>LAB_NB_CONTOURS</source>
@@ -302,6 +354,26 @@
     <message>
       <source>LAB_COOL_TO_WARM</source>
       <translation>冷却から温め</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_PLANE_NORMAL</source>
+        <translation>平面ノーマル:</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_PLANE_POS</source>
+        <translation>切断の平面の位置:</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_POINT1</source>
+        <translation>ポイント 1:</translation>
+    </message>
+    <message>
+        <source>LAB_CUT_POINT2</source>
+        <translation>ポイント 2:</translation>
+    </message>
+    <message>
+        <source>LAB_SCALE_FACTOR</source>
+        <translation>スケール係数</translation>
     </message>
   </context>
   <context>

@@ -29,11 +29,15 @@
 #include <sstream>
 
 const std::string MEDPresentationVectorField::TYPE_NAME = "MEDPresentationVectorField";
+const std::string MEDPresentationVectorField::PROP_SCALE_FACTOR = "scaleFactor";
+const std::string MEDPresentationVectorField::PROP_CUSTOM_SCALE_FACTOR = "customScaleFactor";
 
 MEDPresentationVectorField::MEDPresentationVectorField(const MEDCALC::VectorFieldParameters& params,
                                                    const MEDCALC::ViewModeType viewMode) :
     MEDPresentation(params.fieldHandlerId, TYPE_NAME, viewMode, params.colorMap, params.scalarBarRange), _params(params)
 {
+  setDoubleProperty(MEDPresentationVectorField::PROP_SCALE_FACTOR, params.scaleFactor);
+  setIntProperty(MEDPresentationVectorField::PROP_CUSTOM_SCALE_FACTOR, params.customScaleFactor);
 }
 
 void
@@ -47,11 +51,16 @@ void
 MEDPresentationVectorField::autoScale()
 {
   std::ostringstream oss;
-//  oss << "import medcalc;";
-//  pushAndExecPyLine(oss.str()); oss.str("");
-  oss << _objVar << ".ScaleFactor = 2.0*medcalc.ComputeCellAverageSize(" << _srcObjVar << ")/(" << _rangeVar
+  oss << "__autoScaleF = 2.0*medcalc.ComputeCellAverageSize(" << _srcObjVar << ")/(" << _rangeVar
       << "[1]-" << _rangeVar << "[0]);";
-  pushAndExecPyLine(oss.str()); oss.str("");
+  MEDPyLockWrapper lock;
+  execPyLine(oss.str());
+  PyObject * obj = getPythonObjectFromMain("__autoScaleF");
+  if (obj && PyFloat_Check(obj)) {
+    _params.scaleFactor = PyFloat_AsDouble(obj);
+    setDoubleProperty(MEDPresentationVectorField::PROP_SCALE_FACTOR, _params.scaleFactor);
+  }
+
 }
 
 void
@@ -102,7 +111,7 @@ MEDPresentationVectorField::internalGeneratePipeline()
   selectColorMap();
   rescaleTransferFunction();
 
-  autoScale();   // to be called after transfer function so we have the range
+  scale();   // to be called after transfer function so we have the range
 
   resetCameraAndRender();
 }
@@ -113,12 +122,58 @@ MEDPresentationVectorField::updatePipeline(const MEDCALC::VectorFieldParameters&
   if (params.fieldHandlerId != _params.fieldHandlerId)
     throw KERNEL::createSalomeException("Unexpected updatePipeline error! Mismatching fieldHandlerId!");
 
-  if (params.scalarBarRange != _params.scalarBarRange)
+  if (params.scalarBarRange != _params.scalarBarRange ||
+      params.hideDataOutsideCustomRange != _params.hideDataOutsideCustomRange ||
+      params.scalarBarRangeArray[0] != _params.scalarBarRangeArray[0] ||
+      params.scalarBarRangeArray[1] != _params.scalarBarRangeArray[1])
     {
-      updateScalarBarRange<MEDPresentationVectorField, MEDCALC::VectorFieldParameters>(params.scalarBarRange);
-      autoScale();
+      updateScalarBarRange<MEDPresentationVectorField, MEDCALC::VectorFieldParameters>(params.scalarBarRange,
+                                                                                       params.hideDataOutsideCustomRange,
+                                                                                       params.scalarBarRangeArray[0],
+                                                                                       params.scalarBarRangeArray[1]);
+      scale();
       pushAndExecPyLine("pvs.Render();");
     }
+  if (params.scaleFactor != _params.scaleFactor ||
+      params.customScaleFactor != _params.customScaleFactor) {
+    updateScaleFactor(params.scaleFactor, params.customScaleFactor);
+  }
+
   if (params.colorMap != _params.colorMap)
     updateColorMap<MEDPresentationVectorField, MEDCALC::VectorFieldParameters>(params.colorMap);
+
+  if (params.visibility != _params.visibility)
+    updateVisibility<MEDPresentationVectorField, MEDCALC::VectorFieldParameters>(params.visibility);
+
+  if (params.scalarBarVisibility != _params.scalarBarVisibility)
+    updateScalarBarVisibility<MEDPresentationVectorField, MEDCALC::VectorFieldParameters>(params.scalarBarVisibility);
+
+}
+
+void
+MEDPresentationVectorField::updateScaleFactor(const double scaleFactor, const bool customScaleFactor)
+{
+  if (customScaleFactor) {
+    _params.scaleFactor = scaleFactor;
+    setDoubleProperty(MEDPresentationVectorField::PROP_SCALE_FACTOR, _params.scaleFactor);
+  }
+
+  _params.customScaleFactor = customScaleFactor;
+
+  setIntProperty(MEDPresentationVectorField::PROP_CUSTOM_SCALE_FACTOR, _params.customScaleFactor);
+  scale();
+}
+
+void 
+MEDPresentationVectorField::scale()
+{
+  if (!_params.customScaleFactor) {
+    autoScale();
+  }
+  // Update Scale Factor
+  MEDPyLockWrapper lock;
+  std::ostringstream oss;
+  oss << _objVar << ".ScaleFactor = " << _params.scaleFactor << ";";
+  pushAndExecPyLine(oss.str()); oss.str("");
+  pushAndExecPyLine("pvs.Render();");
 }

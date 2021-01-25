@@ -44,6 +44,7 @@
 class SalomeApp_Application;
 class PVViewer_GUIElements;
 class MEDPresentationManager_i;
+class LightApp_Displayer;
 
 /*!
  * This class defines the gui of the MED module.
@@ -95,6 +96,13 @@ public:
 
   double getCurrentAnimationTimestamp();
 
+  virtual LightApp_Displayer* displayer() override;
+
+  void updateVisibilityState(const bool all=true, const QStringList& entries = QStringList());
+
+  void visibilityStateUpdateOff();
+  void visibilityStateUpdateOn();
+
 signals:
   void presentationSelected(int presId, const QString& presType, const QString& presName);
 
@@ -122,6 +130,10 @@ private:
   PVViewer_GUIElements*   _pvGuiElements;
 
   static MED_ORB::MED_Gen_var _MED_engine;
+  
+  LightApp_Displayer*          _displayer;
+
+  bool _enableVisibilityStateUpdate;
 
 #ifdef MED_HAS_QTTESTING
   TestController * _testController;

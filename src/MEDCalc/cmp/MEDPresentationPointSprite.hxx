@@ -41,9 +41,13 @@ public:
 protected:
   virtual void internalGeneratePipeline();
   void scaleBallRadius();
+  void additionalThresholdActions() override;
+  std::string additionalThresholdVisualizationActions() override;
+  void additionalUnThresholdActions() override;
 
 private:
   MEDCALC::PointSpriteParameters _params;
+  double _gaussianRadius;
 };
 
 #endif

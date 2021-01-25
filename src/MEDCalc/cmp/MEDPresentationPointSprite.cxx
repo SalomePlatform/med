@@ -32,7 +32,8 @@ const std::string MEDPresentationPointSprite::TYPE_NAME = "MEDPresentationPointS
 
 MEDPresentationPointSprite::MEDPresentationPointSprite(const MEDCALC::PointSpriteParameters& params,
                                                    const MEDCALC::ViewModeType viewMode) :
-    MEDPresentation(params.fieldHandlerId, TYPE_NAME, viewMode, params.colorMap, params.scalarBarRange), _params(params)
+    MEDPresentation(params.fieldHandlerId, TYPE_NAME, viewMode, params.colorMap, params.scalarBarRange), _params(params),
+    _gaussianRadius(0.0)
 {
 }
 
@@ -50,21 +51,27 @@ MEDPresentationPointSprite::scaleBallRadius()
   int nbCompo = getIntProperty(MEDPresentation::PROP_NB_COMPONENTS);
 
   // set component or euclidean norm as the array to scale the ball radius
-  if (nbCompo > 1)
-  {
-    if (_selectedComponentIndex == -1)
-      oss << _dispVar << ".ScaleArrayComponent = 'Magnitude';";
-    else
-      oss << _dispVar << ".ScaleArrayComponent = " << _selectedComponentIndex << ";";
-    pushAndExecPyLine(oss.str()); oss.str("");
+  if (!_hideDataOutsideCustomRange) {
+    if (nbCompo > 1)
+    {
+      if (_selectedComponentIndex == -1)
+        oss << _dispVar << ".ScaleArrayComponent = 'Magnitude';";
+      else
+        oss << _dispVar << ".ScaleArrayComponent = " << _selectedComponentIndex << ";";
+      pushAndExecPyLine(oss.str()); oss.str("");
+    }
+  }
+  else {
+    oss << getDispVar() << ".SetScaleArray = ['POINTS', '" << getThresholdFieldName() << "'];";
+    oss << getDispVar() << ".ScaleArrayComponent = " << 0 << ";";
   }
 
   // rescale transfer function to update scalar bar and get min-max range
   rescaleTransferFunction();
 
   // _rangeVar (to get min and max of the fields) is updated in rescaleTransferFunction
-  oss << _dispVar << ".ScaleTransferFunction.RescaleTransferFunction(" << _rangeVar << "[0], " << _rangeVar << "[1]);";
-  pushAndExecPyLine(oss.str()); oss.str("");
+  oss << getDispVar() << ".ScaleTransferFunction.RescaleTransferFunction(" << _rangeVar << "[0], " << _rangeVar << "[1]);";
+  pushAndExecPyLine(oss.str());
 }
 
 
@@ -108,7 +115,13 @@ MEDPresentationPointSprite::internalGeneratePipeline()
 
   // Make the radius twice the default radius
   oss << _dispVar << ".GaussianRadius = 2*" << _dispVar << ".GaussianRadius" << ";";
+  oss <<"__gr = "<< _dispVar << ".GaussianRadius";
   pushAndExecPyLine(oss.str()); oss.str("");
+  
+  PyObject * obj = getPythonObjectFromMain("__gr");
+  if (obj && PyFloat_Check(obj)) {
+    _gaussianRadius = PyFloat_AsDouble(obj);
+  }
 
   showScalarBar();
   selectColorMap();
@@ -131,8 +144,43 @@ MEDPresentationPointSprite::updatePipeline(const MEDCALC::PointSpriteParameters&
       scaleBallRadius();
       pushAndExecPyLine("pvs.Render();");
     }
-  if (params.scalarBarRange != _params.scalarBarRange)
-    updateScalarBarRange<MEDPresentationPointSprite, MEDCALC::PointSpriteParameters>(params.scalarBarRange);
+  if (params.scalarBarRange != _params.scalarBarRange ||
+      params.hideDataOutsideCustomRange != _params.hideDataOutsideCustomRange ||
+    params.scalarBarRangeArray[0] != _params.scalarBarRangeArray[0] ||
+    params.scalarBarRangeArray[1] != _params.scalarBarRangeArray[1])
+    updateScalarBarRange<MEDPresentationPointSprite, MEDCALC::PointSpriteParameters>(params.scalarBarRange,
+                                                                                     params.hideDataOutsideCustomRange,
+                                                                                     params.scalarBarRangeArray[0],
+                                                                                     params.scalarBarRangeArray[1]);
   if (params.colorMap != _params.colorMap)
     updateColorMap<MEDPresentationPointSprite, MEDCALC::PointSpriteParameters>(params.colorMap);
+  if (params.visibility != _params.visibility)
+    updateVisibility<MEDPresentationPointSprite, MEDCALC::PointSpriteParameters>(params.visibility);
+  if (params.scalarBarVisibility != _params.scalarBarVisibility)
+    updateScalarBarVisibility<MEDPresentationPointSprite, MEDCALC::PointSpriteParameters>(params.scalarBarVisibility);
+}
+
+std::string 
+MEDPresentationPointSprite::additionalThresholdVisualizationActions() {
+  if (_hideDataOutsideCustomRange) {
+    // Set point sprite:
+    std::ostringstream oss;
+    std::string aDispVar = getDispVar();
+    oss << aDispVar << ".SetRepresentationType('Point Gaussian');";
+    oss << aDispVar << ".ScaleByArray = 1;";
+    oss << aDispVar << ".SetScaleArray = ['POINTS', '" << getThresholdFieldName() << "'];";
+    oss << aDispVar << ".GaussianRadius = " << _gaussianRadius << ";";
+    oss << aDispVar << ".ScaleTransferFunction.RescaleTransferFunction(" << _rangeVar << "[0], " << _rangeVar << "[1]);";
+    return oss.str();
+  }
+}
+
+void
+MEDPresentationPointSprite::additionalThresholdActions() {
+  scaleBallRadius();
+}
+
+void 
+MEDPresentationPointSprite::additionalUnThresholdActions() {
+  scaleBallRadius();
 }

@@ -96,6 +96,18 @@
       <source>ICO_PRESENTATION_POINT_SPRITE_DEFAULT</source>
       <translation>pqNodeMapData24.png</translation>
     </message>
+    <message>
+      <source>ICO_PRESENTATION_PLOT3D_DEFAULT</source>
+      <translation>pqPlot24.png</translation>
+    </message>
+    <message>
+      <source>ICO_PRESENTATION_STREAM_LINES_DEFAULT</source>
+      <translation>pqStreamTracer24.png</translation>
+    </message>
+    <message>
+      <source>ICO_PRESENTATION_CUT_SEGMENT_DEFAULT</source>
+      <translation>pqPlotOverLine24.png</translation>
+    </message>
     <!-- Presentation tree icons (default theme)-->
     <message>
       <source>ICO_MEDPresentationMeshView_DEFAULT</source>
@@ -124,6 +136,18 @@
     <message>
       <source>ICO_MEDPresentationPointSprite_DEFAULT</source>
       <translation>pqNodeMapData16.png</translation>
+    </message>
+    <message>
+      <source>ICO_MEDPresentationPlot3D_DEFAULT</source>
+      <translation>pqPlot16.png</translation>
+    </message>
+    <message>
+      <source>ICO_MEDPresentationStreamLines_DEFAULT</source>
+      <translation>pqStreamTracer16.png</translation>
+    </message>
+    <message>
+      <source>ICO_MEDPresentationCutSegment_DEFAULT</source>
+      <translation>pqPlotOverLine16.png</translation>
     </message>
     <!-- Presentation toolbar icons (modern theme)-->
     <message>
@@ -154,6 +178,18 @@
       <source>ICO_PRESENTATION_POINT_SPRITE_MODERN</source>
       <translation>pqNodeMapData24.png</translation>
     </message>
+    <message>
+      <source>ICO_PRESENTATION_PLOT3D_MODERN</source>
+      <translation>pqPlot24.png</translation>
+    </message>
+    <message>
+      <source>ICO_PRESENTATION_STREAM_LINES_MODERN</source>
+      <translation>pqStreamTracer24.png</translation>
+    </message>
+    <message>
+      <source>ICO_PRESENTATION_CUT_SEGMENT_MODERN</source>
+      <translation>pqPlotOverLine24.png</translation>
+    </message>
     <!-- Presentation tree icons (modern theme)-->
     <message>
       <source>ICO_MEDPresentationMeshView_MODERN</source>
@@ -182,6 +218,18 @@
     <message>
       <source>ICO_MEDPresentationPointSprite_MODERN</source>
       <translation>pqNodeMapData16.png</translation>
+    </message>
+    <message>
+      <source>ICO_MEDPresentationPlot3D_MODERN</source>
+      <translation>pqPlot16.png</translation>
+    </message>
+    <message>
+      <source>ICO_MEDPresentationStreamLines_MODERN</source>
+      <translation>pqStreamTracer16.png</translation>
+    </message>
+    <message>
+      <source>ICO_MEDPresentationCutSegment_MODERN</source>
+      <translation>pqPlotOverLine16.png</translation>
     </message>
     <!-- Presentation toolbar icons (classic theme)-->
     <message>
@@ -212,6 +260,18 @@
       <source>ICO_PRESENTATION_POINT_SPRITE_CLASSIC</source>
       <translation>visu_points24.png</translation>
     </message>
+    <message>
+      <source>ICO_PRESENTATION_PLOT3D_CLASSIC</source>
+      <translation>visu_plot3d24.png</translation>
+    </message>
+    <message>
+      <source>ICO_PRESENTATION_STREAM_LINES_CLASSIC</source>
+      <translation>visu_streamlines24.png</translation>
+    </message>
+    <message>
+      <source>ICO_PRESENTATION_CUT_SEGMENT_CLASSIC</source>
+      <translation>visu_cutsegment24.png</translation>
+    </message>
     <!-- Presentation tree icons (classic theme)-->
     <message>
       <source>ICO_MEDPresentationMeshView_CLASSIC</source>
@@ -240,6 +300,18 @@
     <message>
       <source>ICO_MEDPresentationPointSprite_CLASSIC</source>
       <translation>visu_points16.png</translation>
+    </message>
+    <message>
+      <source>ICO_MEDPresentationPlot3D_CLASSIC</source>
+      <translation>visu_plot3d16.png</translation>
+    </message>
+    <message>
+      <source>ICO_MEDPresentationStreamLines_CLASSIC</source>
+      <translation>visu_streamlines16.png</translation>
+    </message>
+    <message>
+      <source>ICO_MEDPresentationCutSegment_CLASSIC</source>
+      <translation>visu_cutsegment16.png</translation>
     </message>
     <message>
       <source>ICO_DELETE_PRESENTATION</source>

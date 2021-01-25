@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>784</width>
-    <height>584</height>
+    <width>319</width>
+    <height>527</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>300</width>
-    <height>200</height>
+    <height>310</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -30,44 +30,7 @@
    <item>
     <widget class="QWidget" name="commonWidget" native="true">
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="1">
-       <widget class="QComboBox" name="comboBoxScalarBarRange">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <item>
-         <property name="text">
-          <string>LAB_ALL_TIMESTEPS</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>LAB_CURRENT_TIMESTEP</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>LAB_COLOR_MAP</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>LAB_RANGE</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
+      <item row="2" column="1" colspan="2">
        <widget class="QComboBox" name="comboBoxColorMap">
         <property name="enabled">
          <bool>true</bool>
@@ -82,6 +45,86 @@
           <string>LAB_COOL_TO_WARM</string>
          </property>
         </item>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QDoubleSpinBox" name="spinCustomRangeMin"/>
+      </item>
+      <item row="4" column="0" colspan="3">
+       <widget class="QCheckBox" name="checkBoxHideDataOutsideCR">
+        <property name="text">
+         <string>LAB_HIDE_DATA_OUTSIDE_CR</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>LAB_RANGE</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="checkBoxCustomRange">
+        <property name="text">
+         <string>LAB_CUSTOM_RANGE</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>LAB_COLOR_MAP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QDoubleSpinBox" name="spinCustomRangeMax">
+        <property name="maximum">
+         <double>9999999999999999583119736832.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.500000000000000</double>
+        </property>
+        <property name="value">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QComboBox" name="comboBoxScalarBarRange">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>LAB_ALL_TIMESTEPS</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>LAB_CURRENT_TIMESTEP</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="3">
+       <widget class="QCheckBox" name="checkBoxShowScalarBar">
+        <property name="text">
+         <string>LAB_SHOW_SCALAR_BAR</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -104,7 +147,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="0" column="1" colspan="3">
        <widget class="QComboBox" name="comboBoxMesh">
         <item>
          <property name="text">
@@ -130,7 +173,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="1" column="1" colspan="3">
        <widget class="QComboBox" name="comboBoxCompo">
         <item>
          <property name="text">
@@ -146,7 +189,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="2" column="1" colspan="3">
        <widget class="QSpinBox" name="spinBox">
         <property name="toolTip">
          <string>LAB_SPINBOX_TOOLTIP</string>
@@ -159,27 +202,45 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>235</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="3" column="0">
+       <widget class="QLabel" name="labelContourComp">
+        <property name="text">
+         <string>LAB_CONTOUR_COMP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" colspan="3">
+       <widget class="QComboBox" name="comboBoxContComp">
+        <item>
+         <property name="text">
+          <string>LAB_CONTOUR_MAGN</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>LAB_CONTOUR_X</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>LAB_CONTOUR_Y</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>LAB_CONTOUR_Z</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="0">
        <widget class="QLabel" name="labelSliceOrient">
         <property name="text">
          <string>LAB_SLICE_ORIENT</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1" colspan="3">
        <widget class="QComboBox" name="comboBoxSliceOrient">
         <item>
          <property name="text">
@@ -216,6 +277,150 @@
           <string>LAB_SLICE_NORMAL_TO_XYZ</string>
          </property>
         </item>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="labelCutPlaneNormal">
+        <property name="text">
+         <string>LAB_CUT_PLANE_NORMAL</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QDoubleSpinBox" name="spinNormalX">
+        <property name="singleStep">
+         <double>0.050000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QDoubleSpinBox" name="spinNormalY">
+        <property name="singleStep">
+         <double>0.050000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="QDoubleSpinBox" name="spinNormalZ">
+        <property name="singleStep">
+         <double>0.050000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="labelCutPlanePosition">
+        <property name="text">
+         <string>LAB_CUT_PLANE_POS</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1" colspan="3">
+       <widget class="QDoubleSpinBox" name="spinPlanePos">
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="labelIntegrDir">
+        <property name="text">
+         <string>LAB_INTEGR_DIR</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1" colspan="3">
+       <widget class="QComboBox" name="comboBoxIntegrDir">
+        <property name="currentText">
+         <string>LAB_INTEGR_DIR_BOTH</string>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>LAB_INTEGR_DIR_BOTH</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>LAB_INTEGR_DIR_FORWARD</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>LAB_INTEGR_DIR_BACKWARD</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="labelPoint1">
+        <property name="text">
+         <string>LAB_CUT_POINT1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QDoubleSpinBox" name="spinPoint1_X">
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="2">
+       <widget class="QDoubleSpinBox" name="spinPoint1_Y">
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="3">
+       <widget class="QDoubleSpinBox" name="spinPoint1_Z">
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="labelPoint2">
+        <property name="text">
+         <string>LAB_CUT_POINT2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QDoubleSpinBox" name="spinPoint2_X">
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="2">
+       <widget class="QDoubleSpinBox" name="spinPoint2_Y">
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="3">
+       <widget class="QDoubleSpinBox" name="spinPoint2_Z">
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1" colspan="3">
+       <widget class="QDoubleSpinBox" name="spinScaleFactor">
+        <property name="singleStep">
+         <double>0.020000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QCheckBox" name="checkBoxScaleFactor">
+        <property name="text">
+         <string>LAB_SCALE_FACTOR</string>
+        </property>
        </widget>
       </item>
      </layout>

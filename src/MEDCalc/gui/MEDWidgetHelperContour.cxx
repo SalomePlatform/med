@@ -29,7 +29,8 @@ MEDWidgetHelperContour::MEDWidgetHelperContour(const PresentationController * pr
                                                MEDCALC::MEDPresentationManager_ptr presManager, int presId,
                                                const std::string & presName, WidgetPresentationParameters * paramW):
   MEDWidgetHelper(presController, presManager, presId, presName, paramW),
-  _nbContours(-1)
+  _nbContours(-1),
+  _contourComponent(0)
 {}
 
 MEDWidgetHelperContour::~MEDWidgetHelperContour()
@@ -39,6 +40,8 @@ void MEDWidgetHelperContour::loadParametersFromEngine()
 {
   MEDWidgetHelper::loadParametersFromEngine();
   _nbContours = _presManager->getPresentationIntProperty(_presId, MEDPresentationContour::PROP_NB_CONTOUR.c_str());
+  _contourComponent = _presManager->getPresentationIntProperty(_presId, MEDPresentationContour::PROB_CONTOUR_COMPONENT_ID.c_str());
+
 }
 
 void MEDWidgetHelperContour::updateWidget(bool connect)
@@ -48,6 +51,7 @@ void MEDWidgetHelperContour::updateWidget(bool connect)
 
   // Contour presentation needs the number of contours
   _paramWidget->setNbContour(_nbContours);
+  _paramWidget->setContourComponents(_allCompos, _contourComponent);
 
   // Connect combo box changes
   if (connect)
@@ -55,7 +59,10 @@ void MEDWidgetHelperContour::updateWidget(bool connect)
       QObject::connect( this, SIGNAL(presentationUpdateSignal(const PresentationEvent *)),
                         _presController, SIGNAL(presentationSignal(const PresentationEvent *)) );
       QObject::connect( _paramWidget, SIGNAL(spinBoxValueChanged(int)), this, SLOT(onNbContourChanged(int)) );
+      QObject::connect( _paramWidget, SIGNAL(comboContCompIndexChanged(int)), this, SLOT(onContourComponentTypeChanged(int)) );
     }
+  if(_nbCompos == 1)
+    _paramWidget->hideContourComponent();
 }
 
 void MEDWidgetHelperContour::releaseWidget()
@@ -64,8 +71,8 @@ void MEDWidgetHelperContour::releaseWidget()
 
   QObject::disconnect( this, SIGNAL(presentationUpdateSignal(const PresentationEvent *)),
                        _presController, SIGNAL(presentationSignal(const PresentationEvent *)) );
-//  QObject::disconnect( _paramWidget, SIGNAL(comboCompoIndexChanged(int)), this, SLOT(onComponentChanged(int)) );
   QObject::disconnect( _paramWidget, SIGNAL(spinBoxValueChanged(int)), this, SLOT(onNbContourChanged(int)) );
+  QObject::disconnect( _paramWidget, SIGNAL(comboContCompIndexChanged(int)), this, SLOT(onContourComponentTypeChanged(int)) );
 }
 
 void MEDWidgetHelperContour::onNbContourChanged(int nbContour)
@@ -79,3 +86,14 @@ void MEDWidgetHelperContour::onNbContourChanged(int nbContour)
   emit presentationUpdateSignal(event); // --> PresentationController::processPresentationEvent
 }
 
+void MEDWidgetHelperContour::onContourComponentTypeChanged(int index)
+{
+  STDLOG("MEDWidgetHelperContour::onContourComponentTypeChanged");
+  PresentationEvent* event = new PresentationEvent();
+  event->eventtype = PresentationEvent::EVENT_CHANGE_CONTOUR_COMPONENT;
+  event->presentationId = _presId;
+  event->anInteger = index;
+  event->aString = _paramWidget->getContourComponent();
+
+  emit presentationUpdateSignal(event); // --> PresentationController::processPresentationEvent
+}

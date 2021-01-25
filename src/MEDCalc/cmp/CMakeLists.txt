@@ -45,7 +45,10 @@ SET(COMMON_SOURCES
   MEDPresentationVectorField.cxx
   MEDPresentationSlices.cxx
   MEDPresentationPointSprite.cxx
-  MEDPresentationDeflectionShape.cxx  
+  MEDPresentationPlot3D.cxx
+  MEDPresentationDeflectionShape.cxx
+  MEDPresentationStreamLines.cxx
+  MEDPresentationCutSegment.cxx
 )
 
 SET(MEDEngineCommon_SOURCES

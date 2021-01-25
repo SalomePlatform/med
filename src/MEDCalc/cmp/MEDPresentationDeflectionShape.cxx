@@ -105,12 +105,24 @@ MEDPresentationDeflectionShape::updatePipeline(const MEDCALC::DeflectionShapePar
   if (params.fieldHandlerId != _params.fieldHandlerId)
     throw KERNEL::createSalomeException("Unexpected updatePipeline error! Mismatching fieldHandlerId!");
 
-  if (params.scalarBarRange != _params.scalarBarRange)
+  if (params.scalarBarRange != _params.scalarBarRange ||
+      params.hideDataOutsideCustomRange != _params.hideDataOutsideCustomRange ||
+      params.scalarBarRangeArray[0] != _params.scalarBarRangeArray[0] ||
+      params.scalarBarRangeArray[1] != _params.scalarBarRangeArray[1])
     {
-      updateScalarBarRange<MEDPresentationDeflectionShape, MEDCALC::DeflectionShapeParameters>(params.scalarBarRange);
+      updateScalarBarRange<MEDPresentationDeflectionShape, MEDCALC::DeflectionShapeParameters>(params.scalarBarRange,
+                                                                                               params.hideDataOutsideCustomRange,
+                                                                                               params.scalarBarRangeArray[0],
+                                                                                               params.scalarBarRangeArray[1]);
       autoScale();
       pushAndExecPyLine("pvs.Render();");
     }
   if (params.colorMap != _params.colorMap)
     updateColorMap<MEDPresentationDeflectionShape, MEDCALC::DeflectionShapeParameters>(params.colorMap);
+
+  if (params.visibility != _params.visibility)
+    updateVisibility<MEDPresentationDeflectionShape, MEDCALC::DeflectionShapeParameters>(params.visibility);
+
+  if (params.scalarBarVisibility != _params.scalarBarVisibility)
+    updateScalarBarVisibility<MEDPresentationDeflectionShape, MEDCALC::DeflectionShapeParameters>(params.scalarBarVisibility);
 }

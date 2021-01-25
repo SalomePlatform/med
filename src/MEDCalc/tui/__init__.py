@@ -59,6 +59,9 @@ from .medpresentation import MakeSlices
 from .medpresentation import MakePointSprite
 from .medpresentation import RemovePresentation
 from .medpresentation import MakeDeflectionShape
+from .medpresentation import MakePlot3D
+from .medpresentation import MakeStreamLines
+from .medpresentation import MakeCutSegment
 
 from .medpresentation import GetMeshViewParameters
 from .medpresentation import GetScalarMapParameters
@@ -67,6 +70,9 @@ from .medpresentation import GetSlicesParameters
 from .medpresentation import GetPointSpriteParameters
 from .medpresentation import GetVectorFieldParameters
 from .medpresentation import GetDeflectionShapeParameters
+from .medpresentation import GetPlot3DParameters
+from .medpresentation import GetStreamLinesParameters
+from .medpresentation import GetCutSegmentParameters
 
 from .medpresentation import UpdateMeshView
 from .medpresentation import UpdateScalarMap
@@ -75,8 +81,12 @@ from .medpresentation import UpdateSlices
 from .medpresentation import UpdateVectorField
 from .medpresentation import UpdatePointSprite
 from .medpresentation import UpdateDeflectionShape
+from .medpresentation import UpdatePlot3D
+from .medpresentation import UpdateStreamLines
+from .medpresentation import UpdateCutSegment
 
 from .medpresentation import ComputeCellAverageSize, GetDomainCenter, GetSliceOrigins, SelectSourceField
+from .medpresentation import IsPlanarObj, GetPositions, GetPlaneNormalVector, FindOrCreateView
 
 # Processing
 from .medprocessing import ChangeUnderlyingMesh
