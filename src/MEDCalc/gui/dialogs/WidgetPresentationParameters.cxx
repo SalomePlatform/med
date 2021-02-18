@@ -129,7 +129,7 @@ WidgetPresentationParameters::isShown() const
 string
 WidgetPresentationParameters::getComponent() const
 {
-  if (_ui.comboBoxCompo->count() > 1 && _ui.comboBoxCompo->count() <= 3)
+  if (_ui.comboBoxCompo->count() > 1 && _ui.comboBoxCompo->count() <= 4)
     if (_ui.comboBoxCompo->currentIndex() == 0) // Euclidean norm
       return "";
 

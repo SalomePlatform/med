@@ -653,6 +653,8 @@ MEDPresentation::fillAvailableFieldComponents()
   if (!(nbCompo > 1 && nbCompo <= 3))
     _selectedComponentIndex = 0;
 
+  std::map<std::string, long> aCompoMap;
+  std::vector <std::string> aCompos;
   for (long i = 0; i<nbCompo; i++)
     {
       std::ostringstream oss2;
@@ -667,10 +669,41 @@ MEDPresentation::fillAvailableFieldComponents()
           STDLOG("Unexpected Python error");
           throw KERNEL::createSalomeException("Unexpected Python error");
         }
-      std::ostringstream oss_p;
-      oss_p << MEDPresentation::PROP_COMPONENT << i;
-      setStringProperty(oss_p.str(), compo);
+      if (aCompoMap.find(compo) == aCompoMap.end()) {
+        aCompoMap.insert(std::pair<std::string, int>(compo, 1));
+        aCompos.push_back(compo);
+      }
+      else {
+        if (aCompoMap[compo] == 1) {
+          for (std::vector<std::string>::size_type ii = 0; ii != aCompos.size(); ii++) {
+            // Modify the previous occurrence
+            if (aCompos[ii] == compo) {
+              std::ostringstream oss_m;
+              oss_m << compo << "(" << 1 << ")";
+              aCompos[ii] = oss_m.str();
+              break;
+            }
+          }
+          std::ostringstream oss_n;
+          oss_n << compo << "(" << 2 << ")";
+          aCompos.push_back(oss_n.str());
+        }
+        else if (aCompoMap[compo] > 1) {
+          auto val = aCompoMap[compo];
+          val++;
+          std::ostringstream oss_n;
+          oss_n << compo << "(" << val << ")";
+          aCompos.push_back(oss_n.str());
+        }
+        aCompoMap[compo] = aCompoMap[compo]++;
+      }
     }
+  for (std::vector<std::string>::size_type i = 0; i != aCompos.size(); i++) {
+    std::ostringstream oss_p;
+    oss_p << MEDPresentation::PROP_COMPONENT << i;
+    setStringProperty(oss_p.str(), aCompos[i]);
+  }
+
 }
 
 /**
