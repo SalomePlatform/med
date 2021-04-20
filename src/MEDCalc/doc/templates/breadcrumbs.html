@@ -1,0 +1,9 @@
+{% extends "!breadcrumbs.html" %}
+
+{% block breadcrumbs_aside %}
+{{ super() }}
+  <ul class="wy-breadcrumbs">
+      {% set path_to_main = pathto('../dev/FIELDS/index') %}
+      <li><a href="{{ path_to_main }}">Return to main documentation page</a></li>
+  </ul
+{% endblock %}

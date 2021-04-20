@@ -12,6 +12,10 @@ References
 
 **User documentation**
 
+.. _FIELDS module\: User guide for simplified MED visualisation: ../../MEDCalc/index.html
+
+* `FIELDS module\: User guide for simplified MED visualisation`_
+
 .. toctree::
    :maxdepth: 1
 

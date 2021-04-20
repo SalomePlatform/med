@@ -76,6 +76,9 @@ OPTION(SALOME_USE_MPI "(Use MPI containers) - For FIELDS this triggers the build
 OPTION(SALOME_BUILD_GUI "Build GUI of FIELDS." ON)
 OPTION(SALOME_BUILD_TESTS "Build FIELDS tests." ON)
 OPTION(SALOME_BUILD_DOC "Build FIELDS doc." ON)
+CMAKE_DEPENDENT_OPTION(SALOME_FIELDS_BUILD_FRENCH_DOC "Generate SALOME Fields French documentation" OFF
+                       "SALOME_BUILD_DOC" OFF)
+
 
 # Find MEDCoupling (required)
 # ==========================
