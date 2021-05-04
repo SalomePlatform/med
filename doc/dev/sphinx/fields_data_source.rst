@@ -4,20 +4,20 @@
 Data Source
 ***********
 
-.. |img| image:: ../images/image_datasource_add.png
+.. |img| image:: images/image_datasource_add.png
    :scale: 50 %
 
 Data Source for all presentations of Fields module is a MED file. To add Data Source into Fields module, choose
 **File > Add Data Source** menu (or click **Add Data Source** |img| button in the *Datasource* toolbar).
 This shows a standard dialog that allows browsing and choosing \*.med files:
 
-.. image:: ../images/image_file_search.png
+.. image:: images/image_file_search.png
    :align: center
 
 Select a file and confirm your choice by pressing **Open** button.
 As a result, Data Source representation appears in **Object Browser**:
 
-.. image:: ../images/image_data_source_representation.png
+.. image:: images/image_data_source_representation.png
    :align: center
 
 It contains the following information:

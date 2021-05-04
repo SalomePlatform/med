@@ -4,12 +4,12 @@
 Mesh presentation
 *****************
 
-.. image:: ../images/image_mesh_prs.png
+.. image:: images/image_mesh_prs.png
    :align: center
 
 The main purpose of this presentation is to display the mesh structure without any physical data.
 
-.. |img_msh| image:: ../images/image_mesh.png
+.. |img_msh| image:: images/image_mesh.png
 
 This presentation is automatically created when importing a :ref:`fields_data_source_page`.
 Additionally, **Mesh** presentation can be created by

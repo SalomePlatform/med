@@ -1,3 +1,5 @@
+.. _fields_view_modes_page:
+
 **********
 View Modes
 **********

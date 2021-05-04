@@ -1,10 +1,10 @@
-.. _presentations_page:
+.. _fields_presentations_page:
 
 *************
 Presentations
 *************
 
-.. image:: ../images/image_representations.png
+.. image:: images/image_representations.png
    :align: center
 
 Fields module allows creating several types of presentations. All presentation types can be split in two main groups:

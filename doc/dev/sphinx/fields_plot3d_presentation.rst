@@ -4,13 +4,13 @@
 Plot3D presentation
 *******************
 
-.. image:: ../images/image_plot3d_prs.png
+.. image:: images/image_plot3d_prs.png
    :align: center
 
 **Plot3D** is a presentation of scalar values of meshes lying on a cutting plane.
 The relief and coloring of the resulting presentation both correspond to the values applied to the cells of a mesh.
 
-.. |img_pl3| image:: ../images/image_slices.png
+.. |img_pl3| image:: images/image_slices.png
 
 To create a **Plot3D** presentation,
 

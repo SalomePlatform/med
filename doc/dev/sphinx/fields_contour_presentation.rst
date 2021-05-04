@@ -4,12 +4,12 @@
 Contour presentation
 ********************
 
-.. image:: ../images/image_contour_prs.png
+.. image:: images/image_contour_prs.png
    :align: center
 
 **Contour** presentation combines all equal scalar values applied to the cells and constructs isobaric surfaces.
 
-.. |img_ct| image:: ../images/image_contour.png
+.. |img_ct| image:: images/image_contour.png
 
 To create a **Contour** presentation,
 

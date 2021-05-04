@@ -1,5 +1,8 @@
-Welcome to Fields's documentation!
-==================================
+.. _fields_index_page:
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+FIELDS module: Guide on presentations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 .. toctree::
 
@@ -8,8 +11,3 @@ Welcome to Fields's documentation!
   fields_data_source.rst
   fields_view_modes.rst
   fields_presentations.rst
- 
-Indices and tables
-==================
-
-* :ref:`search`

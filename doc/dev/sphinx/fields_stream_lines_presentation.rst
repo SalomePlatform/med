@@ -4,14 +4,14 @@
 Stream lines presentation
 *************************
 
-.. image:: ../images/image_stream_lines_prs.png
+.. image:: images/image_stream_lines_prs.png
    :align: center
 
 **Stream lines** is a type of presentation transforming the cells with vectors having most similar direction into lines.
 A streamline can be thought of as the path that a massless particle takes in a vector field. Streamlines are used to
 convey the structure of a vector field.
 
-.. |img_stl| image:: ../images/image_stream_lines.png
+.. |img_stl| image:: images/image_stream_lines.png
 
 To create a **Stream lines** presentation,
 

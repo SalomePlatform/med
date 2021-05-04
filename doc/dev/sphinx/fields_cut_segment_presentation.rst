@@ -4,13 +4,13 @@
 Cut Segment presentation
 ************************
 
-.. image:: ../images/image_cut_segment_prs.png
+.. image:: images/image_cut_segment_prs.png
    :align: center
 
 **Cut segment** presentation is a type of presentation which displays colored cells with applied scalar values on the
 mesh where cut segment is placed.
 
-.. |img_cs| image:: ../images/image_cut_segment.png
+.. |img_cs| image:: images/image_cut_segment.png
 
 To create a **Cut segment** presentation,
 

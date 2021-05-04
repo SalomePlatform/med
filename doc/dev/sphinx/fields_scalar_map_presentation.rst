@@ -4,13 +4,13 @@
 Scalar map presentation
 ***********************
 
-.. image:: ../images/image_scalar_map_prs.png
+.. image:: images/image_scalar_map_prs.png
    :align: center
 
 **Scalar map** is the basic type of presentation in Fields module. It consists in coloring each cell of a field
 in accordance with the scalar or vector data applied to it.
 
-.. |img_sm| image:: ../images/image_scalar_map.png
+.. |img_sm| image:: images/image_scalar_map.png
 
 To create a **Scalar map** presentation,
 

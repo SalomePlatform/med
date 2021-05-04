@@ -4,13 +4,13 @@
 Slices presentation
 *******************
 
-.. image:: ../images/image_slices_prs.png
+.. image:: images/image_slices_prs.png
    :align: center
 
 **Slices** is a type of field presentation, when the given mesh is cut by a number of planes.
 These planes are colored according the the values applied to the mesh cells.
 
-.. |img_sl| image:: ../images/image_slices.png
+.. |img_sl| image:: images/image_slices.png
 
 To create a **Slices** presentation,
 

@@ -4,12 +4,12 @@
 Vector field presentation
 *************************
 
-.. image:: ../images/image_vector_field_prs.png
+.. image:: images/image_vector_field_prs.png
    :align: center
 
 **Vector field** presentation visualizes vectors of the corresponding mesh cells in graphical mode.
 
-.. |img_vct| image:: ../images/image_vector.png
+.. |img_vct| image:: images/image_vector.png
 
 To create a **Vector field** presentation,
 

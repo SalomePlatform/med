@@ -1,8 +1,10 @@
+.. _fields_introduction_page:
+
 *****************************
 Introduction to Fields module
 *****************************
 
-.. image:: ../images/image_fields.png
+.. image:: images/image_fields.png
    :align: center
 
 Fields module is used for analysis and post-processing of numerical simulation results. It is based upon ParaVis module, MEDReader ParaVis

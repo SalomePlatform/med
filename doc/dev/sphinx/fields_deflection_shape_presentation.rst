@@ -4,13 +4,13 @@
 Deflection shape presentation
 *****************************
 
-.. image:: ../images/image_deflection_shape_prs.png
+.. image:: images/image_deflection_shape_prs.png
    :align: center
 
 **Deflection shape** is a type of field presentation when vector values corresponding to the mesh cells are
 visualized by shifting these cells.
 
-.. |img_dfl| image:: ../images/image_deflection.png
+.. |img_dfl| image:: images/image_deflection.png
 
 To create a **Deflection shape** presentation,
 

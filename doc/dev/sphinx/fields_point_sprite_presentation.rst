@@ -4,13 +4,13 @@
 Point sprite presentation
 *************************
 
-.. image:: ../images/image_point_sprite_prs.png
+.. image:: images/image_point_sprite_prs.png
     :align: center
 
 **Point sprite** presentation presents data on field as a set of fixed points of the renormalisation group flow
 with Gaussian distribution.
 
-.. |img_ps| image:: ../images/image_point_sprite.png
+.. |img_ps| image:: images/image_point_sprite.png
 
 To create a **Point sprite** presentation,
 
