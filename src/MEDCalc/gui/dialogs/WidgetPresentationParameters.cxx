@@ -96,6 +96,10 @@ WidgetPresentationParameters::WidgetPresentationParameters(QWidget* parent)
   // Min and max values
   _ui.spinCustomRangeMin->setRange(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
   _ui.spinCustomRangeMax->setRange(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
+  
+  _ui.spinCustomRangeMin->setDecimals(6);
+  _ui.spinCustomRangeMax->setDecimals(6);
+  
   _ui.spinNormalX->setRange(0.0, 1.0);
   _ui.spinNormalY->setRange(0.0, 1.0);
   _ui.spinNormalZ->setRange(0.0, 1.0);
