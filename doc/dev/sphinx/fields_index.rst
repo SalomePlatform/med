@@ -1,8 +1,8 @@
 .. _fields_index_page:
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-FIELDS module: Guide on presentations
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+FIELDS module: User guide for simplified MED visualisation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 .. toctree::
 
