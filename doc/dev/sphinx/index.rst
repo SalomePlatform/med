@@ -15,6 +15,7 @@ References
 .. toctree::
    :maxdepth: 1
 
+   fields_index.rst
    medcalc-userguide-gui.rst
    medcalc-userguide-api.rst
 
