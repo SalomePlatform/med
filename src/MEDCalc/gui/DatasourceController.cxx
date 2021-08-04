@@ -243,11 +243,11 @@ void DatasourceController::OnExpandField()
     // First retrieve the fieldseries id associated to this study object
     SALOMEDS::GenericAttribute_var anAttr;
     SALOMEDS::AttributeParameter_var aParam;
-    if ( soFieldseries->FindAttribute(anAttr,"AttributeParameter") ) {
-      aParam = SALOMEDS::AttributeParameter::_narrow(anAttr);
-      if (! aParam->IsSet(FIELD_SERIES_ID, PT_INTEGER))
-        return;
-    }
+    if ( !soFieldseries->FindAttribute(anAttr,"AttributeParameter") )
+      return;
+    aParam = SALOMEDS::AttributeParameter::_narrow(anAttr);
+    if (! aParam->IsSet(FIELD_SERIES_ID, PT_INTEGER))
+      return;
     long fieldseriesId = aParam->GetInt(FIELD_SERIES_ID);
     STDLOG("Expand the field timeseries "<<fieldseriesId);
 
@@ -297,11 +297,11 @@ void DatasourceController::OnUseInWorkspace() {
       return;
     SALOMEDS::GenericAttribute_var anAttr;
     SALOMEDS::AttributeParameter_var aParam;
-    if ( soField->FindAttribute(anAttr,"AttributeParameter") ) {
-      aParam = SALOMEDS::AttributeParameter::_narrow(anAttr);
-      if (! aParam->IsSet(IS_IN_WORKSPACE, PT_BOOLEAN))
-        return;
-    }
+    if ( !soField->FindAttribute(anAttr,"AttributeParameter") )
+      return;
+    aParam = SALOMEDS::AttributeParameter::_narrow(anAttr);
+    if (! aParam->IsSet(IS_IN_WORKSPACE, PT_BOOLEAN))
+      return;
     bool isInWorkspace = aParam->GetBool(IS_IN_WORKSPACE);
     if ( isInWorkspace ) {
       QMessageBox::warning(_salomeModule->getApp()->desktop(),
@@ -366,11 +366,11 @@ void DatasourceController::OnUseInWorkspace() {
         continue;
       SALOMEDS::GenericAttribute_var anAttr;
       SALOMEDS::AttributeParameter_var aParam;
-      if ( soField->FindAttribute(anAttr,"AttributeParameter") ) {
-        aParam = SALOMEDS::AttributeParameter::_narrow(anAttr);
-        if (! aParam->IsSet(IS_IN_WORKSPACE, PT_BOOLEAN))
-          return;
-      }
+      if ( !soField->FindAttribute(anAttr,"AttributeParameter") )
+        return;
+      aParam = SALOMEDS::AttributeParameter::_narrow(anAttr);
+      if (! aParam->IsSet(IS_IN_WORKSPACE, PT_BOOLEAN))
+        return;
       bool isInWorkspace = aParam->GetBool(IS_IN_WORKSPACE);
       if ( !isInWorkspace ) {
         if (! aParam->IsSet(FIELD_ID, PT_INTEGER))
