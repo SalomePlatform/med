@@ -29,6 +29,7 @@
 #include "MEDCouplingRemapper.hxx"
 #include "MEDCouplingUMesh.hxx"
 #include "MEDCouplingFieldDouble.hxx"
+#include "MEDCouplingFieldFloat.hxx"
 using namespace MEDCoupling;
 
 /*! This map is used for lifecycle management of fields used in this operator */

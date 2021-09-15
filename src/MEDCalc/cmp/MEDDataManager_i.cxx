@@ -722,6 +722,16 @@ MEDCouplingFieldDouble * MEDDataManager_i::getFieldDouble(const MEDCALC::FieldHa
                 fieldHandler->iteration,
                 fieldHandler->order));
   MCAuto<MEDCouplingFieldDouble> myField(DynamicCast<MEDCouplingField,MEDCouplingFieldDouble>(myFieldTmpp));
+
+  // trying float field
+  if (!myField){
+    MCAuto<MEDCouplingFieldFloat> myFieldFloat(DynamicCast<MEDCouplingField,MEDCouplingFieldFloat>(myFieldTmpp));
+    if (myFieldFloat){
+      myField = myFieldFloat->convertToDblField();
+      LOG("getFieldDouble: field "<<fieldHandler->fieldname<<" was read as float and converted to double.");
+    }
+  }
+
   myField->setMesh(myMesh);
   _fieldDoubleMap[fieldHandler->id] = myField.retn();
   return myField;
