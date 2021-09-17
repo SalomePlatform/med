@@ -21,15 +21,14 @@ SET(TEST_NAMES
   access_API
   load_file
   import_pvsimple
-## These tests need a display to open a render window (paraview calls from python)
-## Uncomment these lines to add the tests to the test suite and run them manually
-#  scalar_map
-#  contour
-#  slices
-#  mesh_view
-#  point_sprite
-#  vector_field
-#  deflection_shape
-#  elno_field
-#  interpolate_field_float
+# These tests need a display to open a render window (paraview calls from python)
+  scalar_map
+  contour
+  slices
+  mesh_view
+  point_sprite
+  vector_field
+  deflection_shape
+  elno_field
+  interpolate_field_float
 )
