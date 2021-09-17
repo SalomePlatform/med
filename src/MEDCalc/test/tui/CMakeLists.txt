@@ -24,6 +24,8 @@ SET(_test_files
     medfiles/agitateur.med
     medfiles/deplacements.med
     medfiles/portico_elno.med
+    medfiles/source_1.med
+    medfiles/target_1.med
 )
 
 SET(TEST_INSTALL_DIRECTORY ${SALOME_FIELDS_INSTALL_TEST}/MEDCalc/tui)
