@@ -37,8 +37,9 @@ MEDFactory_i::MEDFactory_i(CORBA::ORB_ptr orb,
                            PortableServer::POA_ptr poa,
                            PortableServer::ObjectId* contId,
                            const char* instanceName,
-                           const char* interfaceName)
-  : Engines_Component_i(orb, poa, contId, instanceName, interfaceName)
+                           const char* interfaceName,
+						   bool checkNS)
+  : Engines_Component_i(orb, poa, contId, instanceName, interfaceName, false, checkNS)
 {
   MESSAGE("activate object");
   _thisObj = this ;
@@ -80,22 +81,4 @@ MEDFactory_i::getCommandsHistoryManager()
   MEDCommandsHistoryManager_i* manager = MEDCommandsHistoryManager_i::getInstance();
   MEDCALC::MEDCommandsHistoryManager_ptr managerPtr = manager->_this();
   return managerPtr;
-}
-
-extern "C"
-{
-  PortableServer::ObjectId* MEDFactoryEngine_factory(
-             CORBA::ORB_ptr orb,
-             PortableServer::POA_ptr poa,
-             PortableServer::ObjectId* contId,
-             const char* instanceName,
-             const char* interfaceName)
-  {
-    MESSAGE("PortableServer::ObjectId * MEDEngine_factory()");
-    SCRUTE(interfaceName);
-    MEDFactory_i* factory = new MEDFactory_i(orb, poa, contId,
-                                             instanceName,
-                                             interfaceName);
-    return factory->getId() ;
-  }
 }

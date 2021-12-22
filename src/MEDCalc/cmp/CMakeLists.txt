@@ -49,6 +49,11 @@ SET(COMMON_SOURCES
   MEDPresentationDeflectionShape.cxx
   MEDPresentationStreamLines.cxx
   MEDPresentationCutSegment.cxx
+  MEDFactory_i.cxx
+  MEDFactory_No_Session_i.cxx
+  MEDFactory_Session_i.cxx
+  MEDFactory_Component_Generator.cxx
+
 )
 
 SET(MEDEngineCommon_SOURCES
@@ -56,11 +61,14 @@ SET(MEDEngineCommon_SOURCES
 )
 
 SET(MEDFactoryEngine_SOURCES
-  MEDFactory_i.cxx
+    _MEDFactory_Session_i.cxx
 )
 
 SET(MEDEngine_SOURCES
   MED.cxx
+  MED_Session.cxx
+  MED_No_Session.cxx
+  MED_Component_Generator.cxx
 )
 
 SET(COMMON_LIBS

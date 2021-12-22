@@ -41,7 +41,8 @@ public:
                PortableServer::POA_ptr poa,
                PortableServer::ObjectId * contId,
                const char *instanceName,
-               const char *interfaceName);
+               const char *interfaceName,
+			   bool checkNS = true);
   virtual ~MEDFactory_i();
 
   /*! Returns the singleton instance of the data manager */
@@ -53,13 +54,5 @@ public:
   /*! Returns the singleton instance of the commands history manager */
   MEDCALC::MEDCommandsHistoryManager_ptr getCommandsHistoryManager();
 };
-
-extern "C"
-MEDCALC_EXPORT PortableServer::ObjectId *
-MEDFactoryEngine_factory(CORBA::ORB_ptr orb,
-                         PortableServer::POA_ptr poa,
-                         PortableServer::ObjectId * contId,
-                         const char *instanceName,
-                         const char *interfaceName);
 
 #endif

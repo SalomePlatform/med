@@ -121,6 +121,7 @@ SET(link_libraries
   SalomeIDLMED
   MEDCALCGUI_dialogs
   MEDFactoryEngine
+  FIELDSEngine
   ${GUI_qtx}
   ${GUI_suit}
   ${GUI_SalomeObject}

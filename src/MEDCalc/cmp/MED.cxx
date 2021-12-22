@@ -49,8 +49,9 @@ MED::MED(CORBA::ORB_ptr orb,
          PortableServer::POA_ptr poa,
          PortableServer::ObjectId* contId,
          const char* instanceName,
-         const char* interfaceName)
-  : Engines_Component_i(orb, poa, contId, instanceName, interfaceName),
+         const char* interfaceName,
+		 bool checkNS)
+  : Engines_Component_i(orb, poa, contId, instanceName, interfaceName, false, checkNS),
     _fieldSeriesEntries(),
     _meshEntries()
 {
@@ -463,26 +464,4 @@ void MED::cleanUp()
 {
   _fieldSeriesEntries.clear();
   _meshEntries.clear();
-}
-
-extern "C"
-{
-  /*!
-    \brief Exportable factory function: create an instance of the MED component engine
-    \param orb reference to the ORB
-    \param poa reference to the POA
-    \param contId CORBA object ID, pointing to the owner SALOME container
-    \param instanceName SALOME component instance name
-    \param interfaceName SALOME component interface name
-    \return CORBA object identifier of the registered servant
-  */
-  PortableServer::ObjectId* FIELDSEngine_factory(CORBA::ORB_ptr orb,
-                                              PortableServer::POA_ptr poa,
-                                              PortableServer::ObjectId* contId,
-                                              const char* instanceName,
-                                              const char* interfaceName)
-  {
-    MED* component = new MED(orb, poa, contId, instanceName, interfaceName);
-    return component->getId();
-  }
 }
