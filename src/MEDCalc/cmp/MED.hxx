@@ -40,7 +40,8 @@ public:
       PortableServer::POA_ptr poa,
       PortableServer::ObjectId* contId,
       const char* instanceName,
-      const char* interfaceName);
+      const char* interfaceName,
+	  bool checkNS = true);
   virtual ~MED();
 
   MED_ORB::status addDatasourceToStudy(const MEDCALC::DatasourceHandler& datasourceHandler);
@@ -78,17 +79,12 @@ public:
   virtual CORBA::Boolean hasObjectInfo();
   virtual char* getObjectInfo(const char* entry);
 
+  // Get Study
+  virtual SALOMEDS::Study_var getStudyServant() = 0;
+
  private:
   std::map<long, std::string> _fieldSeriesEntries;
   std::map<long, std::string> _meshEntries;
 };
-
-extern "C"
-MEDCALC_EXPORT
-PortableServer::ObjectId* FIELDSEngine_factory( CORBA::ORB_ptr orb,
-                                               PortableServer::POA_ptr poa,
-                                               PortableServer::ObjectId* contId,
-                                               const char* instanceName,
-                                               const char* interfaceName );
 
 #endif

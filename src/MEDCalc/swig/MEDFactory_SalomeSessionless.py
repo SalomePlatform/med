@@ -1,4 +1,5 @@
-# Copyright (C) 2012-2021  CEA/DEN, EDF R&D
+#  -*- coding: iso-8859-1 -*-
+# Copyright (C) 2021  CEA/DEN, EDF R&D, OPEN CASCADE
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,19 +18,11 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-ADD_SUBDIRECTORY(cmp)
-ADD_SUBDIRECTORY(res)
-ADD_SUBDIRECTORY(swig)
-
-IF(SALOME_BUILD_GUI)
-  ADD_SUBDIRECTORY(gui)
-ENDIF()
-
-ADD_SUBDIRECTORY(test)
-
-IF(SALOME_FIELDS_ENABLE_PYTHON)
-  ADD_SUBDIRECTORY(tui)
-  ADD_SUBDIRECTORY(exe)
-ENDIF()
-
-INSTALL(FILES MEDCalcConstants.hxx DESTINATION ${SALOME_INSTALL_HEADERS})
+def buildInstance(orb):
+    import MedHelper
+    med_field_ior = MedHelper.BuildMEDFactoryInstance()
+    import MEDCALC
+    import CORBA
+    orb=CORBA.ORB_init([''])
+    med_factory = orb.string_to_object(med_field_ior)
+    return med_factory, orb
