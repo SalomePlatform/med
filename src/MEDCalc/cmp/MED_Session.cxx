@@ -44,6 +44,8 @@ SALOMEDS::Study_var MED_Session::getStudyServant()
   return aStudy;
 }
 
+#include "MED_No_Session.hxx"
+
 extern "C"
 {
   /*!
@@ -61,7 +63,17 @@ extern "C"
                                               const char* instanceName,
                                               const char* interfaceName)
   {
-    MED* component = new MED_Session(orb, poa, contId, instanceName, interfaceName);
-    return component->getId();
+    CORBA::Object_var o = poa->id_to_reference(*contId);
+		Engines::Container_var cont = Engines::Container::_narrow(o);
+		if(cont->is_SSL_mode())
+		{
+      MED_No_Session* component = new MED_No_Session(orb, poa, contId, instanceName, interfaceName);
+      return component->getId();
+    }
+    else
+    {
+      MED* component = new MED_Session(orb, poa, contId, instanceName, interfaceName);
+      return component->getId();
+    }
   }
 }

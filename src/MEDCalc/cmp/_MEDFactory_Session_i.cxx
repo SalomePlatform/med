@@ -20,7 +20,7 @@
 // Authors : Guillaume Boulant (EDF) - 01/06/2011
 
 #include "MEDFactory_Session_i.hxx"
-
+#include "MEDFactory_No_Session_i.hxx"
 
 extern "C"
 {
@@ -33,9 +33,21 @@ extern "C"
 	{
 		MESSAGE("PortableServer::ObjectId * MEDEngine_factory()");
 		SCRUTE(interfaceName);
-		MEDFactory_i* factory = new MEDFactory_Session_i(orb, poa, contId,
-			instanceName,
-			interfaceName);
-		return factory->getId();
+		CORBA::Object_var o = poa->id_to_reference(*contId);
+		Engines::Container_var cont = Engines::Container::_narrow(o);
+		if(cont->is_SSL_mode())
+		{
+			MEDFactory_No_Session_i* factory = new MEDFactory_No_Session_i(orb, poa, contId,
+				instanceName,
+				interfaceName);
+			return factory->getId();
+		}
+		else
+		{
+			MEDFactory_i* factory = new MEDFactory_Session_i(orb, poa, contId,
+				instanceName,
+				interfaceName);
+			return factory->getId();
+		}
 	}
 }
