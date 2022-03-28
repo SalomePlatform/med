@@ -187,6 +187,7 @@ module MEDCALC
     boolean hideDataOutsideCustomRange;
   };
 
+  // sphinx doc: begin of plot3d params
   struct Plot3DParameters {
     long fieldHandlerId;
     ScalarBarRangeType scalarBarRange;
@@ -198,6 +199,7 @@ module MEDCALC
     DoubleArray planeNormal;
     double planePos;
   };
+  // sphinx doc: end of plot3d params
 
   struct StreamLinesParameters {
     long fieldHandlerId;

@@ -238,6 +238,7 @@ PresentationController::createActions()
   _salomeModule->action(actionId)->setIconVisibleInMenu(true);
   _salomeModule->createMenu(actionId, presentationMenuId);
 
+  // sphinx doc: begin of plot3d gui items
   label   = tr("LAB_PRESENTATION_PLOT3D");
   tooltip = tr("TIP_PRESENTATION_PLOT3D");
   icon    = tr(_getIconName("ICO_PRESENTATION_PLOT3D").c_str());
@@ -246,6 +247,7 @@ PresentationController::createActions()
   _salomeModule->createTool(actionId, presentationToolbarId);
   _salomeModule->action(actionId)->setIconVisibleInMenu(true);
   _salomeModule->createMenu(actionId, presentationMenuId);
+  // sphinx doc: end of plot3d gui items
 
   label   = tr("LAB_PRESENTATION_STREAM_LINES");
   tooltip = tr("TIP_PRESENTATION_STREAM_LINES");
@@ -422,11 +424,13 @@ PresentationController::onVisualizePointSprite()
   this->visualize(PresentationEvent::EVENT_VIEW_OBJECT_POINT_SPRITE);
 }
 
+// sphinx doc: begin of onVisualizePlot3D
 void
 PresentationController::onVisualizePlot3D()
 {
   this->visualize(PresentationEvent::EVENT_VIEW_OBJECT_PLOT3D);
 }
+// sphinx doc: end of onVisualizePlot3D
 
 void
 PresentationController::onVisualizeStreamLines()
@@ -605,11 +609,13 @@ PresentationController::processPresentationEvent(const PresentationEvent* event)
               .arg(fieldHandler->id).arg(viewMode).arg(scalarBarRange).arg(colorMap);
       commands += QString("presentation_id");
   }
+  // sphinx doc: begin of plot3d prs creation
   else if ( event->eventtype == PresentationEvent::EVENT_VIEW_OBJECT_PLOT3D ) {
       commands += QString("presentation_id = medcalc.MakePlot3D(accessField(%1), viewMode=%2, scalarBarRange=%3, colorMap=%4)")
               .arg(fieldHandler->id).arg(viewMode).arg(scalarBarRange).arg(colorMap);
       commands += QString("presentation_id");
   }
+  // sphinx doc: end of plot3d prs creation
   else if ( event->eventtype == PresentationEvent::EVENT_VIEW_OBJECT_STREAM_LINES ) {
       commands += QString("presentation_id = medcalc.MakeStreamLines(accessField(%1), viewMode=%2, scalarBarRange=%3, colorMap=%4)")
               .arg(fieldHandler->id).arg(viewMode).arg(scalarBarRange).arg(colorMap);
@@ -680,6 +686,7 @@ PresentationController::processPresentationEvent(const PresentationEvent* event)
       commands += QString("params.orientation = %1").arg(getSliceOrientationPython(event->anInteger));
       commands += QString("medcalc.UpdateSlices(%1, params)").arg(event->presentationId);
   }
+  // sphinx doc: begin of plot3d prs update
   else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_PLANE_POS ) {
       std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
       commands += QString("params = medcalc.GetPlot3DParameters(%2)").arg(event->presentationId);
@@ -692,6 +699,7 @@ PresentationController::processPresentationEvent(const PresentationEvent* event)
       commands += QString("params.planeNormal = [%1, %2, %3]").arg(event->aDoubleN[0]).arg(event->aDoubleN[1]).arg(event->aDoubleN[2]);
       commands += QString("medcalc.UpdatePlot3D(%1, params)").arg(event->presentationId);
   }
+  // sphinx doc: end of plot3d prs update
   else if ( event->eventtype == PresentationEvent::EVENT_CHANGE_CUT_POINT1 ) {
       std::string typ = getPresTypeFromWidgetHelper(event->presentationId);
       commands += QString("params = medcalc.GetCutSegmentParameters(%2)").arg(event->presentationId);

@@ -19,6 +19,13 @@ References
    medcalc-userguide-gui.rst
    medcalc-userguide-api.rst
 
+**Technical documentation** (**in english**):
+
+.. toctree::
+   :maxdepth: 1
+
+   fields_arch_introduction.rst
+
 **Technical documentation** (**in french**):
 
 .. toctree::

@@ -66,12 +66,16 @@ WidgetPresentationParameters::WidgetPresentationParameters(QWidget* parent)
                      this,                     SLOT(onSpinboxScaleFactorChanged()));
   QObject::connect(_ui.checkBoxHideDataOutsideCR, SIGNAL(stateChanged(int)),
                      this,                        SLOT(onCheckboxHideDataOutsideCustomRangeChanged(int)));
+  // sphinx doc: begin of normal and plane connections
   QObject::connect(_ui.spinNormalX,            SIGNAL(editingFinished()),
                      this,                     SLOT(onSpinNormalEditingFinished()) );
   QObject::connect(_ui.spinNormalY,            SIGNAL(editingFinished()),
                      this,                     SLOT(onSpinNormalEditingFinished()) );
   QObject::connect(_ui.spinNormalZ,            SIGNAL(editingFinished()),
                      this,                     SLOT(onSpinNormalEditingFinished()) );
+  QObject::connect(_ui.spinPlanePos,           SIGNAL(editingFinished()),
+                     this,                     SLOT(onSpinPlanePosEditingFinished()) );
+  // sphinx doc: end of normal and plane connections
   QObject::connect(_ui.spinPoint1_X,           SIGNAL(editingFinished()),
                      this,                     SLOT(onSpinCutPoint1EditingFinished()) );
   QObject::connect(_ui.spinPoint1_Y,           SIGNAL(editingFinished()),
@@ -84,8 +88,6 @@ WidgetPresentationParameters::WidgetPresentationParameters(QWidget* parent)
                      this,                     SLOT(onSpinCutPoint2EditingFinished()) );
   QObject::connect(_ui.spinPoint2_Z,           SIGNAL(editingFinished()),
                      this,                     SLOT(onSpinCutPoint2EditingFinished()) );
-  QObject::connect(_ui.spinPlanePos,           SIGNAL(editingFinished()),
-                     this,                     SLOT(onSpinPlanePosEditingFinished()) );
 
    // Disable Custom Range Spin boxes
   _ui.spinCustomRangeMax->setEnabled(false);
@@ -106,11 +108,13 @@ WidgetPresentationParameters::WidgetPresentationParameters(QWidget* parent)
   _ui.spinPlanePos->setRange(0.0, 1.0);
 }
 
+// for sphinx doc: start of onComboCompoIndexChanged
 void
 WidgetPresentationParameters::onComboCompoIndexChanged(int idx)
 {
   if (!_blockSig) emit comboCompoIndexChanged(idx);
 }
+// for sphinx doc: end of onComboCompoIndexChanged
 
 void
 WidgetPresentationParameters::onComboOrientIndexChanged(int idx)
@@ -751,13 +755,16 @@ void WidgetPresentationParameters::setScaleFactor(double scale) {
   _blockSig = false;
 }
 
+// sphinx doc: begin of getNormal
 void WidgetPresentationParameters::getNormal(double* arr) const
 {
   arr[0] = _ui.spinNormalX->value();
   arr[1] = _ui.spinNormalY->value();
   arr[2] = _ui.spinNormalZ->value();
 }
+// sphinx doc: end of getNormal
 
+// sphinx doc: begin of setNormal
 void
 WidgetPresentationParameters::setNormal(const double normX, const double normY, const double normZ)
 {
@@ -771,6 +778,7 @@ WidgetPresentationParameters::setNormal(const double normX, const double normY, 
   _ui.spinNormalZ->setValue(normZ);
   _blockSig = false;
 }
+// sphinx doc: end of setNormal
 
 void WidgetPresentationParameters::getCutPoint1(double* arr) const
 {
@@ -814,11 +822,14 @@ WidgetPresentationParameters::setCutPoint2(const double x, const double y, const
   _blockSig = false;
 }
 
+// sphinx doc: begin of getPlanePosition
 double WidgetPresentationParameters::getPlanePosition() const
 {
   return _ui.spinPlanePos->value();
 }
+// sphinx doc: begin of getPlanePosition
 
+// sphinx doc: begin of setPlanePosition
 void WidgetPresentationParameters::setPlanePosition(double pos)
 {
   _blockSig = true;
@@ -827,6 +838,7 @@ void WidgetPresentationParameters::setPlanePosition(double pos)
   _ui.spinPlanePos->setValue(pos);
   _blockSig = false;
 }
+// sphinx doc: begin of setPlanePosition
 
 bool WidgetPresentationParameters::getScalarBarVisibility() const {
   return _ui.checkBoxShowScalarBar->isChecked();
