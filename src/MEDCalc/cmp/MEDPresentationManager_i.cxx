@@ -193,11 +193,13 @@ MEDPresentationManager_i::makePointSprite(const MEDCALC::PointSpriteParameters& 
   return _makePresentation<MEDPresentationPointSprite>(params, viewMode);
 }
 
+// sphinx doc: begin of makePlot3D
 MEDPresentation::TypeID
 MEDPresentationManager_i::makePlot3D(const MEDCALC::Plot3DParameters& params, const MEDCALC::ViewModeType viewMode)
 {
   return _makePresentation<MEDPresentationPlot3D>(params, viewMode);
 }
+// sphinx doc: end of makePlot3D
 
 MEDPresentation::TypeID
 MEDPresentationManager_i::makeStreamLines(const MEDCALC::StreamLinesParameters& params, const MEDCALC::ViewModeType viewMode)
@@ -266,6 +268,7 @@ MEDPresentationManager_i::getPointSpriteParameters(MEDPresentation::TypeID prese
   return tmp._retn();
 }
 
+// sphinx doc: begin of getPlot3DParameters
 MEDCALC::Plot3DParameters*
 MEDPresentationManager_i::getPlot3DParameters(MEDPresentation::TypeID presentationID)
 {
@@ -274,6 +277,7 @@ MEDPresentationManager_i::getPlot3DParameters(MEDPresentation::TypeID presentati
   MEDCALC::Plot3DParameters_var tmp(p);
   return tmp._retn();
 }
+// sphinx doc: end of getPlot3DParameters
 
 MEDCALC::StreamLinesParameters*
 MEDPresentationManager_i::getStreamLinesParameters(MEDPresentation::TypeID presentationID)
@@ -345,11 +349,13 @@ MEDPresentationManager_i::updatePointSprite(MEDPresentation::TypeID presentation
   return _updatePresentation<MEDPresentationPointSprite>(presentationID, params);
 }
 
+// sphinx doc: begin of updatePlot3D
 void
 MEDPresentationManager_i::updatePlot3D(MEDPresentation::TypeID presentationID, const MEDCALC::Plot3DParameters& params)
 {
   return _updatePresentation<MEDPresentationPlot3D>(presentationID, params);
 }
+// sphinx doc: end of updatePlot3D
 
 void
 MEDPresentationManager_i::updateStreamLines(MEDPresentation::TypeID presentationID, const MEDCALC::StreamLinesParameters& params)

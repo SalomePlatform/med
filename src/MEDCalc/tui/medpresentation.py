@@ -190,7 +190,7 @@ def MakePointSprite(proxy,
     notifyGui_error("An error occurred while creating the point sprite:\n" + e.details.text)
     raise Exception(e.details.text)
 
-
+# sphinx doc: begin of MakePlot3D
 def MakePlot3D(proxy,
               viewMode=MEDCALC.VIEW_MODE_DEFAULT,
               scalarBarRange=MEDCALC.SCALAR_BAR_RANGE_DEFAULT,
@@ -214,7 +214,7 @@ def MakePlot3D(proxy,
   except SALOME.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the Plot3D:\n" + e.details.text)
     raise Exception(e.details.text)
-
+# sphinx doc: end of MakePlot3D
 
 def MakeStreamLines(proxy,
               viewMode=MEDCALC.VIEW_MODE_DEFAULT,
@@ -280,7 +280,9 @@ GetSlicesParameters = lambda pres_id: __GetGENERICParameters("Slices", pres_id)
 GetPointSpriteParameters = lambda pres_id: __GetGENERICParameters("PointSprite", pres_id)
 GetVectorFieldParameters = lambda pres_id: __GetGENERICParameters("VectorField", pres_id)
 GetDeflectionShapeParameters = lambda pres_id: __GetGENERICParameters("DeflectionShape", pres_id)
+# sphinx doc: begin of GetPlot3DParameters
 GetPlot3DParameters = lambda pres_id: __GetGENERICParameters("Plot3D", pres_id)
+# sphinx doc: end of GetPlot3DParameters
 GetStreamLinesParameters = lambda pres_id: __GetGENERICParameters("StreamLines", pres_id)
 GetCutSegmentParameters = lambda pres_id: __GetGENERICParameters("CutSegment", pres_id)
 
@@ -300,7 +302,9 @@ UpdateSlices = lambda pres_id, params: __UpdateGENERIC("Slices", pres_id, params
 UpdateVectorField = lambda pres_id, params: __UpdateGENERIC("VectorField", pres_id, params)
 UpdatePointSprite = lambda pres_id, params: __UpdateGENERIC("PointSprite", pres_id, params)
 UpdateDeflectionShape = lambda pres_id, params: __UpdateGENERIC("DeflectionShape", pres_id, params)
+# sphinx doc: begin of UpdatePlot3D
 UpdatePlot3D = lambda pres_id, params: __UpdateGENERIC("Plot3D", pres_id, params)
+# sphinx doc: end of UpdatePlot3D
 UpdateStreamLines = lambda pres_id, params: __UpdateGENERIC("StreamLines", pres_id, params)
 UpdateCutSegment = lambda pres_id, params: __UpdateGENERIC("CutSegment", pres_id, params)
 
