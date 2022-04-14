@@ -51,7 +51,6 @@
 
 #include "MEDFactoryClient.hxx"
 #include "MEDPresentationManager_i.hxx"
-#include "MED_Component_Generator.hxx"
 
 #include <QTimer>
 #include <sstream>
@@ -110,23 +109,14 @@ void
 MEDModule::init()
 {
   // initialize FIELDS module engine (load, if necessary)
-  Engines::EngineComponent_var comp;
-  if ( CORBA::is_nil( _MED_engine ) ) {
-    SALOME_NamingService_Abstract *ns = SalomeApp_Application::namingService();
-    if( dynamic_cast<SALOME_NamingService *>(ns) )
-    {
-      comp = SalomeApp_Application::lcc()->FindOrLoad_Component( "FactoryServer", "FIELDS" );
-    }
-    else
-    {
-      comp = RetrieveMEDInstance();
-      CORBA::Object_var comp2 = CORBA::Object::_narrow(comp);
-      KERNEL::RegisterCompo("FIELDS",comp2);
-    }
-    _MED_engine = MED_ORB::MED_Gen::_narrow( comp );
-    if (CORBA::is_nil( _MED_engine )) {
-      STDLOG("Could not narrow FIELDS engine");
-    }
+	
+  if (CORBA::is_nil(_MED_engine)) {
+	Engines::EngineComponent_var comp = 
+		SalomeApp_Application::lcc()->FindOrLoad_Component("FactoryServer", "FIELDS");
+	_MED_engine = MED_ORB::MED_Gen::_narrow(comp);
+  }
+  if (CORBA::is_nil( _MED_engine )) {
+    STDLOG("Could not narrow FIELDS engine");
   }
 }
 
