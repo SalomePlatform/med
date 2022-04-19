@@ -22,7 +22,6 @@
 #include <SALOME_KernelServices.hxx>
 
 #include "MEDFactoryClient.hxx"
-#include "MEDFactory_Component_Generator.hxx"
 
 namespace MEDFactoryClient {
 
@@ -32,18 +31,9 @@ namespace MEDFactoryClient {
   MEDCALC::MEDFactory_ptr getFactory() {
     static MEDCALC::MEDFactory_ptr engine;
     if(CORBA::is_nil(engine)){
-		SALOME_NamingService_Abstract *ns = KERNEL::getNamingService();
-		if (dynamic_cast<SALOME_NamingService *>(ns)) {
-			Engines::EngineComponent_var component =
-			KERNEL::getLifeCycleCORBA()->FindOrLoad_Component( "FactoryServer","MEDFactory" );
-			engine = MEDCALC::MEDFactory::_narrow(component);
-		}
-		else {
-			Engines::EngineComponent_var component = RetrieveMEDFactoryInstance();
-			CORBA::Object_var comp2 = CORBA::Object::_narrow(component);
-			KERNEL::RegisterCompo("MEDFactory", comp2);
-			engine = MEDCALC::MEDFactory::_narrow(component);
-		}
+	  Engines::EngineComponent_var component = 
+		  KERNEL::getLifeCycleCORBA()->FindOrLoad_Component( "FactoryServer","MEDFactory" );
+	  engine = MEDCALC::MEDFactory::_narrow(component);
     }
     return engine;
   }
