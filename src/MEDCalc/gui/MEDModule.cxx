@@ -313,6 +313,14 @@ MEDModule::deactivateModule( SUIT_Study* theStudy )
   return SalomeApp_Module::deactivateModule( theStudy );
 }
 
+void MEDModule::studyClosed(SUIT_Study* study)
+{
+  STDLOG("MEDModule::studyClosed()");
+  _presentationController->resetPVSession();
+
+  SalomeApp_Module::studyClosed(study);
+}
+
 //
 // =====================================================================
 // This part add custom widgets (a dockwidget containing a tree view

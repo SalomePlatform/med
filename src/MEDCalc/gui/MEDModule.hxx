@@ -109,6 +109,7 @@ signals:
 public slots:
   virtual bool activateModule(SUIT_Study* theStudy);
   virtual bool deactivateModule(SUIT_Study* theStudy);
+  virtual void studyClosed( SUIT_Study* theStudy);
   virtual void onDblClick(const QModelIndex& index);
   virtual void onClick(const QModelIndex& index);
 

@@ -1012,3 +1012,10 @@ void PresentationController::updateVisibilityState(long presId)
 std::string PresentationController::presentationName2Type(const std::string& name) {
   return std::regex_replace(name, std::regex("MEDPresentation"), std::string(""));
 }
+
+void PresentationController::resetPVSession()
+{
+  QStringList commands;
+  commands += QString("pvs.ResetSession()");
+  _consoleDriver->exec(commands);
+}

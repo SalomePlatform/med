@@ -62,6 +62,8 @@ public:
 
   void emitPresentationSignal(const PresentationEvent* event);
 
+  void resetPVSession();
+
 signals:
   void presentationSignal(const PresentationEvent*);
 
