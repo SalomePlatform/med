@@ -38,7 +38,7 @@ containerType = "FactoryServer"
 
 import salome
 if salome.lcc is None:
-  salome.salome_init_with_session()
+  salome.salome_init()
   pass
 
 import MEDCALC   # corbaModule

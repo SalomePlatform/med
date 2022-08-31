@@ -17,6 +17,4 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-import KernelBasis
-KernelBasis.setSSLMode(False)
 import pvsimple as pvs

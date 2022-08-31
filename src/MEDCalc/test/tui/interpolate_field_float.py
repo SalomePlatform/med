@@ -4,7 +4,7 @@ import os
 import sys
 import salome
 
-salome.salome_init_with_session()
+salome.salome_init()
 
 ###
 ### FIELDS component
