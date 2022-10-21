@@ -435,14 +435,14 @@ MEDPresentation::createSource()
   }
 
   std::ostringstream oss;
-  oss << _srcObjVar << " = pvs.MEDReader(FileName=r'" << _fileName << "');";
+  oss << _srcObjVar << " = pvs.MEDReader(FileNames=r'" << _fileName << "');";
   pushAndExecPyLine(oss.str()); oss.str("");
   oss << "medcalc.SelectSourceField(" << _srcObjVar << ", '" << _meshName << "', '"
       << _fieldName << "', '" << typ << "');";
   pushAndExecPyLine(oss.str()); oss.str("");
   // Generate complete vector fields: fields with 2 components will copied into <name>_vector and
   // have a third null component added.
-  oss << _srcObjVar << ".GenerateVectors = 1;";
+  oss << _srcObjVar << ".VectorsProperty = 1;";
   pushAndExecPyLine(oss.str()); oss.str("");
 
   // Make sure this is set so we stick to time steps:

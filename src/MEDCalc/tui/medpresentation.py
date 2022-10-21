@@ -441,7 +441,7 @@ def SelectSourceField(obj, meshName, fieldName, discretisation):
     arr = t.split("/")
     arr = arr[:-1] + arr[-1].split("@@][@@")
     if arr[1] == meshName and arr[3] == fieldName and arr[4] == discretisation:
-      obj.AllArrays = [t]
+      obj.FieldsStatus = [t]
       return
   raise Exception("Field not found")
 
