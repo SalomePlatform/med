@@ -17,20 +17,26 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-SET(TEST_NAMES
-  access_API
-  load_file
-  import_pvsimple
-# These tests need a display to open a render window (paraview calls from python)
-  scalar_map
-  contour
-  slices
-  mesh_view
-  point_sprite
-  vector_field
-  deflection_shape
-  elno_field
-  interpolate_field_float
-  streamlines
-  streamlines_2d
-)
+import os
+from time import sleep
+
+import medcalc
+medcalc.medconsole.setConsoleGlobals(globals())
+import MEDCALC
+from medcalc.medconsole import accessField
+
+from medcalc_testutils import GetMEDFileDirResources
+
+datafile = os.path.join(GetMEDFileDirResources(), "TimeStamps.med")
+source_id = medcalc.LoadDataSource(datafile)
+
+# Field 55 = VITESSE_ELEM_DOM (ON_CELLS) at timestamp 0
+# Field 65 = VITESSE_ELEM_DOM (ON_CELLS) at timestamp 10
+presentation_id = medcalc.MakeStreamLines(accessField(264), viewMode=MEDCALC.VIEW_MODE_REPLACE,
+                                          colorMap=MEDCALC.COLOR_MAP_BLUE_TO_RED_RAINBOW,
+                                          scalarBarRange=MEDCALC.SCALAR_BAR_CURRENT_TIMESTEP
+                                          )
+sleep(1)
+medcalc.RemovePresentation(presentation_id)
+sleep(1)
+

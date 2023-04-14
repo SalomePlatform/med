@@ -130,7 +130,9 @@ MEDPresentationStreamLines::internalGeneratePipeline()
   oss << _objVar << " = " << _objStreamCalc << ";";
   oss << _objVar << ".UpdatePipeline();";
   pushAndExecPyLine(oss.str()); oss.str("");
-  oss << _objVar << " = pvs.StreamTracer(Input=" << _objVar << ", SeedType='Point Cloud' if pvs.GetParaViewVersion().GetVersion() > 5.8 else 'Point Source');";
+  oss << _objVar << " = pvs.StreamTracer(Input=" << _objVar <<
+      ", SeedType='Point Cloud' if not medcalc.IsPlanarObj(" << _objVar <<
+      ") else 'Line');";
   pushAndExecPyLine(oss.str()); oss.str("");
   oss << _objVar << ".IntegrationDirection = '" << dirType << "';";
   pushAndExecPyLine(oss.str()); oss.str("");

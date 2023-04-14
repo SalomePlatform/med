@@ -46,3 +46,7 @@ def GetMEDFileDirGUI():
 def GetMEDFileDirTUI():
   relativeDir = "@SALOME_FIELDS_INSTALL_RES_DATA@/tests/tui/medfiles"
   return os.path.join(__getRootDir(), relativeDir)
+
+def GetMEDFileDirResources():
+  relativeDir = "@SALOME_FIELDS_INSTALL_RES_DATA@"
+  return os.path.join(__getRootDir(), relativeDir)
