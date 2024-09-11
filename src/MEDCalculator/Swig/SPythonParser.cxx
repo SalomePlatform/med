@@ -459,7 +459,11 @@ TypeOfEntity SPythonPredParser::getTypeOfVar(const std::string& var, PyObject *g
   oss << TMPVAR << "=type(" << var << ").__name__";
   PyRun_String(oss.str().c_str(),Py_single_input,glob,loc);
   PyObject *p=PyDict_GetItemString(glob,TMPVAR);
+#if PY_VERSION_HEX < 0x030c0000 // See PEP-623
   const char *type=Py_EncodeLocale(PyUnicode_AS_UNICODE(p), NULL);
+#else
+  const char *type=Py_EncodeLocale(PyUnicode_AsWideCharString(p,NULL), NULL);
+#endif
   std::string typecpp=std::string(type);
   if(typecpp=="function")
     return FUNC_TYPE;

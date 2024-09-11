@@ -69,6 +69,7 @@ Py_EncodeLocale(const wchar_t *text, size_t *error_pos)
 #endif
 %}
 
+
 namespace MEDCoupling
 {
   class MEDCouplingFieldDoubleClient
@@ -88,7 +89,7 @@ namespace MEDCoupling
           PyObject *iorField=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",fieldPtr);
           if(!iorField)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCouplingFieldDoubleClient.New appears to differ from CORBA reference ! Expecting a FieldDouble CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorField), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorField,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var fieldPtrCpp=orb->string_to_object(ior);
@@ -120,7 +121,7 @@ namespace MEDCoupling
           PyObject *iorField=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",fieldPtr);
           if(!iorField)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCouplingFieldTemplateClient.New appears to differ from CORBA reference ! Expecting a FieldTemplate CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorField), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorField,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var fieldPtrCpp=orb->string_to_object(ior);
@@ -152,7 +153,7 @@ namespace MEDCoupling
           PyObject *iorField=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",fieldPtr);
           if(!iorField)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCouplingFieldTemplateClient.New appears to differ from CORBA reference ! Expecting a MultiFields CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorField), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorField,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var fieldPtrCpp=orb->string_to_object(ior);
@@ -185,7 +186,7 @@ namespace MEDCoupling
           PyObject *iorField=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",fieldPtr);
           if(!iorField)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCouplingFieldOverTimeClient.New appears to differ from CORBA reference ! Expecting a FieldOverTime CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorField), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorField,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var fieldPtrCpp=orb->string_to_object(ior);
@@ -217,7 +218,7 @@ namespace MEDCoupling
           PyObject *iorMesh=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",meshPtr);
           if(!iorMesh)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCouplingMeshClient.New appears to differ from CORBA reference ! Expecting a MeshCorbaInterface CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorMesh), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorMesh,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var meshPtrCpp=orb->string_to_object(ior);
@@ -292,7 +293,7 @@ namespace MEDCoupling
           PyObject *iorMesh=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",meshPtr);
           if(!iorMesh)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCouplingUMeshClient.New appears to differ from CORBA reference ! Expecting a UMeshCorbaInterface CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorMesh), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorMesh,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var meshPtrCpp=orb->string_to_object(ior);
@@ -324,7 +325,7 @@ namespace MEDCoupling
           PyObject *iorMesh=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",meshPtr);
           if(!iorMesh)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCoupling1SGTUMeshClient.New appears to differ from CORBA reference ! Expecting a 1SGTUMeshCorbaInterface CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorMesh), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorMesh,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var meshPtrCpp=orb->string_to_object(ior);
@@ -356,7 +357,7 @@ namespace MEDCoupling
           PyObject *iorMesh=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",meshPtr);
           if(!iorMesh)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCoupling1DGTUMeshClient.New appears to differ from CORBA reference ! Expecting a 1DGTUMeshCorbaInterface CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorMesh), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorMesh,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var meshPtrCpp=orb->string_to_object(ior);
@@ -388,7 +389,7 @@ namespace MEDCoupling
           PyObject *iorMesh=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",meshPtr);
           if(!iorMesh)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCouplingExtrudedMeshClient.New appears to differ from CORBA reference ! Expecting an ExtrudedMeshCorbaInterface CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorMesh), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorMesh,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var meshPtrCpp=orb->string_to_object(ior);
@@ -420,7 +421,7 @@ namespace MEDCoupling
           PyObject *iorMesh=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",meshPtr);
           if(!iorMesh)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCouplingCMeshClient.New appears to differ from CORBA reference ! Expecting a CMeshCorbaInterface CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorMesh), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorMesh,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var meshPtrCpp=orb->string_to_object(ior);
@@ -452,7 +453,7 @@ namespace MEDCoupling
           PyObject *iorMesh=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",meshPtr);
           if(!iorMesh)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCouplingIMeshClient.New appears to differ from CORBA reference ! Expecting a IMeshCorbaInterface CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorMesh), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorMesh,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var meshPtrCpp=orb->string_to_object(ior);
@@ -484,7 +485,7 @@ namespace MEDCoupling
           PyObject *iorMesh=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",meshPtr);
           if(!iorMesh)
             throw INTERP_KERNEL::Exception("Error : the input parameter of MEDCouplingCurveLinearMeshClient.New appears to differ from CORBA reference ! Expecting a CurveLinearMeshCorbaInterface CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorMesh), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorMesh,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var meshPtrCpp=orb->string_to_object(ior);
@@ -516,7 +517,7 @@ namespace MEDCoupling
           PyObject *iorMesh=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",meshPtr);
           if(!iorMesh)
             throw INTERP_KERNEL::Exception("Error : the input parameter of DataArrayDoubleClient.New appears to differ from CORBA reference ! Expecting a DataArrayDoubleCorbaInterface CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorMesh), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorMesh,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var meshPtrCpp=orb->string_to_object(ior);
@@ -548,7 +549,7 @@ namespace MEDCoupling
           PyObject *iorMesh=PyObject_CallMethod(orbPython,(char*)"object_to_string",(char*)"O",meshPtr);
           if(!iorMesh)
             throw INTERP_KERNEL::Exception("Error : the input parameter of DataArrayIntClient.New appears to differ from CORBA reference ! Expecting a DataArrayIntCorbaInterface CORBA reference !");
-          char *ior=Py_EncodeLocale(PyUnicode_AS_UNICODE(iorMesh), NULL);
+          char *ior=Py_EncodeLocale(PyUnicode_AsWideCharString(iorMesh,NULL), NULL);
           int argc=0;
           CORBA::ORB_var orb=CORBA::ORB_init(argc,0);
           CORBA::Object_var meshPtrCpp=orb->string_to_object(ior);

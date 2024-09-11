@@ -48,7 +48,11 @@ void convertPyObjToRS(PyObject *o, MEDCoupling::MEDCalculatorDBRangeSelection& r
     }
   if(PyString_Check(o))
     {
+#if PY_VERSION_HEX < 0x030c0000 // See PEP-623
       char *s=Py_EncodeLocale(PyUnicode_AS_UNICODE(o), NULL);
+#else
+      char *s=Py_EncodeLocale(PyUnicode_AsWideCharString(o,NULL), NULL);
+#endif
       rs=s;
       return ;
     }

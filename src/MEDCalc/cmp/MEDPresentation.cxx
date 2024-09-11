@@ -37,7 +37,6 @@ Py_EncodeLocale(const wchar_t *text, size_t *error_pos)
 	return _Py_wchar2char(text, error_pos);
 }
 #endif
-
 const std::string MEDPresentation::PROP_NAME  = "name";
 const std::string MEDPresentation::PROP_NB_COMPONENTS = "nbComponents";
 const std::string MEDPresentation::PROP_SELECTED_COMPONENT = "selectedComponent";
@@ -995,7 +994,11 @@ MEDPresentation::fillAvailableFieldComponents()
       PyObject* p_obj = getPythonObjectFromMain("__compo");
       std::string compo;
       if (p_obj && PyUnicode_Check(p_obj))
+#if PY_VERSION_HEX < 0x030c0000 // See PEP-623
         compo = std::string(Py_EncodeLocale(PyUnicode_AS_UNICODE(p_obj), NULL));  // pointing to internal Python memory, so make a copy!!
+#else
+        compo = std::string(Py_EncodeLocale(PyUnicode_AsWideCharString(p_obj,NULL), NULL));
+#endif
       else
         {
           STDLOG("Unexpected Python error");
