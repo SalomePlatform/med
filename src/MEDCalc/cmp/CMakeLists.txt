@@ -73,7 +73,7 @@ SET(COMMON_LIBS
   ${PLATFORM_LIBRARIES}
   SalomeIDLMED
   ${KERNEL_TOOLSDS} ${KERNEL_SalomeDS} ${KERNEL_SalomeHDFPersist} ${KERNEL_SalomeContainer} ${KERNEL_SalomeCommunication}
-  ${KERNEL_SalomeKernelHelpers} ${KERNEL_SalomeLifeCycleCORBA} ${KERNEL_SALOMELocalTrace} ${KERNEL_SALOMEBasics}
+  ${KERNEL_SalomeKernelHelpers} ${KERNEL_SalomeLifeCycleCORBA} ${SALOMEBOOTSTRAP_SALOMELocalTrace} ${SALOMEBOOTSTRAP_SALOMEBasics}
   ${KERNEL_SalomeGenericObj}
   ${MEDFILE_C_LIBRARIES}
   ${HDF5_LIBRARIES}
