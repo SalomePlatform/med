@@ -509,7 +509,7 @@ MEDPresentation::setOrCreateRenderView()
       // same as above
       oss2 << view << " = medcalc.FindOrCreateView('RenderView');";
       pushAndExecPyLine(oss2.str()); oss2.str("");
-      oss2 << "pvs.active_objects.source and pvs.Hide(view=" << view << ");";
+      oss2 << "pvs.GetActiveSource() and pvs.Hide(view=" << view << ");";
       pushAndExecPyLine(oss2.str()); oss2.str("");
       oss2 << "pvs.Render();";
       pushAndExecPyLine(oss2.str()); oss2.str("");
