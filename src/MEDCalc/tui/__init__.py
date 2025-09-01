@@ -24,7 +24,7 @@ def print_verbose(function):
     from functools import wraps
     @wraps(function)
     def wrapper(self, *args, **kwargs):
-        from salome_utils import verbose
+        from salome.kernel.salome_utils import verbose
         if verbose():
             function(self, *args, **kwargs)
     return wrapper

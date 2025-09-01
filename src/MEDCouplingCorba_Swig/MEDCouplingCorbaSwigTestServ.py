@@ -21,7 +21,7 @@
 import MEDCouplingCorbaSwigTest
 import MEDCouplingCorbaServantTest_idl
 
-from MEDCouplingCorba import *
+from salome.MEDCouplingCorba import *
 
 class MEDCouplingMeshFieldFactoryComponentPy(MEDCouplingCorbaServantTest_idl._0_SALOME_TEST__POA.MEDCouplingMeshFieldFactory):
     def __init__(self,orb):
@@ -38,7 +38,7 @@ class MEDCouplingMeshFieldFactoryComponentPy(MEDCouplingCorbaServantTest_idl._0_
         self._orb.shutdown(0)
 
     def get1DMesh(self):
-        import SALOME_MED
+        from salome.kernel import SALOME_MED
         mesh=self._test.build1DMesh()
         ret=MEDCouplingUMeshServant._this(mesh)
         assert isinstance(ret,SALOME_MED._objref_MEDCouplingUMeshCorbaInterface)

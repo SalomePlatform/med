@@ -369,7 +369,7 @@ MEDPresentation::getIntProperty(const std::string& propName) const
  {
    MEDPyLockWrapper lock;
    pushAndExecPyLine( "import pvsimple as pvs;");
-   pushAndExecPyLine( "import medcalc");
+   pushAndExecPyLine( "from salome.medcalc import medcalc");
  }
 
 

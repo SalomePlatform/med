@@ -17,9 +17,9 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-import medcalc
-import SALOME
-import salome
+from salome.medcalc import medcalc
+from salome.kernel import SALOME
+from salome.kernel import salome
 
 dataManager = medcalc.medcorba.factory.getDataManager()
 
@@ -81,7 +81,7 @@ connectEventListener()
 #
 # Note that these functions are not part of the class FieldProxy so
 # that they could be used in another context than the FieldProxy instances
-import MEDCALC
+from salome.kernel import MEDCALC
 
 def __notifyGui(eventType, dataId=-1, filename="", presentationId=-1, msg=""):
   medEvent = MEDCALC.MedEvent(eventType, dataId, filename, presentationId, msg)

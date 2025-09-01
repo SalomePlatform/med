@@ -36,12 +36,12 @@ medComponentName = "FIELDS"
 #corbaModule   = "MEDCALC"
 containerType = "FactoryServer"
 
-import salome
+from salome.kernel import salome
 if salome.lcc is None:
   salome.salome_init()
   pass
 
-import MEDCALC   # corbaModule
+from salome.kernel import MEDCALC   # corbaModule
 med_engine = salome.lcc.FindOrLoadComponent(containerType,medComponentName)
 factory = salome.lcc.FindOrLoadComponent(containerType,factoryComponentName)
 # The factory is not the main CORBA component of the SALOME module FIELDS

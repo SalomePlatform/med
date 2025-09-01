@@ -17,8 +17,8 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-import medcalc
-import MEDCALC, SALOME
+from salome.medcalc import medcalc
+from salome.kernel import MEDCALC, SALOME
 from medcalc.medevents import notifyGui_addPresentation, notifyGui_removePresentation, notifyGui_error, notifyGui_modifyPresentation, notifyGui_visibilityChanged
 from functools import reduce
 import pvsimple as pvs

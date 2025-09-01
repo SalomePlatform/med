@@ -54,7 +54,7 @@ componentName = "MEDFactory"
 corbaModule   = "MEDCALC"
 containerType = "FactoryServer"
 
-import salome
+from salome.kernel import salome
 if salome.lcc is None:
     salome.salome_init()
 __import__(corbaModule)
@@ -318,7 +318,7 @@ def TEST_Calculator_applyFunc():
 
     # In this example, "u" stands for the whole field
     calculator = factory.getCalculator()
-    import MEDCALC
+    from salome.kernel import MEDCALC
     nbResultingComponent = MEDCALC.NBCOMP_DEFAULT
     res = calculator.fct(fieldHandler,"abs(u)",nbResultingComponent);
     print(res)

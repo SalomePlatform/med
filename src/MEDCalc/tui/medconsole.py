@@ -17,8 +17,8 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-import medcalc
-import MEDCALC
+from salome.medcalc import medcalc
+from salome.kernel import MEDCALC
 
 dataManager = medcalc.medcorba.factory.getDataManager()
 
@@ -38,7 +38,7 @@ def setConsoleGlobals(pyconsole_globals):
   pyConsoleGlobals = pyconsole_globals
 #
 
-import SALOME
+from salome.kernel import SALOME
 def saveWorkspace(filename):
   """
   Dump your job in a med file. Only the fields marked as persistent
@@ -88,7 +88,7 @@ def getEnvironment(local=True, remote=False):
     dvars = pyConsoleGlobals
     if dvars is None:
       medcalc.wrn("The stat function required the specification of the python context")
-      medcalc.inf("Type this command \"import medcalc; medcalc.setConsoleGlobals(globals())")
+      medcalc.inf("Type this command \"from salome.medcalc import medcalc; medcalc.setConsoleGlobals(globals())")
     if remote is True:
       status="========= Fields used in the current context ===\n"
     for varkey in list(dvars.keys()):

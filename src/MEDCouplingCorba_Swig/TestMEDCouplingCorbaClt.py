@@ -22,8 +22,8 @@ import unittest
 import CORBA
 import MEDCouplingCorbaServantTest_idl
 import MEDCouplingCorbaSwigTest
-from MEDCouplingClient import *
-import MEDCouplingCorbaServant_idl
+from salome.MEDCouplingClient import *
+from salome.kernel import MEDCouplingCorbaServant_idl
 import threading
 
 class MEDCouplingCorbaServBasicsTestClt(unittest.TestCase):

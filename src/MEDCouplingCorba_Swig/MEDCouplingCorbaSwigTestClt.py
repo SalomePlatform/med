@@ -19,9 +19,9 @@
 # Author : Anthony Geay (CEA/DEN)
 
 import MEDCouplingCorbaSwigTest
-from MEDCouplingClient import *
+from salome.MEDCouplingClient import *
 
-import MEDCouplingCorbaServant_idl
+from salome.kernel import MEDCouplingCorbaServant_idl
 import CORBA
 
 orb=CORBA.ORB_init([''])

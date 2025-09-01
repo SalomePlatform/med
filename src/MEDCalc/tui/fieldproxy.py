@@ -18,9 +18,9 @@
 #
 # Author : Guillaume Boulant (EDF)
 
-import medcalc
-import MEDCALC
-import SALOME
+from salome.medcalc import medcalc
+from salome.kernel import MEDCALC
+from salome.kernel import SALOME
 
 from medcalc.medcorba import factory
 dataManager = factory.getDataManager()
@@ -92,7 +92,7 @@ class FieldProxy:
     """
     self.__fieldHandler = fieldHandler
     self.__restriction  = None
-    from salome_utils import verbose
+    from salome.kernel.salome_utils import verbose
     if verbose():
       print(self.__repr__())
   #
@@ -409,7 +409,7 @@ class FieldProxy:
     notifyGui_updateField(self.id)
 
     # Print for visual control
-    from salome_utils import verbose
+    from salome.kernel.salome_utils import verbose
     if verbose():
       print(self.__repr__())
   #

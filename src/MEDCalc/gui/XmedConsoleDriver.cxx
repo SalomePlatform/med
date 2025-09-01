@@ -55,7 +55,7 @@ void XmedConsoleDriver::setup() {
     commands+="";
     //commands+="pvs.ShowParaviewView()";
 #endif
-    commands += "import medcalc";
+    commands += "from salome.medcalc import medcalc";
     commands += "medcalc.medconsole.setConsoleGlobals(globals())";
     commands += "import MEDCALC";
     commands += "";

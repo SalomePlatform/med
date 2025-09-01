@@ -81,7 +81,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -113,7 +113,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -145,7 +145,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -178,7 +178,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -210,7 +210,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -285,7 +285,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -317,7 +317,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -349,7 +349,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -381,7 +381,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -413,7 +413,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -445,7 +445,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -477,7 +477,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -509,7 +509,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");
@@ -541,7 +541,7 @@ namespace MEDCoupling
         {
           PyObject* pdict=PyDict_New();
           PyDict_SetItemString(pdict,"__builtins__",PyEval_GetBuiltins());
-          PyRun_String("import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
+          PyRun_String("from salome.kernel import MEDCouplingCorbaServant_idl",Py_single_input,pdict, pdict);
           PyRun_String("import CORBA",Py_single_input,pdict, pdict);
           PyRun_String("orbTmp15634=CORBA.ORB_init([''])", Py_single_input,pdict, pdict);
           PyObject *orbPython=PyDict_GetItemString(pdict,"orbTmp15634");

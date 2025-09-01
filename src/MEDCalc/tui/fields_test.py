@@ -24,11 +24,11 @@ import unittest
 class TestFields(unittest.TestCase):
 
     def setUp(self):
-        import salome
+        from salome.kernel import salome
         salome.salome_init()
 
     def processGuiEvents(self):
-        import salome
+        from salome.kernel import salome
         if salome.sg.hasDesktop():
             salome.sg.updateObjBrowser();
             import SalomePyQt
@@ -42,7 +42,7 @@ class TestFields(unittest.TestCase):
 
         # ---- initialize Fields
         print('... Initialize Fields module')
-        import medcalc
+        from salome.medcalc import medcalc
         medcalc.medconsole.setConsoleGlobals(globals())
         from medcalc.fieldproxy import FieldProxy
 

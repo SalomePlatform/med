@@ -2,7 +2,7 @@
 
 import os
 import sys
-import salome
+from salome.kernel import salome
 
 salome.salome_init()
 
@@ -12,9 +12,9 @@ salome.salome_init()
 
 import pvsimple as pvs
 
-import medcalc
+from salome.medcalc import medcalc
 medcalc.medconsole.setConsoleGlobals(globals())
-import MEDCALC
+from salome.kernel import MEDCALC
 from medcalc.medconsole import accessField
 
 from medcalc_testutils import GetMEDFileDirTUI
