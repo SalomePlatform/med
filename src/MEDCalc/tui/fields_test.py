@@ -42,7 +42,7 @@ class TestFields(unittest.TestCase):
 
         # ---- initialize Fields
         print('... Initialize Fields module')
-        from salome.medcalc import medcalc
+        import medcalc
         medcalc.medconsole.setConsoleGlobals(globals())
         from medcalc.fieldproxy import FieldProxy
 

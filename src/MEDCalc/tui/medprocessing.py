@@ -17,7 +17,7 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-from salome.medcalc import medcalc
+import medcalc
 from salome.kernel import MEDCALC
 from salome.kernel import SALOME
 from medcalc.medevents import notifyGui_error

@@ -17,11 +17,11 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-from salome.medcalc import medcalc
+import medcalc
 from salome.kernel import MEDCALC, SALOME
 from medcalc.medevents import notifyGui_addPresentation, notifyGui_removePresentation, notifyGui_error, notifyGui_modifyPresentation, notifyGui_visibilityChanged
 from functools import reduce
-import pvsimple as pvs
+import salome.pvsimple as pvs
 
 __manager = medcalc.medcorba.factory.getPresentationManager()
 DEFAULT_VISIBILITY = True

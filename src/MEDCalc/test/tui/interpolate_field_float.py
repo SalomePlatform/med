@@ -10,9 +10,9 @@ salome.salome_init()
 ### FIELDS component
 ###
 
-import pvsimple as pvs
+import salome.pvsimple as pvs
 
-from salome.medcalc import medcalc
+import medcalc
 medcalc.medconsole.setConsoleGlobals(globals())
 from salome.kernel import MEDCALC
 from medcalc.medconsole import accessField

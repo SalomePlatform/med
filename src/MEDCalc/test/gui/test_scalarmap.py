@@ -31,7 +31,7 @@ from medcalc_testutils import GetScenarioDirGUI
 sgPyQt = SalomePyQt.SalomePyQt()
 sgPyQt.activateModule('MED')
 
-from salome.medcalc import medcalc  # After module activation !!
+import medcalc  # After module activation !!
 localTestDir = sys.argv[1]
 medcalc.PlayQtTestingScenario(os.path.join(localTestDir, 'test_scalarmap.xml'))
 

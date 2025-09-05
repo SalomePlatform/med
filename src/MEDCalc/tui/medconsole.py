@@ -17,7 +17,7 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-from salome.medcalc import medcalc
+import medcalc
 from salome.kernel import MEDCALC
 
 dataManager = medcalc.medcorba.factory.getDataManager()
@@ -88,7 +88,7 @@ def getEnvironment(local=True, remote=False):
     dvars = pyConsoleGlobals
     if dvars is None:
       medcalc.wrn("The stat function required the specification of the python context")
-      medcalc.inf("Type this command \"from salome.medcalc import medcalc; medcalc.setConsoleGlobals(globals())")
+      medcalc.inf("Type this command \"import medcalc; medcalc.setConsoleGlobals(globals())")
     if remote is True:
       status="========= Fields used in the current context ===\n"
     for varkey in list(dvars.keys()):

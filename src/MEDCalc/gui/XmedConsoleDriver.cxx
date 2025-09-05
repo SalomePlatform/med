@@ -51,11 +51,11 @@ void XmedConsoleDriver::setup() {
     QStringList commands;
 #ifndef DISABLE_PVVIEWER
     // start PVServer and show render view
-    commands+="import pvsimple as pvs";
+    commands+="import salome.pvsimple as pvs";
     commands+="";
     //commands+="pvs.ShowParaviewView()";
 #endif
-    commands += "from salome.medcalc import medcalc";
+    commands += "import medcalc";
     commands += "medcalc.medconsole.setConsoleGlobals(globals())";
     commands += "import MEDCALC";
     commands += "";

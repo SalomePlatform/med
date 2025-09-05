@@ -20,7 +20,7 @@
 import os
 from time import sleep
 
-from salome.medcalc import medcalc
+import medcalc
 medcalc.medconsole.setConsoleGlobals(globals())
 from salome.kernel import MEDCALC
 from medcalc.medconsole import accessField

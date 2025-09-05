@@ -18,7 +18,7 @@
 #
 # Author : Guillaume Boulant (EDF)
 
-from salome.medcalc import medcalc
+import medcalc
 from salome.kernel import MEDCALC
 from salome.kernel import SALOME
 

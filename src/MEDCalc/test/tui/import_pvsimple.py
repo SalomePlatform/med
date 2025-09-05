@@ -17,4 +17,4 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-import pvsimple as pvs
+import salome.pvsimple as pvs

@@ -17,7 +17,7 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-from salome.medcalc import medcalc
+import medcalc
 medcalc.medconsole.setConsoleGlobals(globals())
 from salome.kernel import MEDCALC
 

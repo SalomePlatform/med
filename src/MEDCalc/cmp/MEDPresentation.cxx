@@ -368,8 +368,8 @@ MEDPresentation::getIntProperty(const std::string& propName) const
  MEDPresentation::internalGeneratePipeline()
  {
    MEDPyLockWrapper lock;
-   pushAndExecPyLine( "import pvsimple as pvs;");
-   pushAndExecPyLine( "from salome.medcalc import medcalc");
+   pushAndExecPyLine( "import salome.pvsimple as pvs;");
+   pushAndExecPyLine( "import medcalc");
  }
 
 

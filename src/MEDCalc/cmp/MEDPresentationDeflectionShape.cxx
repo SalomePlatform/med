@@ -47,7 +47,7 @@ void
 MEDPresentationDeflectionShape::autoScale()
 {
   std::ostringstream oss;
-  oss << "from salome.medcalc import medcalc;";
+  oss << "import medcalc;";
   pushAndExecPyLine(oss.str()); oss.str("");
   oss << _objVar << ".ScaleFactor = 3.0*medcalc.ComputeCellAverageSize(" << _srcObjVar << ")/(" << _rangeVar
       << "[1]-" << _rangeVar << "[0]);";
