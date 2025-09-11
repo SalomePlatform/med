@@ -10,7 +10,7 @@ salome.salome_init()
 ### FIELDS component
 ###
 
-import salome.pvsimple as pvs
+import pvsimple as pvs
 
 import medcalc
 medcalc.medconsole.setConsoleGlobals(globals())

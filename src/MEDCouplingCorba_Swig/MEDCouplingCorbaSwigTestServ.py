@@ -21,7 +21,7 @@
 import MEDCouplingCorbaSwigTest
 import MEDCouplingCorbaServantTest_idl
 
-from salome.MEDCouplingCorba import *
+from MEDCouplingCorba import *
 
 class MEDCouplingMeshFieldFactoryComponentPy(MEDCouplingCorbaServantTest_idl._0_SALOME_TEST__POA.MEDCouplingMeshFieldFactory):
     def __init__(self,orb):

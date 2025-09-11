@@ -21,7 +21,7 @@ import medcalc
 from salome.kernel import MEDCALC, SALOME
 from medcalc.medevents import notifyGui_addPresentation, notifyGui_removePresentation, notifyGui_error, notifyGui_modifyPresentation, notifyGui_visibilityChanged
 from functools import reduce
-import salome.pvsimple as pvs
+import pvsimple as pvs
 
 __manager = medcalc.medcorba.factory.getPresentationManager()
 DEFAULT_VISIBILITY = True

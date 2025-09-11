@@ -23,7 +23,7 @@ import SALOME_ContainerManager_idl
 
 from SALOME_NamingServicePy import SALOME_NamingServicePy_i
 
-from salome.MEDCouplingCorba import *
+from MEDCouplingCorba import *
 
 def createALocalMesh():
     targetCoords=[ 0., 0., 0., 50., 0., 0. , 200., 0., 0.  , 0., 50., 0., 50., 50., 0. , 200., 50., 0.,   0., 200., 0., 50., 200., 0. , 200., 200., 0. ,

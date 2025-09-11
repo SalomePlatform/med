@@ -22,7 +22,7 @@ import unittest
 import CORBA
 import MEDCouplingCorbaServantTest_idl
 import MEDCouplingCorbaSwigTest
-from salome.MEDCouplingClient import *
+from MEDCouplingClient import *
 from salome.kernel import MEDCouplingCorbaServant_idl
 import threading
 
