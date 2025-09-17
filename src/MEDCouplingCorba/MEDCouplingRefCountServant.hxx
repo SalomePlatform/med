@@ -43,7 +43,7 @@ namespace MEDCoupling
     CORBA::Long getTimeLabel();
     char *versionStr();
     void versionMajMinRel(CORBA::Long_out maj, CORBA::Long_out minor, CORBA::Long_out releas);
-    SALOME::StringSeq *GetExportableFormats();
+    SALOME_CMOD::StringSeq *GetExportableFormats();
   protected:
     int _ref_counter;
     const RefCountObject *_cpp_pointer;

@@ -66,9 +66,9 @@ void MEDCouplingRefCountServant::versionMajMinRel(CORBA::Long_out maj, CORBA::Lo
   releas = _releas;
 }
 
-SALOME::StringSeq *MEDCouplingRefCountServant::GetExportableFormats()
+SALOME_CMOD::StringSeq *MEDCouplingRefCountServant::GetExportableFormats()
 {
-  SALOME::StringSeq *ret=new SALOME::StringSeq;
+  SALOME_CMOD::StringSeq *ret=new SALOME_CMOD::StringSeq;
   ret->length(1);
   (*ret)[0]=CORBA::string_dup("MEDCorba");
   return ret;
@@ -98,6 +98,6 @@ void MEDCouplingRefCountServant::UnRegister()
 
 void MEDCouplingRefCountServant::Destroy()
 {
-  std::cerr << "WARNING SALOME::GenericObj::Destroy() function is obsolete! Use UnRegister() instead." << std::endl;
+  std::cerr << "WARNING SALOME_CMOD::GenericObj::Destroy() function is obsolete! Use UnRegister() instead." << std::endl;
   UnRegister();
 }

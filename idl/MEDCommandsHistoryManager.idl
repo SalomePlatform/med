@@ -27,7 +27,7 @@ module MEDCALC
 
   typedef sequence<string> CommandsList;
 
-  interface MEDCommandsHistoryManager : SALOME::GenericObj
+  interface MEDCommandsHistoryManager : SALOME_CMOD::GenericObj
   {
 
     void addCommand(in string command);

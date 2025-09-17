@@ -40,34 +40,34 @@ module MED_ORB
   MED_Gen : Engines::EngineComponent
   {
     status addDatasourceToStudy(in MEDCALC::DatasourceHandler datasourceHandler)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
 
     status registerPresentationField(in long fieldId,
                                      in string name,
                                      in string type,
                                      in string ico,
                                      in long presentationId)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
 
     status registerPresentationMesh(in long meshId,
                                     in string name,
                                     in string type,
                                     in string ico,
                                     in long presentationId)
-          raises (SALOME::SALOME_Exception);
+          raises (SALOME_CMOD::SALOME_Exception);
 
     status unregisterPresentation(in long presentationId)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
 
 //    PresentationsList getSiblingPresentations(in long presentationId)
-//      raises (SALOME::SALOME_Exception);
+//      raises (SALOME_CMOD::SALOME_Exception);
 
     // Get all presentations in study:
     PresentationsList getStudyPresentations()
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
 
     string getStudyPresentationEntry(in long presentationId)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
 
     void cleanUp();
   };

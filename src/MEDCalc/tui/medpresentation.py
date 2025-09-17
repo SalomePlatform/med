@@ -18,7 +18,7 @@
 #
 
 import medcalc
-from salome.kernel import MEDCALC, SALOME
+from salome.kernel import MEDCALC, SALOME_CMOD
 from medcalc.medevents import notifyGui_addPresentation, notifyGui_removePresentation, notifyGui_error, notifyGui_modifyPresentation, notifyGui_visibilityChanged
 from functools import reduce
 import pvsimple as pvs
@@ -48,7 +48,7 @@ def MakeMeshView(meshID,
     presentation_id = __manager.makeMeshView(params, viewMode)
     notifyGui_addPresentation(meshID, presentation_id)
     return presentation_id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the mesh view:\n" + e.details.text)
     raise Exception(e.details.text)
 
@@ -71,7 +71,7 @@ def MakeScalarMap(proxy,
     presentation_id = __manager.makeScalarMap(params, viewMode)
     notifyGui_addPresentation(proxy.id, presentation_id)
     return presentation_id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the scalar map:\n" + e.details.text)
     raise Exception(e.details.text)
 
@@ -92,7 +92,7 @@ def MakeContour(proxy,
     presentation_id = __manager.makeContour(params, viewMode)
     notifyGui_addPresentation(proxy.id, presentation_id)                           
     return presentation_id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the contour:\n" + e.details.text)
     raise Exception(e.details.text)
 
@@ -117,7 +117,7 @@ def MakeVectorField(proxy,
     presentation_id = __manager.makeVectorField(params, viewMode)
     notifyGui_addPresentation(proxy.id, presentation_id)
     return presentation_id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the vector field:\n" + e.details.text)
     raise Exception(e.details.text)
 
@@ -141,7 +141,7 @@ def MakeSlices(proxy,
     presentation_id = __manager.makeSlices(params, viewMode)
     notifyGui_addPresentation(proxy.id, presentation_id)
     return presentation_id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the slices:\n" + e.details.text)
     raise Exception(e.details.text)
 
@@ -163,7 +163,7 @@ def MakeDeflectionShape(proxy,
     presentation_id = __manager.makeDeflectionShape(params, viewMode)
     notifyGui_addPresentation(proxy.id, presentation_id)
     return presentation_id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the deflection shape:\n" + e.details.text)
     raise Exception(e.details.text)
 
@@ -186,7 +186,7 @@ def MakePointSprite(proxy,
     presentation_id = __manager.makePointSprite(params, viewMode)
     notifyGui_addPresentation(proxy.id, presentation_id)
     return presentation_id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the point sprite:\n" + e.details.text)
     raise Exception(e.details.text)
 
@@ -211,7 +211,7 @@ def MakePlot3D(proxy,
     presentation_id = __manager.makePlot3D(params, viewMode)
     notifyGui_addPresentation(proxy.id, presentation_id)
     return presentation_id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the Plot3D:\n" + e.details.text)
     raise Exception(e.details.text)
 # sphinx doc: end of MakePlot3D
@@ -234,7 +234,7 @@ def MakeStreamLines(proxy,
     presentation_id = __manager.makeStreamLines(params, viewMode)
     notifyGui_addPresentation(proxy.id, presentation_id)
     return presentation_id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the StreamLines:\n" + e.details.text)
     raise Exception(e.details.text)
 
@@ -258,7 +258,7 @@ def MakeCutSegment(proxy,
     presentation_id = __manager.makeCutSegment(params, viewMode)
     notifyGui_addPresentation(proxy.id, presentation_id)
     return presentation_id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while creating the CutSegment:\n" + e.details.text)
     raise Exception(e.details.text)
 

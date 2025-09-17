@@ -53,7 +53,7 @@ module MEDCALC
     string        msg;
   };
 
-  interface MEDEventListener: SALOME::GenericObj {
+  interface MEDEventListener: SALOME_CMOD::GenericObj {
     void processMedEvent(in MedEvent event);
   };
 };

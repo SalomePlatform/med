@@ -110,7 +110,7 @@ module MEDCALC
     string intersectionType;
   };
 
-  interface MEDDataManager: SALOME::GenericObj
+  interface MEDDataManager: SALOME_CMOD::GenericObj
   {
 
     //==========================================================
@@ -124,7 +124,7 @@ module MEDCALC
     // Mesh data management
     //==========================================================
 
-    MeshHandler     getMeshHandler(in long meshId) raises (SALOME::SALOME_Exception);
+    MeshHandler     getMeshHandler(in long meshId) raises (SALOME_CMOD::SALOME_Exception);
     MeshHandlerList getMeshHandlerList(in long datasourceId);
 
     //==========================================================
@@ -142,10 +142,10 @@ module MEDCALC
 
     // Persistency management
     void             saveFields(in string filepath, in FieldIdList list)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
     void             markAsPersistent(in long fieldHandlerId, in boolean persistent);
     void             savePersistentFields(in string filepath)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
 
 
     void updateFieldMetadata(in long   fieldHandlerId,
@@ -159,21 +159,21 @@ module MEDCALC
     double getFieldTimestamp(in long fieldHandlerId);
 
     void changeUnderlyingMesh(in long fieldHandlerId, in long meshHandlerId)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
 
     FieldHandler interpolateField(in long fieldHandlerId, in long meshHandlerId, in InterpolationParameters params)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
 
     //==========================================================
     // General purpose data management
     //==========================================================
     void   setEventListenerIOR(in string ior);
-    string getEventListenerIOR() raises (SALOME::SALOME_Exception);
+    string getEventListenerIOR() raises (SALOME_CMOD::SALOME_Exception);
 
     // Print out server data
     void serverlog();
 
-    void cleanUp() raises (SALOME::SALOME_Exception);
+    void cleanUp() raises (SALOME_CMOD::SALOME_Exception);
   };
 };
 

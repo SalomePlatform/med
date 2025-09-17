@@ -124,7 +124,7 @@ void ParaMEDMEMComponent_i::initializeCoupling(const char * coupling, const char
   catch(const std::exception &ex)
     {
       MESSAGE(ex.what());
-      THROW_SALOME_CORBA_EXCEPTION(ex.what(),SALOME::INTERNAL_ERROR);
+      THROW_SALOME_CORBA_EXCEPTION(ex.what(),SALOME_CMOD::INTERNAL_ERROR);
     }
 
   pthread_mutex_unlock(&m1);
@@ -137,7 +137,7 @@ void ParaMEDMEMComponent_i::initializeCoupling(const char * coupling, const char
           if(est->exception)
             {
               msg << "[" << ip << "] " << est->msg;
-              THROW_SALOME_CORBA_EXCEPTION(msg.str().c_str(),SALOME::INTERNAL_ERROR);
+              THROW_SALOME_CORBA_EXCEPTION(msg.str().c_str(),SALOME_CMOD::INTERNAL_ERROR);
             }
           delete est;
         }
@@ -202,7 +202,7 @@ void ParaMEDMEMComponent_i::terminateCoupling(const char * coupling)
   catch(const std::exception &ex)
     {
       MESSAGE(ex.what());
-      THROW_SALOME_CORBA_EXCEPTION(ex.what(),SALOME::INTERNAL_ERROR);
+      THROW_SALOME_CORBA_EXCEPTION(ex.what(),SALOME_CMOD::INTERNAL_ERROR);
     }
   pthread_mutex_unlock(&m2);
   if(_numproc == 0)
@@ -215,7 +215,7 @@ void ParaMEDMEMComponent_i::terminateCoupling(const char * coupling)
             {
               ostringstream msg;
               msg << "[" << ip << "] " << est->msg;
-              THROW_SALOME_CORBA_EXCEPTION(msg.str().c_str(),SALOME::INTERNAL_ERROR);
+              THROW_SALOME_CORBA_EXCEPTION(msg.str().c_str(),SALOME_CMOD::INTERNAL_ERROR);
             }
           delete est;
         }
@@ -283,7 +283,7 @@ void ParaMEDMEMComponent_i::setInterpolationOptions(const char * coupling,
   if(!ret)
     {
       MESSAGE("Error on setting interpolation options");
-      THROW_SALOME_CORBA_EXCEPTION("Error on setting interpolation options",SALOME::INTERNAL_ERROR);
+      THROW_SALOME_CORBA_EXCEPTION("Error on setting interpolation options",SALOME_CMOD::INTERNAL_ERROR);
     }
   
   if(_numproc == 0)
@@ -295,7 +295,7 @@ void ParaMEDMEMComponent_i::setInterpolationOptions(const char * coupling,
           if(est->exception)
             {
               msg << "[" << ip << "] " << est->msg;
-              THROW_SALOME_CORBA_EXCEPTION(msg.str().c_str(),SALOME::INTERNAL_ERROR);
+              THROW_SALOME_CORBA_EXCEPTION(msg.str().c_str(),SALOME_CMOD::INTERNAL_ERROR);
             }
           delete est;
         }
@@ -457,7 +457,7 @@ void ParaMEDMEMComponent_i::_initializeCoupling(SALOME_MED::MPIMEDCouplingFieldD
         pthread_join (th[0], &ret_th); 
         est = (except_st*)ret_th;
         if(est->exception)
-          THROW_SALOME_CORBA_EXCEPTION(est->msg.c_str(),SALOME::INTERNAL_ERROR);
+          THROW_SALOME_CORBA_EXCEPTION(est->msg.c_str(),SALOME_CMOD::INTERNAL_ERROR);
         delete est;
         delete[] th;
       }
@@ -510,7 +510,7 @@ void *th_setinterpolationoptions(void *s)
                                      st->measure_abs,
                                      st->splitting_policy);
     }
-  catch(const SALOME::SALOME_Exception &ex)
+  catch(const SALOME_CMOD::SALOME_Exception &ex)
     {
       est->exception = true;
       est->msg = ex.details.text;
@@ -537,7 +537,7 @@ void *th_initializecoupling(void *s)
       SALOME_MED::ParaMEDMEMComponent_var compo=SALOME_MED::ParaMEDMEMComponent::_narrow((*(st->tior))[st->ip]);
       compo->initializeCoupling(st->coupling.c_str(),st->ior.c_str());
     }
-  catch(const SALOME::SALOME_Exception &ex)
+  catch(const SALOME_CMOD::SALOME_Exception &ex)
     {
       est->exception = true;
       est->msg = ex.details.text;
@@ -564,7 +564,7 @@ void *th_terminatecoupling(void *s)
       SALOME_MED::ParaMEDMEMComponent_var compo=SALOME_MED::ParaMEDMEMComponent::_narrow((*(st->tior))[st->ip]);
       compo->terminateCoupling(st->coupling.c_str());
     }
-  catch(const SALOME::SALOME_Exception &ex)
+  catch(const SALOME_CMOD::SALOME_Exception &ex)
     {
       est->exception = true;
       est->msg = ex.details.text;
@@ -590,7 +590,7 @@ void *th_getdata(void *s)
     {
       st->fieldptr->getDataByMPI(st->coupling.c_str());
     }
-  catch(const SALOME::SALOME_Exception &ex)
+  catch(const SALOME_CMOD::SALOME_Exception &ex)
     {
       est->exception = true;
       est->msg = ex.details.text;
@@ -616,7 +616,7 @@ void *th_initializecouplingdist(void *s)
     {
       st->compo->initializeCoupling(st->coupling.c_str(), st->ior.c_str());
     }
-  catch(const SALOME::SALOME_Exception &ex)
+  catch(const SALOME_CMOD::SALOME_Exception &ex)
     {
       est->exception = true;
       est->msg = ex.details.text;
@@ -642,7 +642,7 @@ void *th_terminatecouplingdist(void *s)
     {
       st->compo->terminateCoupling(st->coupling.c_str());
     }
-  catch(const SALOME::SALOME_Exception &ex)
+  catch(const SALOME_CMOD::SALOME_Exception &ex)
     {
       est->exception = true;
       est->msg = ex.details.text;

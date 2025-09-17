@@ -58,7 +58,7 @@ namespace MEDCoupling
     SALOME_MED::MEDCouplingMeshesCorbaInterface *getMeshes();
     SALOME_MED::MEDCouplingMeshCorbaInterface_ptr getMeshWithId(CORBA::Long id);
     //
-    CORBA::Boolean ExportDataAs(const char *format, SALOME::GenericObj_out exporter);
+    CORBA::Boolean ExportDataAs(const char *format, SALOME_CMOD::GenericObj_out exporter);
   };
 }
 

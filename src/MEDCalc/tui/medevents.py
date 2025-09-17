@@ -18,7 +18,7 @@
 #
 
 import medcalc
-from salome.kernel import SALOME
+from salome.kernel import SALOME_CMOD
 from salome.kernel import salome
 
 dataManager = medcalc.medcorba.factory.getDataManager()
@@ -36,7 +36,7 @@ def connectEventListener():
   try:
     eventListenerIOR = dataManager.getEventListenerIOR()
     __eventListener = salome.orb.string_to_object(eventListenerIOR)
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     medcalc.wrn("The event listener is not running yet")
     msg ="When you'll have loaded the MED GUI, "
     msg+="call explicitly \"medcalc.medevents.connectEventListener()\" "

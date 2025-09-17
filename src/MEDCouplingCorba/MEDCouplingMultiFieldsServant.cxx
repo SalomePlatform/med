@@ -154,7 +154,7 @@ SALOME_MED::DataArrayDoubleCorbaInterface_ptr MEDCouplingMultiFieldsServant::get
   return retServ->_this();
 }
 
-CORBA::Boolean MEDCouplingMultiFieldsServant::ExportDataAs(const char *format, SALOME::GenericObj_out exporter)
+CORBA::Boolean MEDCouplingMultiFieldsServant::ExportDataAs(const char *format, SALOME_CMOD::GenericObj_out exporter)
 {
   std::string frmCpp(format);
   if(frmCpp=="MEDCorba")
@@ -164,6 +164,6 @@ CORBA::Boolean MEDCouplingMultiFieldsServant::ExportDataAs(const char *format, S
       exporter=cPtr;
       return true;
     }
-  exporter=SALOME::GenericObj::_nil();
+  exporter=SALOME_CMOD::GenericObj::_nil();
   return false;
 }

@@ -71,7 +71,7 @@ void MEDCouplingFieldTemplateServant::getSerialisationData(SALOME_TYPES::ListOfL
     la->length(0);
 }
 
-CORBA::Boolean MEDCouplingFieldTemplateServant::ExportDataAs(const char *format, SALOME::GenericObj_out exporter)
+CORBA::Boolean MEDCouplingFieldTemplateServant::ExportDataAs(const char *format, SALOME_CMOD::GenericObj_out exporter)
 {
   std::string frmCpp(format);
   if(frmCpp=="MEDCorba")

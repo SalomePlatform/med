@@ -85,7 +85,7 @@ void MEDCouplingMeshServant::getSerialisationData(SALOME_TYPES::ListOfLong_out l
     }
 }
 
-CORBA::Boolean MEDCouplingMeshServant::ExportDataAs(const char *format, SALOME::GenericObj_out exporter)
+CORBA::Boolean MEDCouplingMeshServant::ExportDataAs(const char *format, SALOME_CMOD::GenericObj_out exporter)
 {
   std::string frmCpp(format);
   if(frmCpp=="MEDCorba")
@@ -95,6 +95,6 @@ CORBA::Boolean MEDCouplingMeshServant::ExportDataAs(const char *format, SALOME::
       exporter=cPtr;
       return true;
     }
-  exporter=SALOME::GenericObj::_nil();
+  exporter=SALOME_CMOD::GenericObj::_nil();
   return false;
 }

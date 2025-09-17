@@ -33,7 +33,7 @@ module SALOME_MED
     void versionMajMinRel(out long maj, out long min, out long releas);
   };
 
-  interface MEDCouplingRefCountCorbaInterface : SALOME::ExportableObject, MEDCouplingTimeLabelCorbaInterface
+  interface MEDCouplingRefCountCorbaInterface : SALOME_CMOD::ExportableObject, MEDCouplingTimeLabelCorbaInterface
   {
   };
 

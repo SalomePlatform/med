@@ -34,7 +34,7 @@ module SALOME_MED
 {
   interface MPIMEDCouplingFieldDoubleCorbaInterface:ParaMEDCouplingFieldDoubleCorbaInterface
   {
-    void getDataByMPI(in string coupling) raises (SALOME::SALOME_Exception);
+    void getDataByMPI(in string coupling) raises (SALOME_CMOD::SALOME_Exception);
     string getRef();
     // only for coupling one component with itself
     long long getImplementation();
@@ -53,9 +53,9 @@ module SALOME_MED
                                  in double max_distance_for_3Dsurf_intersect,
                                  in long orientation,
                                  in boolean measure_abs,
-                                 in string splitting_policy) raises (SALOME::SALOME_Exception);
-    void initializeCoupling(in string coupling, in string ior) raises (SALOME::SALOME_Exception);
-    void terminateCoupling(in string coupling) raises (SALOME::SALOME_Exception);
+                                 in string splitting_policy) raises (SALOME_CMOD::SALOME_Exception);
+    void initializeCoupling(in string coupling, in string ior) raises (SALOME_CMOD::SALOME_Exception);
+    void terminateCoupling(in string coupling) raises (SALOME_CMOD::SALOME_Exception);
   };
 } ;
 

@@ -36,36 +36,36 @@ module MEDCALC
   typedef long medcalcNumber;
   const medcalcNumber NBCOMP_DEFAULT=-1;
 
-  interface MEDCalculator: SALOME::GenericObj
+  interface MEDCalculator: SALOME_CMOD::GenericObj
   {
     /*! Addition of the fields f1 and f2 ( f1+f2) */
     FieldHandler add(in FieldHandler f1, in FieldHandler f2)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
     /*! Substraction of the fields f1 and f2 (f1-f2) */
     FieldHandler sub(in FieldHandler f1, in FieldHandler f2)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
     /*! Multiplication of the fields f1 by f2 (f1*f2) */
     FieldHandler mul(in FieldHandler f1, in FieldHandler f2)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
     /*! Division of the fields f1 by f2 (f1/f2) */
     FieldHandler div(in FieldHandler f1, in FieldHandler f2)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
     /*! Power of the field f (f^power) */
     FieldHandler pow(in FieldHandler f, in long power)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
     /*! Linear transformation of the field f (factor*f+offset) */
     FieldHandler lin(in FieldHandler f, in double factor, in double offset)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
     /*! Duplication of the field f */
     FieldHandler dup(in FieldHandler f)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
 
     /*! Creation of a field whose values are initialized with the specified double */
-    /* FieldHandler ini(in double value) raises (SALOME::SALOME_Exception); */
+    /* FieldHandler ini(in double value) raises (SALOME_CMOD::SALOME_Exception); */
 
     /*! Transformation of the field f using a custom function */
     FieldHandler fct(in FieldHandler f, in string function, in medcalcNumber nbResComponents)
-      raises (SALOME::SALOME_Exception);
+      raises (SALOME_CMOD::SALOME_Exception);
 
   };
 };

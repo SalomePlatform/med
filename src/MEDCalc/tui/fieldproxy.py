@@ -20,7 +20,7 @@
 
 import medcalc
 from salome.kernel import MEDCALC
-from salome.kernel import SALOME
+from salome.kernel import SALOME_CMOD
 
 from medcalc.medcorba import factory
 dataManager = factory.getDataManager()
@@ -176,7 +176,7 @@ class FieldProxy:
         offset = operande
         medcalc.inf("Application of the offset %s to %s" % (offset, self.fieldname))
         rfieldHandler = calculator.lin(self.__fieldHandler, factor, offset)
-    except SALOME.SALOME_Exception as ex:
+    except SALOME_CMOD.SALOME_Exception as ex:
       medcalc.err(ex.details.text)
       return None
 
@@ -213,7 +213,7 @@ class FieldProxy:
         offset = -operande
         medcalc.inf("Application of the offset %s to %s" % (offset, self.fieldname))
         rfieldHandler = calculator.lin(self.__fieldHandler, factor, offset)
-    except SALOME.SALOME_Exception as ex:
+    except SALOME_CMOD.SALOME_Exception as ex:
       medcalc.err(ex.details.text)
       return None
 
@@ -239,7 +239,7 @@ class FieldProxy:
     medcalc.inf("Linear transformation %s%s*%s" % (offset, factor, self.fieldname))
     try:
       rfieldHandler = calculator.lin(self.__fieldHandler, factor, offset)
-    except SALOME.SALOME_Exception as ex:
+    except SALOME_CMOD.SALOME_Exception as ex:
       medcalc.err(ex.details.text)
       return None
 
@@ -263,7 +263,7 @@ class FieldProxy:
         offset = 0
         medcalc.inf("Scaling %s by factor %s" % (self.fieldname, factor))
         rfieldHandler = calculator.lin(self.__fieldHandler, factor, offset)
-    except SALOME.SALOME_Exception as ex:
+    except SALOME_CMOD.SALOME_Exception as ex:
       medcalc.err(ex.details.text)
       return None
 
@@ -294,7 +294,7 @@ class FieldProxy:
         offset = 0
         medcalc.inf("Scaling %s by factor 1/%s" % (self.fieldname, operande))
         rfieldHandler = calculator.lin(self.__fieldHandler, factor, offset)
-    except SALOME.SALOME_Exception as ex:
+    except SALOME_CMOD.SALOME_Exception as ex:
       medcalc.err(ex.details.text)
       return None
 
@@ -310,7 +310,7 @@ class FieldProxy:
     nbResComp = MEDCALC.NBCOMP_DEFAULT
     try:
       rfieldHandler = calculator.fct(self.__fieldHandler,function,nbResComp)
-    except SALOME.SALOME_Exception as ex:
+    except SALOME_CMOD.SALOME_Exception as ex:
       medcalc.err(ex.details.text)
       return None
 
@@ -343,7 +343,7 @@ class FieldProxy:
     medcalc.inf("Duplication of %s"%self.fieldname)
     try:
       rfieldHandler = calculator.dup(self.__fieldHandler)
-    except SALOME.SALOME_Exception as ex:
+    except SALOME_CMOD.SALOME_Exception as ex:
       medcalc.err(ex.details.text)
       return None
 
@@ -362,7 +362,7 @@ class FieldProxy:
       rfieldHandler = calculator.fct(self.__fieldHandler,
                                      function,
                                      MEDCALC.NBCOMP_DEFAULT)
-    except SALOME.SALOME_Exception as ex:
+    except SALOME_CMOD.SALOME_Exception as ex:
       medcalc.err(ex.details.text)
       return None
 

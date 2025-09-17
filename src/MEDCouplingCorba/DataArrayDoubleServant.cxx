@@ -61,15 +61,15 @@ void DataArrayDoubleServant::getSerialisationData(SALOME_TYPES::ListOfDouble_out
     }
 }
 
-SALOME::StringSeq *DataArrayDoubleServant::GetExportableFormats()
+SALOME_CMOD::StringSeq *DataArrayDoubleServant::GetExportableFormats()
 {
-  SALOME::StringSeq *ret=new SALOME::StringSeq;
+  SALOME_CMOD::StringSeq *ret=new SALOME_CMOD::StringSeq;
   ret->length(0);
   return ret;
 }
 
-CORBA::Boolean DataArrayDoubleServant::ExportDataAs(const char * /*format*/, SALOME::GenericObj_out exporter)
+CORBA::Boolean DataArrayDoubleServant::ExportDataAs(const char * /*format*/, SALOME_CMOD::GenericObj_out exporter)
 {
-  exporter=SALOME::GenericObj::_nil();
+  exporter=SALOME_CMOD::GenericObj::_nil();
   return false;
 }

@@ -169,7 +169,7 @@ MEDPresentation::~MEDPresentation()
       //execPyLine(getRenderViewVar() + ".ResetCamera();");
       //execPyLine("pvs.Render();");
     }
-    catch(SALOME::SALOME_Exception&) {
+    catch(SALOME_CMOD::SALOME_Exception&) {
     }
   }
 }

@@ -51,7 +51,7 @@ namespace MEDCoupling
     SALOME_TYPES::ListOfString *getInfoOnComponents();
     void getTinyInfo(SALOME_TYPES::ListOfLong_out la, SALOME_TYPES::ListOfDouble_out da, SALOME_TYPES::ListOfString_out sa);
     void getSerialisationData(SALOME_TYPES::ListOfLong_out la, SALOME_TYPES::ListOfDouble2_out da2);
-    CORBA::Boolean ExportDataAs(const char *format, SALOME::GenericObj_out exporter);
+    CORBA::Boolean ExportDataAs(const char *format, SALOME_CMOD::GenericObj_out exporter);
   };
 }
 

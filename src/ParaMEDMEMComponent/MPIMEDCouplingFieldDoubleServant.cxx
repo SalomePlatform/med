@@ -67,7 +67,7 @@ void MPIMEDCouplingFieldDoubleServant::getDataByMPI(const char* coupling)
   catch(const std::exception &ex)
     {
       MESSAGE(ex.what());
-      THROW_SALOME_CORBA_EXCEPTION(ex.what(),SALOME::INTERNAL_ERROR);
+      THROW_SALOME_CORBA_EXCEPTION(ex.what(),SALOME_CMOD::INTERNAL_ERROR);
     }
     
   if(_numproc == 0)
@@ -80,7 +80,7 @@ void MPIMEDCouplingFieldDoubleServant::getDataByMPI(const char* coupling)
             {
               ostringstream msg;
               msg << "[" << ip << "] " << est->msg;
-              THROW_SALOME_CORBA_EXCEPTION(msg.str().c_str(),SALOME::INTERNAL_ERROR);
+              THROW_SALOME_CORBA_EXCEPTION(msg.str().c_str(),SALOME_CMOD::INTERNAL_ERROR);
             }
           delete est;
         }
@@ -100,7 +100,7 @@ void *th_getdatabympi(void *s)
       SALOME_MED::MPIMEDCouplingFieldDoubleCorbaInterface_var fieldPtr=SALOME_MED::MPIMEDCouplingFieldDoubleCorbaInterface::_narrow((*(st->tior))[st->ip]);
       fieldPtr->getDataByMPI(st->coupling.c_str());
     }
-  catch(const SALOME::SALOME_Exception &ex)
+  catch(const SALOME_CMOD::SALOME_Exception &ex)
     {
       est->exception = true;
       est->msg = ex.details.text;

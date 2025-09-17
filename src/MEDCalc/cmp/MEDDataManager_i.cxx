@@ -512,7 +512,7 @@ void MEDDataManager_i::savePersistentFields(const char * filepath) {
   try {
     this->saveFields(filepath, fieldIdList);
   }
-  catch (const SALOME::SALOME_Exception & ex) {
+  catch (const SALOME_CMOD::SALOME_Exception & ex) {
     throw ex;
   }
   catch (const std::exception& ex) {

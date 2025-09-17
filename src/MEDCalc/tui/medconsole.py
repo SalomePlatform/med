@@ -38,7 +38,7 @@ def setConsoleGlobals(pyconsole_globals):
   pyConsoleGlobals = pyconsole_globals
 #
 
-from salome.kernel import SALOME
+from salome.kernel import SALOME_CMOD
 def saveWorkspace(filename):
   """
   Dump your job in a med file. Only the fields marked as persistent
@@ -46,7 +46,7 @@ def saveWorkspace(filename):
   """
   try:
     dataManager.savePersistentFields(filename)
-  except SALOME.SALOME_Exception as ex:
+  except SALOME_CMOD.SALOME_Exception as ex:
     medcalc.err(ex.details.text)
 #
 

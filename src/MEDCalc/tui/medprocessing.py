@@ -19,7 +19,7 @@
 
 import medcalc
 from salome.kernel import MEDCALC
-from salome.kernel import SALOME
+from salome.kernel import SALOME_CMOD
 from medcalc.medevents import notifyGui_error
 
 
@@ -35,7 +35,7 @@ def ChangeUnderlyingMesh(fieldId, meshId):
     from medcalc.medevents import notifyGui_changeUnderlyingMesh
     notifyGui_changeUnderlyingMesh(duplicate.id)
     return duplicate.id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while changing underlying mesh:\n" + e.details.text)
     raise Exception(e.details.text)
 #
@@ -56,7 +56,7 @@ def InterpolateField(fieldId,
     from medcalc.medevents import notifyGui_interpolateField
     notifyGui_interpolateField(fieldHandler.id)
     return fieldHandler.id
-  except SALOME.SALOME_Exception as e:
+  except SALOME_CMOD.SALOME_Exception as e:
     notifyGui_error("An error occurred while interpolating field:\n" + e.details.text)
     raise Exception(e.details.text)
 #

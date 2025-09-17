@@ -105,7 +105,7 @@ void MEDCouplingFieldDoubleServant::getSerialisationData(SALOME_TYPES::ListOfLon
     }
 }
 
-CORBA::Boolean MEDCouplingFieldDoubleServant::ExportDataAs(const char *format, SALOME::GenericObj_out exporter)
+CORBA::Boolean MEDCouplingFieldDoubleServant::ExportDataAs(const char *format, SALOME_CMOD::GenericObj_out exporter)
 {
   std::string frmCpp(format);
   if(frmCpp=="MEDCorba")
@@ -115,6 +115,6 @@ CORBA::Boolean MEDCouplingFieldDoubleServant::ExportDataAs(const char *format, S
       exporter=cPtr;
       return true;
     }
-  exporter=SALOME::GenericObj::_nil();
+  exporter=SALOME_CMOD::GenericObj::_nil();
   return false;
 }

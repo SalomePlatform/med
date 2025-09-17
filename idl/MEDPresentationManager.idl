@@ -228,18 +228,18 @@ module MEDCALC
 
   /* Functions */
 
-  interface MEDPresentationManager : SALOME::GenericObj
+  interface MEDPresentationManager : SALOME_CMOD::GenericObj
   {
-    long makeMeshView(in MeshViewParameters params, in ViewModeType viewMode)   raises (SALOME::SALOME_Exception);
-    long makeScalarMap(in ScalarMapParameters params, in ViewModeType viewMode) raises (SALOME::SALOME_Exception);
-    long makeContour(in ContourParameters params, in ViewModeType viewMode)     raises (SALOME::SALOME_Exception);
-    long makeVectorField(in VectorFieldParameters params, in ViewModeType viewMode)  raises (SALOME::SALOME_Exception);
-    long makeSlices(in SlicesParameters params, in ViewModeType viewMode)            raises (SALOME::SALOME_Exception);
-    long makeDeflectionShape(in DeflectionShapeParameters params, in ViewModeType viewMode) raises (SALOME::SALOME_Exception);
-    long makePointSprite(in PointSpriteParameters params, in ViewModeType viewMode)  raises (SALOME::SALOME_Exception);
-    long makePlot3D(in Plot3DParameters params, in ViewModeType viewMode)       raises (SALOME::SALOME_Exception);
-    long makeStreamLines(in StreamLinesParameters params, in ViewModeType viewMode)       raises (SALOME::SALOME_Exception);
-    long makeCutSegment(in CutSegmentParameters params, in ViewModeType viewMode)       raises (SALOME::SALOME_Exception);
+    long makeMeshView(in MeshViewParameters params, in ViewModeType viewMode)   raises (SALOME_CMOD::SALOME_Exception);
+    long makeScalarMap(in ScalarMapParameters params, in ViewModeType viewMode) raises (SALOME_CMOD::SALOME_Exception);
+    long makeContour(in ContourParameters params, in ViewModeType viewMode)     raises (SALOME_CMOD::SALOME_Exception);
+    long makeVectorField(in VectorFieldParameters params, in ViewModeType viewMode)  raises (SALOME_CMOD::SALOME_Exception);
+    long makeSlices(in SlicesParameters params, in ViewModeType viewMode)            raises (SALOME_CMOD::SALOME_Exception);
+    long makeDeflectionShape(in DeflectionShapeParameters params, in ViewModeType viewMode) raises (SALOME_CMOD::SALOME_Exception);
+    long makePointSprite(in PointSpriteParameters params, in ViewModeType viewMode)  raises (SALOME_CMOD::SALOME_Exception);
+    long makePlot3D(in Plot3DParameters params, in ViewModeType viewMode)       raises (SALOME_CMOD::SALOME_Exception);
+    long makeStreamLines(in StreamLinesParameters params, in ViewModeType viewMode)       raises (SALOME_CMOD::SALOME_Exception);
+    long makeCutSegment(in CutSegmentParameters params, in ViewModeType viewMode)       raises (SALOME_CMOD::SALOME_Exception);
 
     void setPresentationStringProperty(in long presId, in string propName, in string propValue);
     string getPresentationStringProperty(in long presId, in string propName);
@@ -260,24 +260,24 @@ module MEDCALC
     StreamLinesParameters     getStreamLinesParameters(in long presId);
     CutSegmentParameters     getCutSegmentParameters(in long presId);
 
-    void updateMeshView(in long presId, in MeshViewParameters params)   raises (SALOME::SALOME_Exception);
-    void updateScalarMap(in long presId, in ScalarMapParameters params) raises (SALOME::SALOME_Exception);
-    void updateContour(in long presId, in ContourParameters params)     raises (SALOME::SALOME_Exception);
-    void updateVectorField(in long presId, in VectorFieldParameters params) raises (SALOME::SALOME_Exception);
-    void updateSlices(in long presId, in SlicesParameters params)       raises (SALOME::SALOME_Exception);
-    void updateDeflectionShape(in long presId, in DeflectionShapeParameters params) raises (SALOME::SALOME_Exception);
-    void updatePointSprite(in long presId, in PointSpriteParameters params)         raises (SALOME::SALOME_Exception);
-    void updatePlot3D(in long presId, in Plot3DParameters params)         raises (SALOME::SALOME_Exception);
-    void updateStreamLines(in long presId, in StreamLinesParameters params)         raises (SALOME::SALOME_Exception);
-    void updateCutSegment(in long presId, in CutSegmentParameters params)         raises (SALOME::SALOME_Exception);
+    void updateMeshView(in long presId, in MeshViewParameters params)   raises (SALOME_CMOD::SALOME_Exception);
+    void updateScalarMap(in long presId, in ScalarMapParameters params) raises (SALOME_CMOD::SALOME_Exception);
+    void updateContour(in long presId, in ContourParameters params)     raises (SALOME_CMOD::SALOME_Exception);
+    void updateVectorField(in long presId, in VectorFieldParameters params) raises (SALOME_CMOD::SALOME_Exception);
+    void updateSlices(in long presId, in SlicesParameters params)       raises (SALOME_CMOD::SALOME_Exception);
+    void updateDeflectionShape(in long presId, in DeflectionShapeParameters params) raises (SALOME_CMOD::SALOME_Exception);
+    void updatePointSprite(in long presId, in PointSpriteParameters params)         raises (SALOME_CMOD::SALOME_Exception);
+    void updatePlot3D(in long presId, in Plot3DParameters params)         raises (SALOME_CMOD::SALOME_Exception);
+    void updateStreamLines(in long presId, in StreamLinesParameters params)         raises (SALOME_CMOD::SALOME_Exception);
+    void updateCutSegment(in long presId, in CutSegmentParameters params)         raises (SALOME_CMOD::SALOME_Exception);
 
-    boolean removePresentation(in long presId)   raises (SALOME::SALOME_Exception);
+    boolean removePresentation(in long presId)   raises (SALOME_CMOD::SALOME_Exception);
 
     // Helper function to keep GUI sync
-    boolean activateView(in long presentationId) raises (SALOME::SALOME_Exception);
+    boolean activateView(in long presentationId) raises (SALOME_CMOD::SALOME_Exception);
 
     // Low level ParaVis dump
-    string getParavisDump(in long presId) raises (SALOME::SALOME_Exception);
+    string getParavisDump(in long presId) raises (SALOME_CMOD::SALOME_Exception);
 
 //    ViewModeType getPresentationViewMode(in long presId);
     
@@ -286,7 +286,7 @@ module MEDCALC
 //  Visibility State in the active ParaView viewer
     PresentationVisibility stateInActiveView(in long presId);
 
-    void cleanUp()   raises (SALOME::SALOME_Exception);
+    void cleanUp()   raises (SALOME_CMOD::SALOME_Exception);
   };
 };
 
